@@ -1,0 +1,97 @@
+<header class="header">
+
+    <div class="izquierda">
+        <button
+            type="button"
+            class="btn-menu-movil"
+            aria-label="Abrir menú de navegación"
+            (click)="abrirCerrarMenu()">
+            <span></span><span></span><span></span>
+        </button>
+
+        <div class="marca">
+            <div class="marca-icono">F</div>
+            <div class="marca-texto">
+                <h2>FARMACOR</h2>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="derecha">
+
+        <div class="notificaciones-wrap">
+            <button
+                type="button"
+                class="btn-notificaciones"
+                aria-label="Notificaciones de seguridad"
+                (click)="toggleNotificaciones()">
+                <span class="campana">🔔</span>
+                <span class="badge" *ngIf="noLeidas > 0">
+                    {{ noLeidas > 99 ? '99+' : noLeidas }}
+                </span>
+            </button>
+
+            <div class="panel-notificaciones" *ngIf="mostrarNotificaciones">
+                <div class="notif-header">
+                    <div>
+                        <h3>Notificaciones</h3>
+                        <small>{{ noLeidas }} sin revisar</small>
+                    </div>
+                    <span class="escudo">🛡️</span>
+                </div>
+
+                <div class="notif-cargando" *ngIf="cargandoNotificaciones">
+                    Cargando notificaciones...
+                </div>
+
+                <div
+                    class="notif-vacia"
+                    *ngIf="!cargandoNotificaciones && notificaciones.length === 0">
+                    <span>✅</span>
+                    <strong>Sin alertas de seguridad</strong>
+                    <small>No se detectaron cambios directos en la base de datos.</small>
+                </div>
+
+                <div
+                    class="notif-item"
+                    [class.no-leida]="!item.leida"
+                    *ngFor="let item of notificaciones"
+                    (click)="abrirNotificacion(item)">
+                    <div class="notif-icono">⚠️</div>
+                    <div class="notif-contenido">
+                        <strong>Intento de modificación bloqueado</strong>
+                        <span>
+                            {{ formatearTabla(item.tabla_afectada) }}
+                            <ng-container *ngIf="item.registro_id"> · Registro {{ item.registro_id }}</ng-container>
+                        </span>
+                        <small>{{ item.accion }} · {{ item.fecha_hora | date:'dd/MM/yyyy HH:mm' }}</small>
+                    </div>
+                    <span class="punto" *ngIf="!item.leida"></span>
+                </div>
+
+                <button type="button" class="btn-ver-todas" (click)="verTodas()">
+                    Ver todas las notificaciones
+                </button>
+            </div>
+        </div>
+
+        <div class="usuario">
+            <div class="avatar">
+                {{ usuario ? usuario.charAt(0).toUpperCase() : 'A' }}
+            </div>
+            <div class="usuario-datos">
+                <h4>{{ usuario }}</h4>
+                <small>{{ rolUsuario }}</small>
+            </div>
+        </div>
+
+        <div class="separador"></div>
+
+        <div class="fecha">
+            <span class="fecha-icono">📅</span>
+            <span>{{ fecha | date:'dd/MM/yyyy' }}</span>
+        </div>
+
+    </div>
+</header>

@@ -1,0 +1,112 @@
+/* =========================================================
+   LAYOUT GENERAL - FARMACOR
+   Fondo oscuro integrado con todos los módulos
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.layout{
+    display:flex;
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 50%,
+            #06162f 100%
+        );
+}
+
+.contenido{
+    flex:1;
+    min-width:0;
+    min-height:100vh;
+    min-height:100dvh;
+
+    display:flex;
+    flex-direction:column;
+
+    background:
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 50%,
+            #06162f 100%
+        );
+}
+
+.pagina{
+    flex:1;
+    min-width:0;
+
+    overflow:auto;
+
+    padding:25px;
+
+    margin-left:280px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 50%,
+            #06162f 100%
+        );
+}
+
+/* Fondo que cierra el menú lateral en tablet/celular */
+.sidebar-backdrop{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:998;
+    border:0;
+    padding:0;
+    background:rgba(1, 8, 22, .66);
+    backdrop-filter:blur(2px);
+    -webkit-backdrop-filter:blur(2px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1024px){
+    .pagina{
+        padding:20px;
+    }
+}
+
+@media(max-width:768px){
+
+    .pagina{
+        margin-left:0;
+        padding:16px;
+        overflow-x:hidden;
+    }
+
+    .sidebar-backdrop{
+        display:block;
+    }
+
+    .sidebar-backdrop.visible{
+        opacity:1;
+        pointer-events:auto;
+    }
+}
+
+@media(max-width:480px){
+    .pagina{
+        padding:12px;
+    }
+}

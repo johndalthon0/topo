@@ -1,0 +1,19 @@
+FARMACOR - AJUSTES RESPONSIVE
+
+Cambios principales:
+- Menú lateral ocultable en tablet y celular.
+- Botón hamburguesa en el encabezado.
+- Fondo oscuro para cerrar el menú tocando fuera.
+- Ajuste del layout para 1024px, 768px, 480px y pantallas pequeñas.
+- Protección global para tablas, modales, imágenes, formularios y ancho de pantalla.
+- Se conservaron los estilos oscuros originales de FARMACOR.
+
+Prueba rápida en Chrome:
+1. Ejecutar Angular normalmente.
+2. Abrir http://localhost:4200
+3. F12
+4. Ctrl + Shift + M
+5. Probar 1366px, 768px, 390px y 360px.
+
+IMPORTANTE PARA PUBLICAR:
+El frontend tiene URLs de API hacia http://127.0.0.1:8000. Para que un enlace público funcione completamente desde otro dispositivo, primero se debe publicar Django y MySQL y cambiar las URLs del frontend a la URL pública de la API.

@@ -1,0 +1,761 @@
+<div class="compras-container">
+
+    <!-- =========================================
+                CABECERA
+    ========================================== -->
+
+    <div class="compras-header">
+
+        <div class="titulo-compras">
+
+            <div class="titulo-icono">
+                <span>🛒</span>
+            </div>
+
+            <div>
+                <h2>Compras</h2>
+
+                <div class="breadcrumb-compras">
+                    <span>Compras</span>
+                    <b>›</b>
+                    <strong>Gestión de Compras</strong>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+                TARJETAS RESUMEN
+    ========================================== -->
+
+    <div class="compras-cards">
+
+        <div class="compra-card azul">
+
+            <div class="compra-icono">
+                🛒
+            </div>
+
+            <div class="compra-datos">
+                <h4>Total Compras</h4>
+                <h2>{{ totalCompras }}</h2>
+                <span>Compras registradas</span>
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+
+        <div class="compra-card verde">
+
+            <div class="compra-icono">
+                📅
+            </div>
+
+            <div class="compra-datos">
+                <h4>Compras Hoy</h4>
+                <h2>{{ comprasHoy }}</h2>
+                <span>Compras activas realizadas hoy</span>
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+
+        <div class="compra-card naranja">
+
+            <div class="compra-icono">
+                👥
+            </div>
+
+            <div class="compra-datos">
+                <h4>Proveedores</h4>
+                <h2>{{ totalProveedores }}</h2>
+                <span>Proveedores con compras activas</span>
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+
+        <div class="compra-card morado">
+
+            <div class="compra-icono">
+                💰
+            </div>
+
+            <div class="compra-datos">
+                <h4>Total Comprado</h4>
+                <h2>Bs. {{ totalDinero | number:'1.2-2' }}</h2>
+                <span>Monto de compras no anuladas</span>
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+                REGISTRO DE COMPRAS
+    ========================================== -->
+
+    <div class="compras-panel">
+
+        <div class="tabla-header">
+
+            <div class="titulo-registro">
+
+                <div class="registro-icono">
+                    📋
+                </div>
+
+                <div>
+                    <h3>Registro de Compras</h3>
+                    <small>Historial de compras, anulaciones y correcciones</small>
+                </div>
+
+            </div>
+
+
+            <div class="acciones-tabla">
+
+                <div class="buscador-compras">
+
+                    <span class="buscador-icono">
+                        🔍
+                    </span>
+
+                    <input
+                        type="text"
+                        placeholder="Buscar compra, factura o proveedor..."
+                        [(ngModel)]="textoBusqueda"
+                        (input)="buscarCompras()"
+                        autocomplete="off">
+
+                </div>
+
+
+                <button
+                    class="btn-buscar"
+                    type="button"
+                    (click)="buscarCompras()">
+                    Buscar
+                </button>
+
+
+                <button
+                    class="btn-nueva-compra"
+                    type="button"
+                    (click)="abrirModal()">
+                    <span>＋</span>
+                    Nueva Compra
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="tabla-contenedor">
+
+            <table class="tabla-compras">
+
+                <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Factura</th>
+                        <th>Proveedor</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr
+                        *ngFor="let c of comprasPagina; let i = index"
+                        [class.fila-anulada]="c.estado === 'ANULADA'">
+
+                        <td>
+                            {{ indiceInicio + i + 1 }}
+                        </td>
+
+                        <td>
+                            {{ c.fecha }}
+                        </td>
+
+                        <td>
+
+                            <strong>
+                                {{ c.factura }}
+                            </strong>
+
+                            <small
+                                class="referencia-correccion"
+                                *ngIf="c.compra_origen_factura">
+                                Corrige: {{ c.compra_origen_factura }}
+                            </small>
+
+                        </td>
+
+                        <td>
+                            {{ c.proveedor }}
+                        </td>
+
+                        <td>
+                            <strong class="total-tabla">
+                                Bs. {{ c.total }}
+                            </strong>
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="estado-recibida"
+                                *ngIf="c.estado !== 'ANULADA'">
+                                <i></i>
+                                {{ c.estado || 'RECIBIDA' }}
+                            </span>
+
+
+                            <span
+                                class="estado-anulada"
+                                *ngIf="c.estado === 'ANULADA'">
+                                <i></i>
+                                ANULADA
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <div class="acciones-compra">
+
+                                <button
+                                    class="btn-ver"
+                                    type="button"
+                                    title="Ver detalle"
+                                    (click)="verCompra(c)">
+                                    👁
+                                </button>
+
+
+                                <button
+                                    class="btn-anular"
+                                    type="button"
+                                    [disabled]="!puedeAnular(c)"
+                                    [title]="puedeAnular(c) ? 'Anular compra' : 'Compra anulada'"
+                                    (click)="abrirAnulacion(c)">
+                                    🚫
+                                </button>
+
+
+                                <button
+                                    class="btn-corregir"
+                                    type="button"
+                                    [disabled]="!puedeCorregir(c)"
+                                    [title]="puedeCorregir(c) ? 'Registrar corrección' : 'La corrección se habilita después de anular'"
+                                    (click)="corregirCompra(c)">
+                                    🔄
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr *ngIf="comprasFiltradas.length === 0">
+
+                        <td
+                            colspan="7"
+                            class="sin-registros">
+
+                            <span *ngIf="textoBusqueda">
+                                🔍 No se encontraron compras con "{{ textoBusqueda }}"
+                            </span>
+
+                            <span *ngIf="!textoBusqueda">
+                                📭 No existen compras registradas
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- PAGINACIÓN SENCILLA -->
+        <div
+            class="paginacion-simple"
+            *ngIf="comprasFiltradas.length > porPagina">
+
+            <button
+                type="button"
+                class="pagina-control"
+                [disabled]="paginaActual === 1"
+                (click)="paginaAnterior()">
+                ‹
+            </button>
+
+
+            <button
+                type="button"
+                class="pagina-numero"
+                *ngFor="let pagina of paginasVisibles"
+                [class.activa]="pagina === paginaActual"
+                (click)="irPagina(pagina)">
+                {{ pagina }}
+            </button>
+
+
+            <button
+                type="button"
+                class="pagina-control"
+                [disabled]="paginaActual === totalPaginas"
+                (click)="paginaSiguiente()">
+                ›
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+        MODAL NUEVA COMPRA / COMPRA CORREGIDA
+====================================================== -->
+
+<div
+    class="modal"
+    *ngIf="mostrarModal">
+
+    <div class="modal-contenido modal-compra">
+
+        <div class="modal-header">
+            <div>
+                <h2>
+                    {{ modoCorreccion ? '🔄 Corregir Compra' : '🛒 Nueva Compra' }}
+                </h2>
+
+                <span>
+                    {{
+                        modoCorreccion
+                        ? 'Registrar una nueva operación que reemplaza a la compra anulada'
+                        : 'Registrar una nueva compra'
+                    }}
+                </span>
+            </div>
+
+            <button
+                class="btn-cerrar"
+                (click)="cerrarModal()">
+                ✖
+            </button>
+        </div>
+
+
+        <div
+            class="aviso-correccion"
+            *ngIf="modoCorreccion">
+            <div class="aviso-icono">🔄</div>
+            <div>
+                <strong>Corrección de la compra {{ facturaOrigen }}</strong>
+                <p>
+                    El registro original permanece ANULADO. Esta operación se guardará como una nueva compra y quedará vinculada en Blockchain.
+                </p>
+            </div>
+        </div>
+
+
+        <div class="formulario-compra">
+
+            <div class="campo">
+                <label>Proveedor</label>
+                <input
+                    type="text"
+                    [(ngModel)]="proveedor"
+                    placeholder="Nombre del proveedor">
+            </div>
+
+            <div class="campo">
+                <label>
+                    {{ modoCorreccion ? 'Nueva Factura' : 'Factura' }}
+                </label>
+                <input
+                    type="text"
+                    [(ngModel)]="factura"
+                    [placeholder]="modoCorreccion ? 'Número de la factura corregida' : 'Número de factura'">
+            </div>
+
+        </div>
+
+
+        <div class="campo observacion">
+            <label>Observación</label>
+            <textarea
+                rows="3"
+                [(ngModel)]="observacion"
+                placeholder="Observaciones de la compra..."></textarea>
+        </div>
+
+
+        <div class="agregar-producto">
+
+            <h3>💊 Agregar Medicamento</h3>
+
+            <div class="producto-form">
+
+                <div class="campo campo-buscador-medicamento">
+                    <label>Medicamento</label>
+                    <div class="buscador-medicamento-wrap">
+                        <input
+                            type="text"
+                            [(ngModel)]="busquedaMedicamento"
+                            (input)="alEscribirMedicamento()"
+                            (focus)="mostrarResultadosMedicamento = true"
+                            placeholder="🔍 Buscar medicamento por nombre o código..."
+                            autocomplete="off">
+
+                        <div class="resultados-medicamento" *ngIf="mostrarResultadosMedicamento">
+                            <button
+                                type="button"
+                                class="resultado-medicamento"
+                                *ngFor="let m of medicamentosBuscados"
+                                (click)="seleccionarMedicamentoBuscado(m)">
+                                <span>{{ m.nombre }}</span>
+                                <small>{{ m.codigo || 'Sin código' }}</small>
+                            </button>
+                            <div class="sin-resultados" *ngIf="medicamentosBuscados.length === 0">
+                                No se encontraron medicamentos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>Cantidad</label>
+                    <input
+                        type="number"
+                        min="1"
+                        [(ngModel)]="cantidad">
+                </div>
+
+                <div class="campo">
+                    <label>Precio Compra</label>
+                    <input
+                        type="number"
+                        min="0"
+                        [(ngModel)]="precioCompra">
+                </div>
+
+                <button
+                    class="btn-agregar"
+                    (click)="agregarProducto()">
+                    ➕ Agregar
+                </button>
+
+            </div>
+        </div>
+
+
+        <div class="detalle-productos">
+
+            <h3>📋 Detalle de la Compra</h3>
+
+            <div class="tabla-detalle-contenedor">
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Medicamento</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr *ngFor="let d of detalleCompra; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ d.nombreMedicamento || d.medicamento }}</td>
+                            <td>{{ d.cantidad }}</td>
+                            <td>Bs. {{ d.precio_compra }}</td>
+                            <td><strong>Bs. {{ d.subtotal }}</strong></td>
+                            <td>
+                                <button
+                                    class="btn-eliminar"
+                                    (click)="eliminarProducto(i)">
+                                    🗑
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="detalleCompra.length === 0">
+                            <td colspan="6" class="sin-productos">
+                                📭 No hay medicamentos agregados
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+
+        <div class="total-compra">
+            <span>Total de la Compra:</span>
+            <strong>Bs. {{ totalCompra }}</strong>
+        </div>
+
+
+        <div class="acciones-modal">
+            <button
+                class="btn-cancelar"
+                (click)="cerrarModal()">
+                ❌ Cancelar
+            </button>
+
+            <button
+                class="btn-guardar-compra"
+                (click)="guardarCompra()">
+                {{ modoCorreccion ? '💾 Registrar Corrección' : '💾 Registrar Compra' }}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =====================================================
+                    MODAL ANULAR COMPRA
+====================================================== -->
+
+<div
+    class="modal"
+    *ngIf="mostrarModalAnular">
+
+    <div class="modal-contenido modal-anular">
+
+        <div class="modal-header modal-header-anular">
+            <div class="titulo-anular">
+                <div class="icono-anular">🚫</div>
+                <div>
+                    <h2>Anular Compra</h2>
+                    <span>La operación original se conservará para trazabilidad</span>
+                </div>
+            </div>
+
+            <button
+                class="btn-cerrar"
+                [disabled]="procesandoAnulacion"
+                (click)="cerrarAnulacion()">
+                ✖
+            </button>
+        </div>
+
+
+        <div class="resumen-anulacion" *ngIf="compraParaAnular">
+
+            <div class="dato-anulacion">
+                <span>Factura</span>
+                <strong>{{ compraParaAnular.factura }}</strong>
+            </div>
+
+            <div class="dato-anulacion">
+                <span>Proveedor</span>
+                <strong>{{ compraParaAnular.proveedor }}</strong>
+            </div>
+
+            <div class="dato-anulacion">
+                <span>Total</span>
+                <strong>Bs. {{ compraParaAnular.total }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="campo campo-motivo">
+            <label>Motivo de anulación *</label>
+            <textarea
+                rows="4"
+                [(ngModel)]="motivoAnulacion"
+                placeholder="Ej.: Cantidad registrada incorrectamente"></textarea>
+            <small>El motivo quedará registrado en Reportes y en la trazabilidad Blockchain.</small>
+        </div>
+
+
+        <div class="aviso-stock">
+            ℹ️ Al confirmar, el sistema revertirá automáticamente el stock ingresado por esta compra.
+        </div>
+
+
+        <div class="acciones-modal">
+            <button
+                class="btn-cancelar"
+                [disabled]="procesandoAnulacion"
+                (click)="cerrarAnulacion()">
+                Cancelar
+            </button>
+
+            <button
+                class="btn-confirmar-anulacion"
+                [disabled]="procesandoAnulacion"
+                (click)="confirmarAnulacion()">
+                {{ procesandoAnulacion ? 'Procesando...' : '🚫 Confirmar anulación' }}
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =====================================================
+                    MODAL DETALLE COMPRA
+====================================================== -->
+
+<div
+    class="modal"
+    *ngIf="mostrarModalDetalle">
+
+    <div class="modal-contenido modal-detalle">
+
+        <div class="modal-header">
+            <div>
+                <h2>🧾 Detalle de Compra</h2>
+                <span>Información completa y trazabilidad de la operación</span>
+            </div>
+
+            <button
+                class="btn-cerrar"
+                (click)="cerrarDetalle()">
+                ✖
+            </button>
+        </div>
+
+
+        <div class="cargando" *ngIf="cargandoDetalle">
+            Cargando detalle...
+        </div>
+
+
+        <div *ngIf="detalleSeleccionado && !cargandoDetalle">
+
+            <div class="detalle-info-grid">
+                <div>
+                    <span>Factura</span>
+                    <strong>{{ detalleSeleccionado.factura }}</strong>
+                </div>
+
+                <div>
+                    <span>Proveedor</span>
+                    <strong>{{ detalleSeleccionado.proveedor }}</strong>
+                </div>
+
+                <div>
+                    <span>Fecha</span>
+                    <strong>{{ detalleSeleccionado.fecha }}</strong>
+                </div>
+
+                <div>
+                    <span>Estado</span>
+                    <strong
+                        [class.texto-anulado]="detalleSeleccionado.estado === 'ANULADA'">
+                        {{ detalleSeleccionado.estado || 'RECIBIDA' }}
+                    </strong>
+                </div>
+            </div>
+
+
+            <div
+                class="detalle-anulacion"
+                *ngIf="detalleSeleccionado.estado === 'ANULADA'">
+                <h3>🚫 Información de anulación</h3>
+                <p><b>Motivo:</b> {{ detalleSeleccionado.motivo_anulacion }}</p>
+                <p><b>Anulado por:</b> {{ detalleSeleccionado.anulado_por }}</p>
+                <p><b>Fecha:</b> {{ detalleSeleccionado.fecha_anulacion }}</p>
+            </div>
+
+
+            <div class="detalle-productos">
+                <h3>💊 Medicamentos</h3>
+
+                <div class="tabla-detalle-contenedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Medicamento</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr *ngFor="let d of detalleSeleccionado.detalle; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ d.medicamento }}</td>
+                                <td>{{ d.cantidad }}</td>
+                                <td>Bs. {{ d.precio_compra || d.precio }}</td>
+                                <td>Bs. {{ d.subtotal }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="blockchain-detalle" *ngIf="detalleSeleccionado.hash_operacion">
+                <h3>⛓ Blockchain</h3>
+                <div class="blockchain-grid">
+                    <div>
+                        <span>Hash operación</span>
+                        <code>{{ detalleSeleccionado.hash_operacion }}</code>
+                    </div>
+                    <div>
+                        <span>Transaction Hash</span>
+                        <code>{{ detalleSeleccionado.transaction_hash }}</code>
+                    </div>
+                    <div>
+                        <span>Bloque</span>
+                        <strong>{{ detalleSeleccionado.block_number }}</strong>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="total-compra total-detalle">
+                <span>Total:</span>
+                <strong>Bs. {{ detalleSeleccionado.total }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+</div>

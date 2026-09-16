@@ -1,0 +1,1155 @@
+<div class="ventas-container">
+
+    <!-- =========================================
+                CABECERA
+    ========================================== -->
+
+    <div class="ventas-header">
+
+        <div class="titulo-ventas">
+
+            <div class="titulo-icono">
+                💰
+            </div>
+
+            <div>
+
+                <h2>Ventas</h2>
+
+                <div class="breadcrumb-ventas">
+
+                    <span>Ventas</span>
+
+                    <b>›</b>
+
+                    <strong>
+                        Gestión de Ventas
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+                TARJETAS RESUMEN
+    ========================================== -->
+
+    <div class="ventas-cards">
+
+
+        <!-- TOTAL VENTAS -->
+        <div class="venta-card azul">
+
+            <div class="venta-icono">
+                💰
+            </div>
+
+            <div class="venta-datos">
+
+                <h4>
+                    Total Ventas
+                </h4>
+
+                <h2>
+                    {{ totalVentas }}
+                </h2>
+
+                <span>
+                    Ventas activas registradas
+                </span>
+
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+
+        <!-- VENTAS HOY -->
+        <div class="venta-card verde">
+
+            <div class="venta-icono">
+                📅
+            </div>
+
+            <div class="venta-datos">
+
+                <h4>
+                    Ventas Hoy
+                </h4>
+
+                <h2>
+                    {{ ventasHoy }}
+                </h2>
+
+                <span>
+                    Ventas realizadas hoy
+                </span>
+
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+
+        <!-- TOTAL DEL DÍA -->
+        <div class="venta-card naranja">
+
+            <div class="venta-icono">
+                💵
+            </div>
+
+            <div class="venta-datos">
+
+                <h4>
+                    Total del Día
+                </h4>
+
+                <h2>
+                    Bs. {{ totalDia | number:'1.2-2' }}
+                </h2>
+
+                <span>
+                    Ingresos de hoy
+                </span>
+
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+
+        <!-- PRODUCTOS VENDIDOS -->
+        <div class="venta-card morado">
+
+            <div class="venta-icono">
+                📦
+            </div>
+
+            <div class="venta-datos">
+
+                <h4>
+                    Productos Vendidos
+                </h4>
+
+                <h2>
+                    {{ productosVendidos }}
+                </h2>
+
+                <span>
+                    Unidades vendidas activas
+                </span>
+
+            </div>
+
+            <div class="linea-card"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================
+                REGISTRO DE VENTAS
+    ========================================== -->
+
+    <div class="ventas-panel">
+
+        <div class="tabla-header">
+
+
+            <!-- TÍTULO TABLA -->
+            <div class="titulo-registro">
+
+                <div class="registro-icono">
+                    📋
+                </div>
+
+                <div>
+
+                    <h3>
+                        Registro de Ventas
+                    </h3>
+
+                    <small>
+                        Historial de ventas, anulaciones y correcciones
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- BUSCADOR Y NUEVA VENTA -->
+            <div class="acciones-tabla">
+
+
+                <div class="buscador-ventas">
+
+                    <span class="buscador-icono">
+                        🔍
+                    </span>
+
+                    <input
+                        type="text"
+                        placeholder="Buscar venta, cliente o número..."
+                        [(ngModel)]="busqueda"
+                        (input)="buscarVentas()"
+                        autocomplete="off">
+
+                </div>
+
+
+                <button
+                    class="btn-buscar"
+                    type="button"
+                    (click)="buscarVentas()">
+
+                    Buscar
+
+                </button>
+
+
+                <button
+                    class="btn-nueva-venta"
+                    type="button"
+                    (click)="abrirNuevaVenta()">
+
+                    <span class="mas">
+                        ＋
+                    </span>
+
+                    Nueva Venta
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================================
+                    TABLA
+        ========================================== -->
+
+        <div class="tabla-contenedor">
+
+            <table class="tabla-ventas">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            Fecha
+                        </th>
+
+                        <th>
+                            N.º Venta
+                        </th>
+
+                        <th>
+                            Cliente
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                        <th>
+                            Usuario
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr
+                        *ngFor="
+                            let venta of ventasPagina;
+                            let i = index
+                        "
+                        [class.fila-anulada]="esVentaAnulada(venta)">
+
+
+                        <td>
+                            {{ indiceInicio + i + 1 }}
+                        </td>
+
+
+                        <td>
+                            {{ venta.fecha }}
+                        </td>
+
+
+                        <td>
+
+                            <strong class="numero-venta">
+                                {{ venta.numero_venta }}
+                            </strong>
+
+                            <small
+                                class="referencia-correccion"
+                                *ngIf="venta.venta_origen_numero">
+
+                                Corrige:
+                                {{ venta.venta_origen_numero }}
+
+                            </small>
+
+                        </td>
+
+
+                        <td>
+                            {{ venta.cliente || 'Consumidor Final' }}
+                        </td>
+
+
+                        <td>
+
+                            <strong class="total-tabla">
+                                Bs. {{ venta.total }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            {{ venta.usuario }}
+                        </td>
+
+
+                        <td>
+
+
+                            <!-- COMPLETADA -->
+                            <span
+                                class="estado-completada"
+                                *ngIf="!esVentaAnulada(venta)">
+
+                                <i></i>
+
+                                {{ venta.estado || 'COMPLETADA' }}
+
+                            </span>
+
+
+                            <!-- ANULADA -->
+                            <span
+                                class="estado-anulada"
+                                *ngIf="esVentaAnulada(venta)">
+
+                                <i></i>
+
+                                ANULADA
+
+                            </span>
+
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="acciones-venta-tabla">
+
+
+                                <!-- VER -->
+                                <button
+                                    class="btn-ver"
+                                    type="button"
+                                    title="Ver venta"
+                                    (click)="verVenta(venta.id)">
+
+                                    👁
+
+                                </button>
+
+
+                                <!-- ANULAR -->
+                                <button
+                                    class="btn-anular"
+                                    type="button"
+                                    title="Anular venta"
+                                    *ngIf="!esVentaAnulada(venta)"
+                                    (click)="abrirAnulacion(venta)">
+
+                                    🚫
+
+                                </button>
+
+
+                                <!-- CORREGIR -->
+                                <button
+                                    class="btn-corregir"
+                                    type="button"
+                                    title="Corregir venta"
+                                    *ngIf="
+                                        esVentaAnulada(venta)
+                                        &&
+                                        venta.puede_corregir !== false
+                                    "
+                                    (click)="corregirVenta(venta)">
+
+                                    🔄
+
+                                </button>
+
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- SIN RESULTADOS -->
+                    <tr
+                        *ngIf="ventasFiltradas.length === 0">
+
+                        <td
+                            colspan="8"
+                            class="sin-registros">
+
+
+                            <span *ngIf="busqueda">
+
+                                🔍 No se encontraron ventas con
+                                "{{ busqueda }}"
+
+                            </span>
+
+
+                            <span *ngIf="!busqueda">
+
+                                📭 No existen ventas registradas
+
+                            </span>
+
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =========================================
+             PAGINACIÓN SIMPLE
+             SOLO 1, 2, 3 COMO SE APROBÓ EN COMPRAS
+        ========================================== -->
+
+        <div
+            class="paginacion-simple"
+            *ngIf="ventasFiltradas.length > porPagina">
+
+
+            <button
+                type="button"
+                class="pagina-control"
+                [disabled]="paginaActual === 1"
+                (click)="paginaAnterior()">
+
+                ‹
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagina-numero"
+                *ngFor="let pagina of paginasVisibles"
+                [class.activa]="pagina === paginaActual"
+                (click)="irPagina(pagina)">
+
+                {{ pagina }}
+
+            </button>
+
+
+            <button
+                type="button"
+                class="pagina-control"
+                [disabled]="paginaActual === totalPaginas"
+                (click)="paginaSiguiente()">
+
+                ›
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+            MODAL DETALLE DE VENTA
+========================================== -->
+
+<div
+    class="modal"
+    *ngIf="mostrarDetalle">
+
+    <div class="modal-contenido">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    🧾 Detalle de Venta
+                </h2>
+
+                <span>
+                    Información de la venta
+                </span>
+
+            </div>
+
+
+            <button
+                class="btn-cerrar"
+                (click)="cerrarDetalle()">
+
+                ✖
+
+            </button>
+
+        </div>
+
+
+        <div class="detalle-info">
+
+            <p>
+                <b>N.º Venta:</b>
+                {{ detalleVentaSeleccionada?.numero_venta }}
+            </p>
+
+            <p>
+                <b>Cliente:</b>
+                {{ detalleVentaSeleccionada?.cliente }}
+            </p>
+
+            <p>
+                <b>Fecha:</b>
+                {{ detalleVentaSeleccionada?.fecha }}
+            </p>
+
+            <p>
+                <b>Usuario:</b>
+                {{ detalleVentaSeleccionada?.usuario }}
+            </p>
+
+            <p>
+                <b>Estado:</b>
+
+                <span
+                    [class.estado-completada]="!esVentaAnulada(detalleVentaSeleccionada)"
+                    [class.estado-anulada]="esVentaAnulada(detalleVentaSeleccionada)">
+
+                    {{ detalleVentaSeleccionada?.estado }}
+
+                </span>
+
+            </p>
+
+            <p *ngIf="detalleVentaSeleccionada?.venta_origen_numero">
+
+                <b>Corrige a:</b>
+                {{ detalleVentaSeleccionada?.venta_origen_numero }}
+
+            </p>
+
+        </div>
+
+
+        <div
+            class="aviso-anulacion-detalle"
+            *ngIf="esVentaAnulada(detalleVentaSeleccionada)">
+
+            <strong>🚫 Venta anulada</strong>
+
+            <span>
+                <b>Motivo:</b>
+                {{
+                    detalleVentaSeleccionada?.motivo_anulacion
+                    || 'Sin motivo registrado'
+                }}
+            </span>
+
+            <span *ngIf="detalleVentaSeleccionada?.anulado_por">
+                <b>Anulada por:</b>
+                {{ detalleVentaSeleccionada?.anulado_por }}
+            </span>
+
+        </div>
+
+
+        <table class="tabla-detalle">
+
+            <thead>
+
+                <tr>
+                    <th>Medicamento</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr
+                    *ngFor="
+                        let d of detalleVentaSeleccionada?.detalle
+                    ">
+
+                    <td>
+                        {{ d.medicamento }}
+                    </td>
+
+                    <td>
+                        {{ d.cantidad }}
+                    </td>
+
+                    <td>
+                        Bs. {{ d.precio_venta ?? d.precio }}
+                    </td>
+
+                    <td>
+                        Bs. {{ d.subtotal }}
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <div class="detalle-total">
+
+            Total:
+
+            <strong>
+                Bs. {{ calcularTotalDetalle() }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+        MODAL NUEVA / CORREGIR VENTA
+========================================== -->
+
+<div
+    class="modal"
+    *ngIf="mostrarNuevaVenta">
+
+    <div class="modal-contenido modal-venta">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+
+                    {{
+                        modoCorreccion
+                        ? '🔄 Corregir Venta'
+                        : '🛒 Nueva Venta'
+                    }}
+
+                </h2>
+
+                <span>
+
+                    {{
+                        modoCorreccion
+                        ? 'Registrar una nueva venta que corrige la anterior'
+                        : 'Registrar una nueva venta'
+                    }}
+
+                </span>
+
+            </div>
+
+            <button
+                class="btn-cerrar"
+                [disabled]="guardandoVenta"
+                (click)="cerrarNuevaVenta()">
+
+                ✖
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="aviso-correccion"
+            *ngIf="modoCorreccion && ventaOrigen">
+
+            <div class="aviso-correccion-icono">
+                🔄
+            </div>
+
+            <div>
+
+                <strong>
+                    Corrigiendo la venta
+                    {{ ventaOrigen.numero_venta }}
+                </strong>
+
+                <span>
+                    La venta original permanece ANULADA.
+                    Esta operación generará una nueva venta y un nuevo registro Blockchain.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="formulario-venta">
+
+            <div class="campo">
+
+                <label>
+                    Cliente
+                </label>
+
+                <input
+                    type="text"
+                    [(ngModel)]="cliente"
+                    placeholder="Nombre del cliente">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>
+                    Observación
+                </label>
+
+                <input
+                    type="text"
+                    [(ngModel)]="observacion"
+                    placeholder="Observación de la venta">
+
+            </div>
+
+        </div>
+
+
+        <div class="agregar-producto">
+
+            <h3>
+                💊 Agregar Medicamento
+            </h3>
+
+
+            <div class="producto-form">
+
+                <div class="campo campo-buscador-medicamento">
+
+                    <label>Medicamento</label>
+
+                    <div class="buscador-medicamento-wrap">
+                        <input
+                            type="text"
+                            [(ngModel)]="busquedaMedicamentoVenta"
+                            (input)="alEscribirMedicamentoVenta()"
+                            (focus)="mostrarResultadosMedicamentoVenta = true"
+                            placeholder="🔍 Buscar medicamento por nombre o código..."
+                            autocomplete="off">
+
+                        <div class="resultados-medicamento" *ngIf="mostrarResultadosMedicamentoVenta">
+                            <button
+                                type="button"
+                                class="resultado-medicamento"
+                                *ngFor="let medicamento of medicamentosBuscadosVenta"
+                                (click)="seleccionarMedicamentoVenta(medicamento)">
+                                <span>{{ medicamento.nombre }}</span>
+                                <small>{{ medicamento.codigo || 'Sin código' }} · Stock: {{ medicamento.stock }}</small>
+                            </button>
+                            <div class="sin-resultados" *ngIf="medicamentosBuscadosVenta.length === 0">
+                                No se encontraron medicamentos
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="campo cantidad">
+
+                    <label>
+                        Cantidad
+                    </label>
+
+                    <input
+                        type="number"
+                        min="1"
+                        [(ngModel)]="cantidad">
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>
+                        Precio
+                    </label>
+
+                    <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        [(ngModel)]="precioVenta">
+
+                </div>
+
+
+                <button
+                    class="btn-agregar"
+                    (click)="agregarProductoVenta()">
+
+                    ➕ Agregar
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="detalle-productos">
+
+            <h3>
+                📋 Detalle de la Venta
+            </h3>
+
+
+            <div class="tabla-detalle-contenedor">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Medicamento</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th>Acción</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr
+                            *ngFor="
+                                let producto of detalleVenta;
+                                let i = index
+                            ">
+
+                            <td>
+                                {{ i + 1 }}
+                            </td>
+
+                            <td>
+                                {{ producto.medicamento }}
+                            </td>
+
+                            <td>
+                                {{ producto.cantidad }}
+                            </td>
+
+                            <td>
+                                Bs. {{ producto.precio }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    Bs. {{ producto.subtotal }}
+                                </strong>
+                            </td>
+
+                            <td>
+
+                                <button
+                                    class="btn-eliminar"
+                                    (click)="eliminarProductoVenta(i)">
+
+                                    🗑
+
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr
+                            *ngIf="detalleVenta.length === 0">
+
+                            <td
+                                colspan="6"
+                                class="sin-productos">
+
+                                📭 No hay medicamentos agregados
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="total-venta">
+
+            <span>
+                Total de la Venta:
+            </span>
+
+            <strong>
+                Bs. {{ totalVenta }}
+            </strong>
+
+        </div>
+
+
+        <div class="acciones-venta">
+
+            <button
+                class="btn-cancelar"
+                [disabled]="guardandoVenta"
+                (click)="cerrarNuevaVenta()">
+
+                ❌ Cancelar
+
+            </button>
+
+
+            <button
+                class="btn-guardar-venta"
+                [disabled]="guardandoVenta"
+                (click)="guardarVenta()">
+
+                <span *ngIf="!guardandoVenta">
+
+                    {{
+                        modoCorreccion
+                        ? '🔄 Registrar Venta Corregida'
+                        : '💾 Registrar Venta'
+                    }}
+
+                </span>
+
+                <span *ngIf="guardandoVenta">
+                    ⏳ Guardando...
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+            MODAL ANULAR VENTA
+========================================== -->
+
+<div
+    class="modal"
+    *ngIf="mostrarAnulacion">
+
+    <div class="modal-contenido modal-anulacion">
+
+        <div class="modal-header modal-header-peligro">
+
+            <div>
+
+                <h2>
+                    🚫 Anular Venta
+                </h2>
+
+                <span>
+                    La venta no será eliminada del historial
+                </span>
+
+            </div>
+
+
+            <button
+                class="btn-cerrar"
+                [disabled]="anulandoVenta"
+                (click)="cerrarAnulacion()">
+
+                ✖
+
+            </button>
+
+        </div>
+
+
+        <div class="resumen-anulacion">
+
+            <div>
+
+                <span>N.º Venta</span>
+
+                <strong>
+                    {{ ventaParaAnular?.numero_venta }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Cliente</span>
+
+                <strong>
+                    {{ ventaParaAnular?.cliente }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Total</span>
+
+                <strong>
+                    Bs. {{ ventaParaAnular?.total }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="alerta-stock">
+
+            <span class="alerta-stock-icono">
+                📦
+            </span>
+
+            <div>
+
+                <strong>
+                    El stock será devuelto automáticamente
+                </strong>
+
+                <span>
+                    Las unidades de esta venta regresarán al stock.
+                    El registro original permanecerá como ANULADO para mantener la trazabilidad.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="campo campo-motivo">
+
+            <label>
+                Motivo de anulación *
+            </label>
+
+            <textarea
+                rows="4"
+                [(ngModel)]="motivoAnulacion"
+                placeholder="Ej.: cantidad registrada incorrectamente"></textarea>
+
+            <small>
+                El motivo quedará registrado como parte de la trazabilidad.
+            </small>
+
+        </div>
+
+
+        <div class="acciones-venta">
+
+            <button
+                class="btn-cancelar"
+                [disabled]="anulandoVenta"
+                (click)="cerrarAnulacion()">
+
+                Cancelar
+
+            </button>
+
+
+            <button
+                class="btn-confirmar-anulacion"
+                [disabled]="anulandoVenta"
+                (click)="confirmarAnulacion()">
+
+                <span *ngIf="!anulandoVenta">
+                    🚫 Confirmar anulación
+                </span>
+
+                <span *ngIf="anulandoVenta">
+                    ⏳ Anulando...
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

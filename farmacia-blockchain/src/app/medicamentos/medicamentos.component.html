@@ -1,0 +1,469 @@
+<div class="med-page">
+
+  <!-- ================= HEADER DE LA PÁGINA ================= -->
+  <div class="med-header">
+    <div>
+      <h1>Medicamentos</h1>
+      <p>Gestión y control del catálogo farmacéutico</p>
+    </div>
+  </div>
+
+  <!-- ================= TARJETAS ================= -->
+  <div class="summary-grid">
+
+    <div class="summary-card card-blue">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M10.5 4.5 4.8 10.2a4.6 4.6 0 0 0 6.5 6.5l5.7-5.7a4.6 4.6 0 0 0-6.5-6.5Z"/>
+          <path d="m8 7 9 9"/>
+        </svg>
+      </div>
+
+      <div class="summary-data">
+        <span>Total medicamentos</span>
+        <strong>{{ medicamentos.length }}</strong>
+        <small>Activos en el catálogo</small>
+      </div>
+
+      <div class="summary-line"></div>
+    </div>
+
+
+    <div class="summary-card card-green">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m12 3 7 4v10l-7 4-7-4V7l7-4Z"/>
+          <path d="m5 7 7 4 7-4M12 11v10"/>
+        </svg>
+      </div>
+
+      <div class="summary-data">
+        <span>Stock total</span>
+        <strong>{{ stockTotal }}</strong>
+        <small>Unidades disponibles</small>
+      </div>
+
+      <div class="summary-line"></div>
+    </div>
+
+
+    <div class="summary-card card-orange">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3 2.8 19h18.4L12 3Z"/>
+          <path d="M12 9v4M12 17h.01"/>
+        </svg>
+      </div>
+
+      <div class="summary-data">
+        <span>Stock bajo</span>
+        <strong>{{ stockBajo }}</strong>
+        <small>Requieren atención</small>
+      </div>
+
+      <div class="summary-line"></div>
+    </div>
+
+
+    <div class="summary-card card-purple">
+      <div class="summary-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="5" width="16" height="15" rx="2"/>
+          <path d="M8 3v4M16 3v4M4 9h16"/>
+          <path d="M12 13v3l2 1"/>
+        </svg>
+      </div>
+
+      <div class="summary-data">
+        <span>Por vencer</span>
+        <strong>{{ porVencer }}</strong>
+        <small>Vencen en 30 días</small>
+      </div>
+
+      <div class="summary-line"></div>
+    </div>
+
+  </div>
+
+  <!-- ================= TABLA / PANEL ================= -->
+  <div class="med-panel">
+
+    <div class="med-toolbar">
+
+      <div class="search-control">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m20 20-3.5-3.5"/>
+        </svg>
+
+        <input
+          type="text"
+          placeholder="Buscar medicamento..."
+          [(ngModel)]="buscar"
+          (ngModelChange)="filtrarMedicamentos()">
+      </div>
+
+
+      <div class="category-control">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z"/>
+        </svg>
+
+        <select
+          [(ngModel)]="categoriaFiltro"
+          (ngModelChange)="filtrarMedicamentos()">
+
+          <option value="">Todas las categorías</option>
+          <option>Analgésico</option>
+          <option>Antibiótico</option>
+          <option>Antiinflamatorio</option>
+          <option>Vitaminas</option>
+          <option>Cardiovascular</option>
+          <option>Gastrointestinal</option>
+          <option>Antialérgico</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+
+      <button
+        *ngIf="esAdministrador"
+        type="button"
+        class="new-med-btn"
+        (click)="abrirModal()">
+
+        <span class="plus">+</span>
+        Nuevo Medicamento
+      </button>
+
+    </div>
+
+
+    <div class="table-scroll">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Medicamento</th>
+            <th>Categoría</th>
+            <th>Laboratorio</th>
+            <th>Stock</th>
+            <th>Precio Venta</th>
+            <th>Vencimiento</th>
+            <th *ngIf="esAdministrador" class="th-actions">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let m of medicamentosPagina">
+
+            <td>
+              <span class="code-text">{{ m.codigo }}</span>
+            </td>
+
+            <td>
+              <div class="medicine-cell">
+                <strong>{{ m.nombre }}</strong>
+                <small *ngIf="m.lote">Lote {{ m.lote }}</small>
+              </div>
+            </td>
+
+            <td>
+              <span
+                class="category-pill"
+                [ngClass]="claseCategoria(m.categoria)">
+                {{ m.categoria || 'Sin categoría' }}
+              </span>
+            </td>
+
+            <td>{{ m.laboratorio || '-' }}</td>
+
+            <td>
+              <div class="stock-cell">
+                <strong>{{ m.stock }}</strong>
+
+                <span
+                  class="stock-dot"
+                  [class.stock-dot-ok]="!esStockBajo(m)"
+                  [class.stock-dot-low]="esStockBajo(m)">
+                </span>
+
+                <small
+                  [class.stock-text-ok]="!esStockBajo(m)"
+                  [class.stock-text-low]="esStockBajo(m)">
+                  {{ esStockBajo(m) ? 'Bajo' : 'OK' }}
+                </small>
+              </div>
+            </td>
+
+            <td>
+              <span class="price-text">
+                {{ m.precio_venta | number:'1.2-2' }} Bs
+              </span>
+            </td>
+
+            <td>
+              <div class="date-cell">
+
+                <span
+                  [class.date-warning]="estaPorVencer(m)">
+                  {{ m.fecha_vencimiento || '-' }}
+                </span>
+
+                <small
+                  *ngIf="estaPorVencer(m)"
+                  class="expire-pill">
+                  Próximo a vencer
+                </small>
+
+              </div>
+            </td>
+
+            <td *ngIf="esAdministrador">
+              <div class="row-actions">
+
+                <button
+                  type="button"
+                  class="icon-btn edit"
+                  title="Editar"
+                  (click)="editarMedicamento(m)">
+
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m4 20 4.5-1 9.7-9.7-3.5-3.5L5 15.5 4 20Z"/>
+                    <path d="m13.8 6.7 3.5 3.5"/>
+                  </svg>
+                </button>
+
+
+                <button
+                  type="button"
+                  class="icon-btn delete"
+                  title="Eliminar"
+                  (click)="eliminarMedicamento(m.id)">
+
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13"/>
+                    <path d="M10 11v5M14 11v5"/>
+                  </svg>
+                </button>
+
+              </div>
+            </td>
+
+          </tr>
+
+
+          <tr *ngIf="medicamentosFiltrados.length === 0">
+            <td colspan="8" class="empty-state">
+              <div>
+                <strong>No se encontraron medicamentos</strong>
+                <span>Prueba cambiando la búsqueda o la categoría.</span>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <div class="pagination-bar">
+
+      <span>
+        Mostrando {{ indiceInicio + 1 }}
+        a {{ indiceFin }}
+        de {{ medicamentosFiltrados.length }} medicamentos
+      </span>
+
+      <div class="pagination">
+
+        <button
+          type="button"
+          (click)="paginaAnterior()"
+          [disabled]="paginaActual === 1">
+          ‹
+        </button>
+
+        <button
+          *ngFor="let p of paginasVisibles"
+          type="button"
+          [class.active]="p === paginaActual"
+          (click)="irPagina(p)">
+          {{ p }}
+        </button>
+
+        <button
+          type="button"
+          (click)="paginaSiguiente()"
+          [disabled]="paginaActual === totalPaginas">
+          ›
+        </button>
+
+      </div>
+
+
+      <select
+        class="page-size"
+        [(ngModel)]="porPagina"
+        (ngModelChange)="cambiarPorPagina()">
+
+        <option [ngValue]="6">6 por página</option>
+        <option [ngValue]="8">8 por página</option>
+        <option [ngValue]="10">10 por página</option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ======================================================
+     MODAL REGISTRAR / EDITAR
+======================================================= -->
+<div class="modal-overlay" *ngIf="mostrarModal">
+  <div class="modal-box modal-medicamento">
+
+    <div class="modal-titlebar">
+      <div class="modal-title-left">
+        <div class="modal-main-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M10.6 4.6 4.9 10.3a4.5 4.5 0 0 0 6.4 6.4l5.7-5.7a4.5 4.5 0 1 0-6.4-6.4Z"></path>
+            <path d="m8.1 7.1 8.8 8.8"></path>
+          </svg>
+        </div>
+
+        <div>
+          <span class="modal-kicker">
+            {{ editando ? 'ACTUALIZAR REGISTRO' : 'NUEVO REGISTRO' }}
+          </span>
+          <h2>{{ editando ? 'Editar Medicamento' : 'Nuevo Medicamento' }}</h2>
+          <p>Complete la información del medicamento</p>
+        </div>
+      </div>
+
+      <button type="button" class="modal-x" (click)="cerrarModal()">×</button>
+    </div>
+
+    <form class="modal-form modal-form-pro" (submit)="$event.preventDefault()">
+
+      <div class="field">
+        <label>Código</label>
+        <div class="input-with-icon icon-purple">
+          <span class="field-icon">▥</span>
+          <input type="text" name="codigo" [(ngModel)]="codigo" placeholder="Ej: MED001">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Nombre</label>
+        <div class="input-with-icon icon-purple">
+          <span class="field-icon">✎</span>
+          <input type="text" name="nombre" [(ngModel)]="nombre" placeholder="Nombre del medicamento">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Categoría</label>
+        <div class="input-with-icon icon-purple">
+          <span class="field-icon">◇</span>
+          <select name="categoria" [(ngModel)]="categoria">
+            <option value="">Seleccione categoría</option>
+            <option>Analgésico</option>
+            <option>Antibiótico</option>
+            <option>Antiinflamatorio</option>
+            <option>Vitaminas</option>
+            <option>Cardiovascular</option>
+            <option>Gastrointestinal</option>
+            <option>Antialérgico</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Laboratorio</label>
+        <div class="input-with-icon icon-purple">
+          <span class="field-icon">⚗</span>
+          <input type="text" name="laboratorio" [(ngModel)]="laboratorio" placeholder="Laboratorio fabricante">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Lote</label>
+        <div class="input-with-icon icon-purple">
+          <span class="field-icon">▣</span>
+          <input type="text" name="lote" [(ngModel)]="lote" placeholder="Número de lote">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Fecha de Vencimiento</label>
+        <div class="input-with-icon icon-purple">
+          <span class="field-icon">▦</span>
+          <input type="date" name="fecha_vencimiento" [(ngModel)]="fecha_vencimiento">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Precio Compra (Bs.)</label>
+        <div class="input-with-icon icon-green">
+          <span class="field-icon">$</span>
+          <input type="number" name="precio_compra" [(ngModel)]="precio_compra" min="0" step="0.01" placeholder="0.00">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Precio Venta (Bs.)</label>
+        <div class="input-with-icon icon-green">
+          <span class="field-icon">$</span>
+          <input type="number" name="precio_venta" [(ngModel)]="precio_venta" min="0" step="0.01" placeholder="0.00">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Stock Inicial</label>
+        <div class="input-with-icon icon-blue">
+          <span class="field-icon">▤</span>
+          <input type="number" name="stock" [(ngModel)]="stock" min="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Stock Mínimo</label>
+        <div class="input-with-icon icon-orange">
+          <span class="field-icon">⚠</span>
+          <input type="number" name="stock_minimo" [(ngModel)]="stock_minimo" min="0">
+        </div>
+      </div>
+
+      <div class="field field-full">
+        <label>Descripción</label>
+        <div class="textarea-with-icon icon-blue">
+          <span class="field-icon">▧</span>
+          <textarea rows="4" name="descripcion" [(ngModel)]="descripcion" placeholder="Descripción del medicamento..."></textarea>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="modal-buttons">
+      <button type="button" class="modal-cancel" (click)="cerrarModal()">
+        <span>×</span> Cancelar
+      </button>
+
+      <button type="button" class="modal-save" (click)="guardarMedicamento()">
+        <span>▣</span>
+        {{ editando ? 'Actualizar Medicamento' : 'Guardar Medicamento' }}
+      </button>
+    </div>
+
+  </div>
+</div>

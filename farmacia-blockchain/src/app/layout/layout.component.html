@@ -1,0 +1,30 @@
+<div class="layout">
+
+    <app-sidebar
+        [abierto]="sidebarAbierto"
+        (cerrarMenu)="cerrarSidebar()">
+    </app-sidebar>
+
+    <button
+        type="button"
+        class="sidebar-backdrop"
+        [class.visible]="sidebarAbierto"
+        aria-label="Cerrar menú"
+        (click)="cerrarSidebar()">
+    </button>
+
+    <div class="contenido">
+
+        <app-header
+            (menuToggle)="toggleSidebar()">
+        </app-header>
+
+        <main class="pagina">
+
+            <router-outlet></router-outlet>
+
+        </main>
+
+    </div>
+
+</div>

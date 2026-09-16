@@ -181,6 +181,8 @@ app.post(
 
             const {
 
+                hashOperacion: hashOperacionRecibido,
+
                 tipoOperacion,
 
                 referencia,
@@ -235,20 +237,14 @@ app.post(
             // =================================================
 
             const hashOperacion =
-                generarHash({
-
-                    tipoOperacion,
-
-                    referencia,
-
-                    usuario,
-
-                    datosOperacion,
-
-                    fecha:
-                        new Date().toISOString()
-
-                });
+                (typeof hashOperacionRecibido === 'string' && /^[a-fA-F0-9]{64}$/.test(hashOperacionRecibido))
+                    ? hashOperacionRecibido.toLowerCase()
+                    : generarHash({
+                        tipoOperacion,
+                        referencia,
+                        usuario,
+                        datosOperacion
+                    });
 
 
             console.log(
@@ -563,6 +559,75 @@ app.get(
 
         }
 
+    }
+);
+
+
+
+// =====================================================
+// VERIFICAR HASH EN BLOCKCHAIN
+// =====================================================
+
+app.post(
+    '/api/blockchain/verificar/',
+    async (req, res) => {
+        try {
+            const { hashOperacion, referencia } = req.body || {};
+
+            if (!hashOperacion) {
+                return res.status(400).json({
+                    estado: false,
+                    encontrado: false,
+                    mensaje: 'Debe enviar hashOperacion'
+                });
+            }
+
+            const cantidadRaw = await contrato.methods
+                .obtenerCantidadOperaciones()
+                .call();
+
+            const cantidad = Number(cantidadRaw);
+
+            for (let i = cantidad - 1; i >= 0; i--) {
+                const op = await contrato.methods
+                    .obtenerOperacion(i)
+                    .call();
+
+                const hash = op[1];
+                const ref = op[3];
+
+                if (
+                    String(hash).toLowerCase() === String(hashOperacion).toLowerCase()
+                    && (!referencia || String(ref) === String(referencia))
+                ) {
+                    return res.json({
+                        estado: true,
+                        encontrado: true,
+                        id: op[0].toString(),
+                        hashOperacion: hash,
+                        referencia: ref,
+                        tipoOperacion: op[2],
+                        usuario: op[4],
+                        fecha: op[5].toString(),
+                        registrador: op[6]
+                    });
+                }
+            }
+
+            return res.json({
+                estado: true,
+                encontrado: false,
+                mensaje: 'El hash no fue encontrado en Blockchain'
+            });
+
+        } catch (error) {
+            return res.status(500).json({
+                estado: false,
+                encontrado: false,
+                mensaje: 'No se pudo verificar el hash en Blockchain',
+                error: error.message
+            });
+        }
     }
 );
 

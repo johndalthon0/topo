@@ -1,0 +1,86 @@
+<aside class="sidebar" [class.abierto]="abierto">
+
+    <button
+        type="button"
+        class="btn-cerrar-sidebar"
+        aria-label="Cerrar menú"
+        (click)="cerrarSidebar()">
+        ×
+    </button>
+
+    <div class="logo">
+
+        <img src="/farmacor-logo.svg" alt="Logo FARMACOR">
+
+        <div>
+            <h2>FARMACOR</h2>
+        </div>
+
+    </div>
+
+    <div class="perfil">
+
+        <img src="/farmacor-logo.svg" alt="Perfil">
+
+        <h3>{{ nombreUsuario }}</h3>
+
+        <span>{{ rolUsuario }}</span>
+
+        <small>🟢 En línea</small>
+
+    </div>
+
+    <ul>
+
+        <li routerLink="/dashboard" routerLinkActive="activo" (click)="cerrarSidebar()">
+            🏠 <span>Inicio</span>
+        </li>
+
+        <li routerLink="/medicamentos" routerLinkActive="activo" (click)="cerrarSidebar()">
+            💊 <span>Medicamentos</span>
+        </li>
+
+        <li routerLink="/inventario" routerLinkActive="activo" (click)="cerrarSidebar()">
+            📦 <span>Inventario</span>
+        </li>
+
+        <li *ngIf="esAdministrador" routerLink="/compras" routerLinkActive="activo" (click)="cerrarSidebar()">
+            🛒 <span>Compras</span>
+        </li>
+
+        <li routerLink="/ventas" routerLinkActive="activo" (click)="cerrarSidebar()">
+            💰 <span>Ventas</span>
+        </li>
+
+        <li routerLink="/reportes" routerLinkActive="activo" (click)="cerrarSidebar()">
+            📊 <span>Reportes</span>
+        </li>
+
+        <li *ngIf="esAdministrador" routerLink="/blockchain" routerLinkActive="activo" (click)="cerrarSidebar()">
+            ⛓ <span>Blockchain</span>
+        </li>
+
+        <li routerLink="/alertas" routerLinkActive="activo" (click)="cerrarSidebar()">
+            🔔 <span>Notificaciones</span>
+        </li>
+
+        <li *ngIf="esAdministrador" routerLink="/usuarios" routerLinkActive="activo" (click)="cerrarSidebar()">
+            👤 <span>Usuarios</span>
+        </li>
+
+    </ul>
+
+    <div class="seccion-salir">
+
+        <button
+            type="button"
+            class="btn-salir"
+            (click)="cerrarSesion()">
+
+            🚪 <span>Cerrar sesión</span>
+
+        </button>
+
+    </div>
+
+</aside>

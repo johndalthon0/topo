@@ -1,0 +1,293 @@
+/* =========================================================
+   FARMACOR - HEADER GENERAL
+   MISMO ESTILO OSCURO DEL SISTEMA
+========================================================= */
+
+:host{
+    display:block;
+}
+
+.header{
+    height:80px;
+    margin-left:280px;
+    width:calc(100% - 280px);
+    padding:0 30px;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:25px;
+    position:relative;
+    z-index:20;
+
+    background:
+        radial-gradient(
+            circle at 18% 0%,
+            rgba(28,103,214,.16),
+            transparent 34%
+        ),
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 52%,
+            #06162f 100%
+        );
+
+    border-bottom:1px solid rgba(74,125,196,.20);
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+
+.izquierda{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+}
+
+.btn-menu-movil{
+    display:none;
+    width:44px;
+    height:44px;
+    min-width:44px;
+    padding:0;
+    border:1px solid rgba(70,163,255,.34);
+    border-radius:12px;
+    background:rgba(20,82,174,.20);
+    color:#ffffff;
+    cursor:pointer;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:5px;
+    box-shadow:inset 0 0 14px rgba(43,124,224,.08);
+}
+
+.btn-menu-movil span{
+    width:20px;
+    height:2px;
+    border-radius:3px;
+    background:#d9ecff;
+}
+
+/* MARCA */
+
+.marca{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.marca-icono{
+    width:46px;
+    height:46px;
+    min-width:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(70,163,255,.50);
+    border-radius:13px;
+    color:#ffffff;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1767e8,
+            #1499e5
+        );
+
+    box-shadow:0 0 22px rgba(24,143,235,.22);
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.marca-texto{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.marca-texto h2{
+    margin:0;
+    color:#ffffff;
+    font-size:20px;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:1.1px;
+}
+
+.marca-texto span{
+    display:block;
+    margin-top:5px;
+    color:#7f9bc2;
+    font-size:10px;
+    font-weight:500;
+}
+
+/* DERECHA */
+
+.derecha{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+/* USUARIO */
+
+.usuario{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:42px;
+    height:42px;
+    min-width:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(62,151,255,.43);
+    border-radius:12px;
+    color:#63bbff;
+    background:rgba(20,82,174,.23);
+    box-shadow:inset 0 0 14px rgba(43,124,224,.08);
+    font-size:14px;
+    font-weight:800;
+}
+
+.usuario-datos{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.usuario-datos h4{
+    margin:0;
+    color:#f4f8ff;
+    font-size:12px;
+    line-height:1.2;
+    font-weight:700;
+}
+
+.usuario-datos small{
+    display:block;
+    margin-top:4px;
+    color:#7790b2;
+    font-size:9px;
+    font-weight:500;
+}
+
+/* SEPARADOR */
+
+.separador{
+    width:1px;
+    height:34px;
+    background:rgba(91,128,181,.20);
+}
+
+/* FECHA */
+
+.fecha{
+    min-height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:0 13px;
+    border:1px solid rgba(72,119,185,.22);
+    border-radius:10px;
+    color:#bdcbe0;
+    background:rgba(4,21,48,.55);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.015);
+    font-size:10px;
+    font-weight:700;
+}
+
+.fecha-icono{
+    font-size:14px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+    .header{
+        padding:0 20px;
+    }
+
+    .marca-texto span{
+        display:none;
+    }
+}
+
+@media(max-width:768px){
+    .btn-menu-movil{
+        display:flex;
+    }
+
+    .header{
+        width:100%;
+        margin-left:0;
+        padding:0 16px;
+    }
+
+    .usuario-datos,
+    .separador{
+        display:none;
+    }
+}
+
+@media(max-width:480px){
+    .marca-icono{
+        width:40px;
+        height:40px;
+        min-width:40px;
+        font-size:17px;
+    }
+
+    .marca-texto h2{
+        font-size:17px;
+    }
+
+    .avatar{
+        display:none;
+    }
+
+    .fecha{
+        padding:0 9px;
+        font-size:9px;
+    }
+}
+
+
+@media(max-width:390px){
+    .marca-texto h2{
+        font-size:15px;
+    }
+
+    .fecha-icono{
+        display:none;
+    }
+}
+
+/* =========================================================
+   NOTIFICACIONES DE SEGURIDAD
+========================================================= */
+.notificaciones-wrap{position:relative;}
+.btn-notificaciones{width:42px;height:42px;border:1px solid rgba(72,119,185,.25);border-radius:12px;background:rgba(4,21,48,.65);color:#fff;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;transition:.2s ease;}
+.btn-notificaciones:hover{border-color:rgba(62,151,255,.55);transform:translateY(-1px);box-shadow:0 0 18px rgba(34,132,255,.14);}
+.campana{font-size:18px;}
+.badge{position:absolute;top:-6px;right:-7px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#ef4444;color:#fff;border:2px solid #06162f;font-size:9px;font-weight:900;box-sizing:border-box;}
+.panel-notificaciones{position:absolute;right:0;top:52px;width:min(390px,calc(100vw - 28px));max-height:520px;overflow:auto;background:linear-gradient(145deg,#071a38,#06142d);border:1px solid rgba(65,135,230,.28);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.48);z-index:3000;}
+.notif-header{padding:16px 17px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(85,130,190,.18);}
+.notif-header h3{margin:0;color:#fff;font-size:15px;}.notif-header small{color:#7f9bc2;font-size:10px;}.escudo{font-size:20px;}
+.notif-item{display:flex;gap:11px;align-items:flex-start;padding:13px 16px;cursor:pointer;border-bottom:1px solid rgba(85,130,190,.10);transition:.18s ease;position:relative;}
+.notif-item:hover{background:rgba(31,111,220,.10);}.notif-item.no-leida{background:rgba(239,68,68,.055);}
+.notif-icono{width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.18);}
+.notif-contenido{min-width:0;display:flex;flex-direction:column;gap:3px;}.notif-contenido strong{color:#f8fbff;font-size:11px;}.notif-contenido span{color:#9fb1ca;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.notif-contenido small{color:#607b9e;font-size:9px;}
+.punto{width:7px;height:7px;flex:0 0 7px;margin-top:6px;border-radius:50%;background:#ef4444;box-shadow:0 0 10px rgba(239,68,68,.55);}
+.notif-vacia,.notif-cargando{padding:26px 18px;text-align:center;color:#8ea3c1;font-size:11px;}.notif-vacia{display:flex;flex-direction:column;gap:5px;}.notif-vacia span{font-size:24px;}.notif-vacia strong{color:#d9e5f7;}.notif-vacia small{color:#6f86a7;}
+.btn-ver-todas{width:100%;padding:13px;border:0;color:#5fb2ff;background:rgba(18,71,151,.12);font-size:10px;font-weight:800;cursor:pointer;}.btn-ver-todas:hover{background:rgba(18,71,151,.22);}
+@media(max-width:600px){.derecha{gap:9px;}.panel-notificaciones{position:fixed;top:72px;right:10px;left:10px;width:auto;max-height:calc(100vh - 88px);}}

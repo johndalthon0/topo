@@ -1,0 +1,544 @@
+<div class="contenedor-reportes">
+
+    <!--======================================================
+                        TITULO
+    =======================================================-->
+
+    <div class="titulo-reportes">
+
+        <div>
+
+            <h1 class="titulo-con-icono">
+
+                <span class="icono-titulo-reportes">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 19V9"></path>
+                        <path d="M10 19V5"></path>
+                        <path d="M16 19v-7"></path>
+                        <path d="M3 20h18"></path>
+                        <path d="m4 8 5-4 5 4 6-5"></path>
+                    </svg>
+                </span>
+
+                Reportes Generales
+
+            </h1>
+
+            <p>
+                Consulta de compras, ventas, inventario y actividades del sistema.
+            </p>
+
+        </div>
+
+        <button
+            class="btn-recargar-reportes"
+            [disabled]="cargando"
+            (click)="recargarDatos()">
+
+            🔄
+            {{ cargando ? 'Cargando...' : 'Actualizar' }}
+
+        </button>
+
+    </div>
+
+
+    <!--======================================================
+                        FILTROS
+    =======================================================-->
+
+    <div class="panel-filtros">
+
+        <div class="fila-filtros">
+
+            <div class="grupo">
+
+                <label>
+                    Fecha Inicio
+                </label>
+
+                <input
+                    type="date"
+                    [(ngModel)]="fechaInicio">
+
+            </div>
+
+
+            <div class="grupo">
+
+                <label>
+                    Fecha Fin
+                </label>
+
+                <input
+                    type="date"
+                    [(ngModel)]="fechaFin">
+
+            </div>
+
+
+            <div class="grupo buscar">
+
+                <label>
+                    Buscar
+                </label>
+
+                <input
+                    type="text"
+                    placeholder="Buscar factura, venta, medicamento, motivo..."
+                    [(ngModel)]="textoBuscar"
+                    (keyup.enter)="buscarReportes()">
+
+            </div>
+
+
+            <div class="grupo">
+
+                <label for="moduloSeleccionado">
+                    Módulo
+                </label>
+
+                <select
+                    id="moduloSeleccionado"
+                    [(ngModel)]="moduloSeleccionado">
+
+                    <option value="">
+                        Todos
+                    </option>
+
+                    <option value="Compras">
+                        Compras
+                    </option>
+
+                    <option value="Ventas">
+                        Ventas
+                    </option>
+
+                    <option value="Medicamentos">
+                        Medicamentos
+                    </option>
+
+                    <option value="Inventario">
+                        Inventario
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="grupo">
+
+                <label for="usuarioSelect">
+                    Usuario
+                </label>
+
+                <select
+                    id="usuarioSelect"
+                    [(ngModel)]="usuarioSeleccionado">
+
+                    <option value="">
+                        Todos
+                    </option>
+
+                    <option
+                        *ngFor="let usuario of usuarios"
+                        [value]="usuario">
+
+                        {{ usuario }}
+
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="botones-reportes">
+
+            <button
+                class="btn-filtrar"
+                (click)="buscarReportes()">
+
+                <i class="fas fa-search"></i>
+                Filtrar
+
+            </button>
+
+
+            <button
+                class="btn-limpiar"
+                (click)="limpiarFiltros()">
+
+                <i class="fas fa-eraser"></i>
+                Limpiar
+
+            </button>
+
+
+            <button
+                class="btn-pdf"
+                [disabled]="exportando"
+                (click)="exportarPDF()">
+
+                <i class="fas fa-file-pdf"></i>
+                PDF
+
+            </button>
+
+
+            <button
+                class="btn-excel"
+                [disabled]="exportando"
+                (click)="exportarExcel()">
+
+                <i class="fas fa-file-excel"></i>
+                Excel
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!--======================================================
+                    MENSAJE TRAZABILIDAD
+    =======================================================-->
+
+    <div class="aviso-reportes">
+
+        <div class="aviso-icono">
+            🛡️
+        </div>
+
+        <div>
+
+            <strong>
+                Reportes con trazabilidad
+            </strong>
+
+            <span>
+                Las operaciones anuladas se conservan en el historial, pero no se suman en los totales de compras, ventas ni ganancia.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!--======================================================
+                    TARJETAS
+    =======================================================-->
+
+    <div class="cards-reportes">
+
+        <div class="card-resumen card-compras">
+
+            <div class="icono-card">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 1.9-1.4L21 7H7"></path>
+                    <circle cx="10" cy="19" r="1.4"></circle>
+                    <circle cx="18" cy="19" r="1.4"></circle>
+                    <path d="M16 3v5M13.5 5.5h5"></path>
+                </svg>
+            </div>
+
+            <div class="contenido-card">
+
+                <span>Total Comprado Válido</span>
+
+                <h2>
+                    {{ gastoCompras | number:'1.2-2' }} Bs
+                </h2>
+
+                <small>
+                    {{ totalCompras }} compras válidas
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-resumen card-ventas">
+
+            <div class="icono-card">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="9" width="16" height="10" rx="2"></rect>
+                    <path d="M7 9V5h7l3 4"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 16h4"></path>
+                    <circle cx="17" cy="15" r="1.2"></circle>
+                </svg>
+            </div>
+
+            <div class="contenido-card">
+
+                <span>Total Vendido Válido</span>
+
+                <h2>
+                    {{ ingresoVentas | number:'1.2-2' }} Bs
+                </h2>
+
+                <small>
+                    {{ totalVentas }} ventas válidas
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-resumen card-ganancia">
+
+            <div class="icono-card">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 18V6"></path>
+                    <path d="M4 18h16"></path>
+                    <path d="m7 14 4-4 3 2 5-6"></path>
+                    <path d="M16 6h3v3"></path>
+                </svg>
+            </div>
+
+            <div class="contenido-card">
+
+                <span>Ganancia</span>
+
+                <h2>
+                    {{ ganancia | number:'1.2-2' }} Bs
+                </h2>
+
+                <small>
+                    Ingresos válidos - compras válidas
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-resumen card-inventario">
+
+            <div class="icono-card">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m12 3 7 4-7 4-7-4 7-4Z"></path>
+                    <path d="m5 7 7 4 7-4"></path>
+                    <path d="M5 7v8l7 4 7-4V7"></path>
+                    <path d="M12 11v8"></path>
+                </svg>
+            </div>
+
+            <div class="contenido-card">
+
+                <span>Valor Inventario</span>
+
+                <h2>
+                    {{ valorInventario | number:'1.2-2' }} Bs
+                </h2>
+
+                <small>
+                    {{ totalMedicamentos }} medicamentos · {{ totalAnulados }} anulados en historial
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--======================================================
+                    TABLA DE REPORTES
+    =======================================================-->
+
+    <div class="tabla-reportes">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>#</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>Módulo</th>
+                    <th>Referencia</th>
+                    <th>Monto (Bs)</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr
+                    *ngFor="let reporte of reportesPaginados; let i=index"
+                    [class.fila-anulada]="reporte.anulado">
+
+                    <td>
+                        {{ ((paginaActual - 1) * registrosPorPagina) + i + 1 }}
+                    </td>
+
+                    <td>
+                        {{ reporte.usuario }}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="accion"
+                            [ngClass]="claseAccion(reporte)">
+
+                            {{ reporte.accion }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="badge"
+                            [ngClass]="claseModulo(reporte.modulo)">
+
+                            {{ reporte.modulo }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <div class="referencia-reporte">
+
+                            <strong>
+                                {{ reporte.referencia }}
+                            </strong>
+
+                            <small *ngIf="reporte.referencia_origen">
+                                Corrige a: {{ reporte.referencia_origen }}
+                            </small>
+
+                            <small
+                                class="motivo-anulacion"
+                                *ngIf="reporte.motivo">
+
+                                Motivo: {{ reporte.motivo }}
+
+                            </small>
+
+                            <small *ngIf="reporte.descripcion">
+                                {{ reporte.descripcion }}
+                            </small>
+
+                        </div>
+
+                    </td>
+
+                    <td
+                        class="monto"
+                        [ngClass]="reporte.tipo">
+
+                        {{ reporte.monto | number:'1.2-2' }} Bs
+
+                        <small
+                            class="no-suma"
+                            *ngIf="reporte.anulado">
+
+                            No suma al total
+
+                        </small>
+
+                    </td>
+
+                    <td>
+                        {{ reporte.fecha || '-' }}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="estado"
+                            [ngClass]="claseEstado(reporte.estado)">
+
+                            {{ reporte.estado }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+
+                <tr *ngIf="reportesPaginados.length === 0">
+
+                    <td
+                        colspan="8"
+                        class="sin-reportes">
+
+                        📭 No existen registros para los filtros seleccionados
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!--======================================================
+                        PAGINACIÓN
+    =======================================================-->
+
+    <div
+        class="paginacion-reportes"
+        *ngIf="reportesFiltrados.length > 0">
+
+        <button
+            class="btn-pagina"
+            [disabled]="paginaActual === 1"
+            (click)="paginaAnterior()">
+
+            <i class="fas fa-angle-left"></i>
+            Anterior
+
+        </button>
+
+
+        <button
+            class="pagina"
+            *ngFor="let pagina of paginasVisibles"
+            [class.activa]="paginaActual === pagina"
+            (click)="cambiarPagina(pagina)">
+
+            {{ pagina }}
+
+        </button>
+
+
+        <span class="puntos">
+            Página {{ paginaActual }} de {{ totalPaginas }}
+        </span>
+
+
+        <button
+            class="btn-pagina"
+            [disabled]="paginaActual === totalPaginas"
+            (click)="paginaSiguiente()">
+
+            Siguiente
+            <i class="fas fa-angle-right"></i>
+
+        </button>
+
+    </div>
+
+</div>

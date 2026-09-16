@@ -1,0 +1,920 @@
+<!-- ============================================================
+     CONTENEDOR PRINCIPAL
+============================================================ -->
+
+<div class="usuarios-container">
+
+
+  <!-- ==========================================================
+       ENCABEZADO
+  =========================================================== -->
+
+  <div class="pagina-header">
+
+    <div class="titulo-seccion">
+
+      <div class="icono-titulo">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="9" cy="8" r="3"></circle>
+          <path d="M3.5 19c0-3.2 2.4-5 5.5-5s5.5 1.8 5.5 5"></path>
+          <circle cx="17" cy="9" r="2.3"></circle>
+          <path d="M15.5 14.4c.5-.2 1-.3 1.7-.3 2.5 0 4.3 1.5 4.3 4.2"></path>
+        </svg>
+
+      </div>
+
+      <div>
+
+        <h1>Usuarios</h1>
+
+        <p>
+          Gestión de usuarios del sistema
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- BOTÓN NUEVO USUARIO -->
+
+    <button
+      class="btn-nuevo"
+      (click)="abrirFormulario()"
+    >
+
+      <span class="icono-plus">
+        +
+      </span>
+
+      Nuevo Usuario
+
+    </button>
+
+  </div>
+
+
+
+  <!-- ==========================================================
+       TARJETAS DE RESUMEN
+  =========================================================== -->
+
+  <div class="tarjetas-resumen">
+
+
+    <!-- TOTAL USUARIOS -->
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-tarjeta azul">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="9" cy="8" r="3"></circle>
+          <path d="M3.5 19c0-3.2 2.4-5 5.5-5s5.5 1.8 5.5 5"></path>
+          <circle cx="17" cy="9" r="2.3"></circle>
+          <path d="M15.5 14.4c.5-.2 1-.3 1.7-.3 2.5 0 4.3 1.5 4.3 4.2"></path>
+        </svg>
+
+      </div>
+
+      <div class="informacion-tarjeta">
+
+        <span class="titulo-tarjeta">
+          Total Usuarios
+        </span>
+
+        <strong>
+          {{ usuarios.length }}
+        </strong>
+
+        <span class="descripcion-tarjeta">
+          Usuarios registrados
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- USUARIOS ACTIVOS -->
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-tarjeta verde">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8"></circle>
+          <path d="m8.5 12 2.3 2.3 4.8-5"></path>
+        </svg>
+
+      </div>
+
+      <div class="informacion-tarjeta">
+
+        <span class="titulo-tarjeta">
+          Usuarios Activos
+        </span>
+
+        <strong>
+          {{ usuariosActivos }}
+        </strong>
+
+        <span class="descripcion-tarjeta">
+          Con acceso al sistema
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ADMINISTRADORES -->
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-tarjeta naranja">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="7" r="3"></circle>
+          <path d="M5 19c0-4 2.8-6 7-6s7 2 7 6"></path>
+          <path d="M9.5 13 12 16l2.5-3"></path>
+        </svg>
+
+      </div>
+
+      <div class="informacion-tarjeta">
+
+        <span class="titulo-tarjeta">
+          Administradores
+        </span>
+
+        <strong>
+          {{ administradores }}
+        </strong>
+
+        <span class="descripcion-tarjeta">
+          Usuarios administradores
+        </span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- FARMACÉUTICOS -->
+
+    <div class="tarjeta-resumen">
+
+      <div class="icono-tarjeta morado">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="7" r="3"></circle>
+          <path d="M5 19c0-4 2.8-6 7-6s7 2 7 6"></path>
+          <path d="M16.5 13.5v4M14.5 15.5h4"></path>
+        </svg>
+
+      </div>
+
+      <div class="informacion-tarjeta">
+
+        <span class="titulo-tarjeta">
+          Farmacéuticos
+        </span>
+
+        <strong>
+          {{ farmaceuticos }}
+        </strong>
+
+        <span class="descripcion-tarjeta">
+          Personal registrado
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ==========================================================
+       LISTA DE USUARIOS
+  =========================================================== -->
+
+  <div class="contenedor-lista">
+
+
+    <!-- ENCABEZADO DE LISTA -->
+
+    <div class="lista-header">
+
+      <div>
+
+        <h2 class="titulo-lista">
+
+          <span class="icono-lista">
+
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="9" cy="8" r="3"></circle>
+              <path d="M3.5 19c0-3.2 2.4-5 5.5-5s5.5 1.8 5.5 5"></path>
+              <circle cx="17" cy="9" r="2.3"></circle>
+              <path d="M15.5 14.4c.5-.2 1-.3 1.7-.3 2.5 0 4.3 1.5 4.3 4.2"></path>
+            </svg>
+
+          </span>
+
+          Lista de Usuarios
+
+        </h2>
+
+        <p>
+          Usuarios registrados en el sistema
+        </p>
+
+      </div>
+
+
+      <!-- BUSCADOR -->
+
+      <div class="buscador">
+
+        <span class="icono-busqueda">
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="busqueda"
+          placeholder="Buscar usuario..."
+        >
+
+      </div>
+
+    </div>
+
+
+
+    <!-- ========================================================
+         CARGANDO
+    ========================================================= -->
+
+    <div
+      class="mensaje-cargando"
+      *ngIf="cargando"
+    >
+
+      <div class="spinner"></div>
+
+      <p>
+        Cargando usuarios...
+      </p>
+
+    </div>
+
+
+
+    <!-- ========================================================
+         TABLA
+    ========================================================= -->
+
+    <div
+      class="tabla-contenedor"
+      *ngIf="!cargando"
+    >
+
+      <table>
+
+
+        <!-- CABECERA -->
+
+        <thead>
+
+          <tr>
+
+            <th>
+              #
+            </th>
+
+            <th>
+              Usuario
+            </th>
+
+            <th>
+              Nombre Completo
+            </th>
+
+            <th>
+              Correo
+            </th>
+
+            <th>
+              Rol
+            </th>
+
+            <th>
+              Estado
+            </th>
+
+            <th>
+              Fecha Registro
+            </th>
+
+            <th>
+              Acciones
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+
+        <!-- CUERPO -->
+
+        <tbody>
+
+
+          <!-- USUARIOS -->
+
+          <tr
+            *ngFor="
+              let usuario of usuariosFiltrados;
+              let i = index
+            "
+          >
+
+
+            <!-- NÚMERO -->
+
+            <td>
+
+              {{ i + 1 }}
+
+            </td>
+
+
+
+            <!-- USUARIO -->
+
+            <td>
+
+              <div class="usuario-info">
+
+                <div class="avatar">
+
+                  {{
+                    obtenerInicial(
+                      usuario.nombre
+                    )
+                  }}
+
+                </div>
+
+                <strong>
+
+                  {{ usuario.usuario }}
+
+                </strong>
+
+              </div>
+
+            </td>
+
+
+
+            <!-- NOMBRE -->
+
+            <td>
+
+              {{ usuario.nombre }}
+
+            </td>
+
+
+
+            <!-- CORREO -->
+
+            <td>
+
+              {{ usuario.correo }}
+
+            </td>
+
+
+
+            <!-- ROL -->
+
+            <td>
+
+              <span
+                class="rol"
+                [ngClass]="{
+                  'rol-administrador':
+                    usuario.rol === 'Administrador',
+
+                  'rol-farmaceutico':
+                    usuario.rol === 'Farmacéutico'
+                }"
+              >
+
+                {{ usuario.rol }}
+
+              </span>
+
+            </td>
+
+
+
+            <!-- ESTADO -->
+
+            <td>
+
+              <span
+                class="estado"
+                [ngClass]="{
+                  'estado-activo':
+                    usuario.estado === true,
+
+                  'estado-inactivo':
+                    usuario.estado === false
+                }"
+              >
+
+                {{
+                  obtenerEstadoTexto(
+                    usuario.estado
+                  )
+                }}
+
+              </span>
+
+            </td>
+
+
+
+            <!-- FECHA -->
+
+            <td>
+
+              {{
+                usuario.fecha_registro
+                  | date:'dd/MM/yyyy'
+              }}
+
+            </td>
+
+
+
+            <!-- ACCIONES -->
+
+            <td>
+
+              <div class="acciones">
+
+
+                <!-- EDITAR -->
+
+                <button
+                  class="btn-editar"
+                  title="Editar usuario"
+                  (click)="
+                    editarUsuario(usuario)
+                  "
+                >
+
+                  ✏️
+
+                </button>
+
+
+
+                <!-- CAMBIAR ESTADO -->
+
+                <button
+                  class="btn-estado"
+                  [title]="
+                    usuario.estado
+                      ? 'Desactivar usuario'
+                      : 'Activar usuario'
+                  "
+                  (click)="
+                    cambiarEstado(usuario)
+                  "
+                >
+
+                  <span
+                    *ngIf="usuario.estado"
+                  >
+                    🔒
+                  </span>
+
+                  <span
+                    *ngIf="!usuario.estado"
+                  >
+                    🔓
+                  </span>
+
+                </button>
+
+
+
+                <!-- ELIMINAR -->
+
+                <button
+                  class="btn-eliminar"
+                  title="Eliminar usuario"
+                  (click)="
+                    eliminarUsuario(
+                      usuario.id
+                    )
+                  "
+                >
+
+                  🗑️
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+
+
+          <!-- ==================================================
+               SIN RESULTADOS
+          =================================================== -->
+
+          <tr
+            *ngIf="
+              usuariosFiltrados.length === 0
+            "
+          >
+
+            <td
+              colspan="8"
+              class="sin-resultados"
+            >
+
+              <div class="icono-vacio">
+                👥
+              </div>
+
+              <h3>
+                No se encontraron usuarios
+              </h3>
+
+              <p>
+                No existen usuarios que coincidan
+                con la búsqueda.
+              </p>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- ============================================================
+     MODAL NUEVO / EDITAR USUARIO
+============================================================ -->
+
+<div
+  class="modal-overlay"
+  *ngIf="mostrarFormulario"
+>
+
+
+  <div class="modal">
+
+
+    <!-- ========================================================
+         ENCABEZADO MODAL
+    ========================================================= -->
+
+    <div class="modal-header">
+
+      <div>
+
+        <h2>
+
+          <span>
+            {{ modoEdicion ? '✏️' : '➕' }}
+          </span>
+
+          {{
+            modoEdicion
+              ? 'Editar Usuario'
+              : 'Nuevo Usuario'
+          }}
+
+        </h2>
+
+        <p>
+
+          {{
+            modoEdicion
+              ? 'Modifique los datos del usuario'
+              : 'Complete los datos del usuario'
+          }}
+
+        </p>
+
+      </div>
+
+
+      <!-- CERRAR -->
+
+      <button
+        class="btn-cerrar"
+        (click)="cerrarFormulario()"
+      >
+
+        ×
+
+      </button>
+
+    </div>
+
+
+
+    <!-- ========================================================
+         FORMULARIO
+    ========================================================= -->
+
+    <form
+      (ngSubmit)="guardarUsuario()"
+      #formularioUsuario="ngForm"
+    >
+
+
+      <!-- FILA 1 -->
+
+      <div class="fila-formulario">
+
+
+        <!-- USUARIO -->
+
+        <div class="campo">
+
+          <label>
+            Nombre de Usuario
+          </label>
+
+          <input
+            type="text"
+            name="usuario"
+            [(ngModel)]="
+              usuarioForm.usuario
+            "
+            placeholder="Ingrese nombre de usuario"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- NOMBRE -->
+
+        <div class="campo">
+
+          <label>
+            Nombre Completo
+          </label>
+
+          <input
+            type="text"
+            name="nombre"
+            [(ngModel)]="
+              usuarioForm.nombre
+            "
+            placeholder="Ingrese nombre completo"
+            required
+          >
+
+        </div>
+
+      </div>
+
+
+
+      <!-- FILA 2 -->
+
+      <div class="fila-formulario">
+
+
+        <!-- CORREO -->
+
+        <div class="campo">
+
+          <label>
+            Correo Electrónico
+          </label>
+
+          <input
+            type="email"
+            name="correo"
+            [(ngModel)]="
+              usuarioForm.correo
+            "
+            placeholder="correo@farmaciacoria.com"
+            required
+          >
+
+        </div>
+
+
+
+        <!-- CONTRASEÑA -->
+
+        <div class="campo">
+
+          <label>
+
+            Contraseña
+
+            <span
+              *ngIf="modoEdicion"
+              class="texto-opcional"
+            >
+              (opcional)
+            </span>
+
+          </label>
+
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="
+              usuarioForm.password
+            "
+            [placeholder]="
+              modoEdicion
+                ? 'Dejar vacío para mantener'
+                : 'Ingrese contraseña'
+            "
+            [required]="
+              !modoEdicion
+            "
+          >
+
+        </div>
+
+      </div>
+
+
+
+      <!-- FILA 3 -->
+
+      <div class="fila-formulario">
+
+
+        <!-- ROL -->
+
+        <div class="campo">
+
+          <label>
+            Rol
+          </label>
+
+          <select
+            id="rol"
+            name="rol"
+            [(ngModel)]="
+              usuarioForm.rol
+            "
+            aria-label="Rol"
+          >
+
+            <option
+              value="Administrador"
+            >
+              Administrador
+            </option>
+
+            <option
+              value="Farmacéutico"
+            >
+              Farmacéutico
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- ESTADO -->
+
+        <div
+          class="campo"
+          *ngIf="modoEdicion"
+        >
+
+          <label
+            for="estado"
+          >
+            Estado
+          </label>
+
+          <select
+            id="estado"
+            name="estado"
+            [(ngModel)]="
+              usuarioForm.estado
+            "
+          >
+
+            <option
+              [ngValue]="true"
+            >
+              Activo
+            </option>
+
+            <option
+              [ngValue]="false"
+            >
+              Inactivo
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ======================================================
+           BOTONES
+      ======================================================= -->
+
+      <div class="modal-footer">
+
+
+        <!-- CANCELAR -->
+
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="
+            cerrarFormulario()
+          "
+        >
+
+          Cancelar
+
+        </button>
+
+
+
+        <!-- GUARDAR -->
+
+        <button
+          type="submit"
+          class="btn-guardar"
+          [disabled]="
+            formularioUsuario.invalid
+          "
+        >
+
+          <span>
+            💾
+          </span>
+
+          {{
+            modoEdicion
+              ? 'Actualizar Usuario'
+              : 'Guardar Usuario'
+          }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

@@ -1,0 +1,177 @@
+/* =========================================================
+   CONTENEDOR GENERAL DE LA APLICACIÓN
+========================================================= */
+
+:host {
+    display: block;
+    width: 100%;
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 50%,
+            #06162f 100%
+        );
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   QUITAR FONDO CLARO EXTERIOR DEL DASHBOARD
+   Conserva el diseño interno del Dashboard.
+========================================================= */
+
+:host ::ng-deep .dashboard {
+    background:
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 50%,
+            #06162f 100%
+        ) !important;
+}
+
+
+/* =========================================================
+   RESETEO BÁSICO
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+
+/* =========================================================
+   LOGIN
+   Se conserva tu diseño existente.
+========================================================= */
+
+.login-container {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #1e3a8a,
+            #0ea5e9
+        );
+}
+
+
+.login-card {
+    width: 420px;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,0.15);
+
+    backdrop-filter:
+        blur(15px);
+
+    border:
+        1px solid rgba(255,255,255,0.2);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+
+    text-align: center;
+}
+
+
+.logo {
+    width: 90px;
+    margin-bottom: 15px;
+}
+
+
+h1 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+
+h3 {
+    color: #e2e8f0;
+    margin-bottom: 25px;
+    font-weight: normal;
+}
+
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-bottom: 15px;
+
+    border: none;
+    border-radius: 10px;
+
+    outline: none;
+}
+
+
+.opciones {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+
+    color: white;
+
+    font-size: 14px;
+}
+
+
+.opciones a {
+    color: white;
+    text-decoration: none;
+}
+
+
+button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    color: white;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            90deg,
+            #10b981,
+            #06b6d4
+        );
+}
+
+
+button:hover {
+    opacity: .9;
+}

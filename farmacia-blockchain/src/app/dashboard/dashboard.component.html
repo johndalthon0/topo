@@ -1,0 +1,902 @@
+<div class="dashboard">
+
+  <div class="dashboard-header">
+
+    <div class="dashboard-title">
+
+      <span class="welcome-label">
+        PANEL PRINCIPAL
+      </span>
+
+      <h1>Dashboard</h1>
+
+      <p>
+        Resumen general de la gestión de Farmacia Coria
+      </p>
+
+    </div>
+
+    <div class="header-actions">
+
+      <div class="header-date">
+
+        <span>Última actualización</span>
+
+        <strong>
+          {{ fechaActualizacion }}
+        </strong>
+
+      </div>
+
+      <button
+        type="button"
+        class="refresh-button"
+        title="Actualizar dashboard"
+        (click)="cargarDashboard()">
+
+        ↻
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- TARJETAS -->
+
+  <div class="cards-grid">
+
+    <button
+      type="button"
+      class="stat-card blue"
+      (click)="irA('/medicamentos')">
+
+      <span class="card-glow"></span>
+
+      <div class="stat-icon">
+        💊
+      </div>
+
+      <div class="stat-info">
+
+        <span>Total medicamentos</span>
+
+        <strong>
+          {{ totalMedicamentos }}
+        </strong>
+
+        <small>
+          Medicamentos registrados
+        </small>
+
+      </div>
+
+      <span class="stat-arrow">
+        →
+      </span>
+
+      <span class="card-line"></span>
+
+    </button>
+
+
+    <button
+      type="button"
+      class="stat-card orange"
+      (click)="irA('/inventario')">
+
+      <span class="card-glow"></span>
+
+      <div class="stat-icon">
+        ⚠️
+      </div>
+
+      <div class="stat-info">
+
+        <span>Stock bajo</span>
+
+        <strong>
+          {{ stockBajo }}
+        </strong>
+
+        <small>
+          Requieren atención
+        </small>
+
+      </div>
+
+      <span class="stat-arrow">
+        →
+      </span>
+
+      <span class="card-line"></span>
+
+    </button>
+
+
+    <button
+      type="button"
+      class="stat-card green"
+      (click)="irA('/compras')">
+
+      <span class="card-glow"></span>
+
+      <div class="stat-icon">
+        🛒
+      </div>
+
+      <div class="stat-info">
+
+        <span>Total compras</span>
+
+        <strong>
+          {{ totalCompras | number:'1.0-0' }} Bs
+        </strong>
+
+        <small>
+          Operaciones válidas
+        </small>
+
+      </div>
+
+      <span class="stat-arrow">
+        →
+      </span>
+
+      <span class="card-line"></span>
+
+    </button>
+
+
+    <button
+      type="button"
+      class="stat-card purple"
+      (click)="irA('/ventas')">
+
+      <span class="card-glow"></span>
+
+      <div class="stat-icon">
+        💰
+      </div>
+
+      <div class="stat-info">
+
+        <span>Total ventas</span>
+
+        <strong>
+          {{ totalVentas | number:'1.0-0' }} Bs
+        </strong>
+
+        <small>
+          Operaciones válidas
+        </small>
+
+      </div>
+
+      <span class="stat-arrow">
+        →
+      </span>
+
+      <span class="card-line"></span>
+
+    </button>
+
+
+    <button
+      type="button"
+      class="stat-card cyan"
+      (click)="irA('/usuarios')">
+
+      <span class="card-glow"></span>
+
+      <div class="stat-icon">
+        👥
+      </div>
+
+      <div class="stat-info">
+
+        <span>Usuarios</span>
+
+        <strong>
+          {{ totalUsuarios }}
+        </strong>
+
+        <small>
+          Usuarios del sistema
+        </small>
+
+      </div>
+
+      <span class="stat-arrow">
+        →
+      </span>
+
+      <span class="card-line"></span>
+
+    </button>
+
+  </div>
+
+
+  <!-- GRÁFICO + BLOCKCHAIN -->
+
+  <div class="main-grid">
+
+    <section class="panel chart-panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <span class="panel-label">
+            ANÁLISIS
+          </span>
+
+          <h2>
+            Compras y ventas
+          </h2>
+
+          <p>
+            Comparación mensual de movimientos válidos
+          </p>
+
+        </div>
+
+
+        <div class="chart-summary">
+
+          <div class="summary-item compras-summary">
+
+            <span class="summary-dot"></span>
+
+            <div>
+
+              <span>Compras</span>
+
+              <strong>
+                {{ totalCompras | number:'1.0-0' }} Bs
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="summary-item ventas-summary">
+
+            <span class="summary-dot"></span>
+
+            <div>
+
+              <span>Ventas</span>
+
+              <strong>
+                {{ totalVentas | number:'1.0-0' }} Bs
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="chart-empty"
+        *ngIf="ventasCompras.length === 0">
+
+        <span>📊</span>
+
+        <strong>
+          Aún no existen movimientos para mostrar
+        </strong>
+
+        <small>
+          El gráfico se actualizará cuando se registren compras o ventas.
+        </small>
+
+      </div>
+
+
+      <div
+        class="chart-container"
+        *ngIf="ventasCompras.length > 0">
+
+        <div class="chart-y">
+
+          <span
+            *ngFor="let nivel of nivelesGrafico">
+
+            {{ nivel | number:'1.0-0' }}
+
+          </span>
+
+        </div>
+
+
+        <div class="chart-area">
+
+          <div class="chart-lines">
+
+            <span
+              *ngFor="let nivel of nivelesGrafico">
+            </span>
+
+          </div>
+
+
+          <div class="bars">
+
+            <div
+              class="month"
+              *ngFor="let dato of ventasCompras">
+
+              <div class="bars-group">
+
+                <div
+                  class="bar compras-bar"
+                  [style.height.%]="obtenerAlturaBarra(dato.compras)"
+                  [attr.title]="'Compras: ' + (dato.compras | number:'1.0-0') + ' Bs'">
+
+                  <span class="bar-value">
+                    {{ dato.compras | number:'1.0-0' }}
+                  </span>
+
+                </div>
+
+
+                <div
+                  class="bar ventas-bar"
+                  [style.height.%]="obtenerAlturaBarra(dato.ventas)"
+                  [attr.title]="'Ventas: ' + (dato.ventas | number:'1.0-0') + ' Bs'">
+
+                  <span class="bar-value">
+                    {{ dato.ventas | number:'1.0-0' }}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <span class="month-label">
+                {{ dato.mes }}
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="chart-legend">
+
+        <div>
+          <span class="legend compras-color"></span>
+          Compras
+        </div>
+
+        <div>
+          <span class="legend ventas-color"></span>
+          Ventas
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- BLOCKCHAIN -->
+
+    <section class="panel blockchain-panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <span class="panel-label">
+            SEGURIDAD
+          </span>
+
+          <h2>
+            Blockchain
+          </h2>
+
+          <p>
+            Estado de la red y trazabilidad
+          </p>
+
+        </div>
+
+
+        <span
+          class="blockchain-status"
+          [class.offline]="blockchain.estado !== 'Conectado'">
+
+          <span class="status-dot"></span>
+
+          {{ blockchain.estado }}
+
+        </span>
+
+      </div>
+
+
+      <div class="blockchain-main">
+
+        <div class="blockchain-icon">
+          ⛓
+        </div>
+
+        <div class="blockchain-main-text">
+
+          <strong>
+            Red Blockchain
+          </strong>
+
+          <span>
+            {{ blockchain.red }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="blockchain-grid">
+
+        <div class="blockchain-item">
+
+          <div class="blockchain-item-icon blue-icon">
+            ◈
+          </div>
+
+          <div>
+
+            <span>Último bloque</span>
+
+            <strong>
+              #{{ blockchain.ultimoBloque }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="blockchain-item">
+
+          <div class="blockchain-item-icon purple-icon">
+            ▣
+          </div>
+
+          <div>
+
+            <span>Transacciones</span>
+
+            <strong>
+              {{ blockchain.transacciones }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="blockchain-item">
+
+          <div class="blockchain-item-icon green-icon">
+            🛡
+          </div>
+
+          <div>
+
+            <span>Seguridad</span>
+
+            <strong class="success-text">
+              {{ blockchain.seguridad }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="blockchain-item">
+
+          <div class="blockchain-item-icon cyan-icon">
+            ◉
+          </div>
+
+          <div>
+
+            <span>Estado</span>
+
+            <strong>
+              {{ blockchain.estado }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="blockchain-footer">
+
+        <span>✓</span>
+
+        Registros protegidos y verificables mediante trazabilidad Blockchain.
+
+      </div>
+
+
+      <button
+        type="button"
+        class="blockchain-button"
+        (click)="irA('/blockchain')">
+
+        Ver trazabilidad completa
+
+        <span>→</span>
+
+      </button>
+
+    </section>
+
+  </div>
+
+
+  <!-- STOCK BAJO + ACCESOS RÁPIDOS -->
+
+  <div class="second-grid">
+
+    <section class="panel stock-panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <span class="panel-label">
+            INVENTARIO
+          </span>
+
+          <h2>
+            Medicamentos con stock bajo
+          </h2>
+
+          <p>
+            Productos que requieren reposición
+          </p>
+
+        </div>
+
+
+        <span
+          class="warning-badge"
+          [class.no-warning]="stockBajo === 0">
+
+          {{ stockBajo }} alertas
+
+        </span>
+
+      </div>
+
+
+      <div class="stock-list">
+
+        <!-- SOLO MOSTRAMOS 5 -->
+
+        <div
+          class="stock-row"
+          *ngFor="let medicamento of (medicamentosStockBajo | slice:0:5)">
+
+          <div class="medicine-icon">
+            💊
+          </div>
+
+
+          <div class="medicine-info">
+
+            <strong>
+              {{ medicamento.nombre }}
+            </strong>
+
+            <span>
+              Stock mínimo:
+              {{ medicamento.stock_minimo }}
+            </span>
+
+          </div>
+
+
+          <div class="stock-value">
+
+            <strong>
+              {{ medicamento.stock }}
+            </strong>
+
+            <span
+              [class.stock-empty]="medicamento.stock <= 0">
+
+              {{
+                obtenerEstadoStock(
+                  medicamento.stock,
+                  medicamento.stock_minimo
+                )
+              }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- BOTÓN PARA VER EL RESTO -->
+
+        <button
+          type="button"
+          class="stock-view-all"
+          *ngIf="medicamentosStockBajo.length > 5"
+          (click)="irA('/inventario')">
+
+          Ver todos ({{ medicamentosStockBajo.length }})
+
+          <span>
+            →
+          </span>
+
+        </button>
+
+
+        <div
+          class="empty-state"
+          *ngIf="medicamentosStockBajo.length === 0">
+
+          <div class="empty-icon">
+            ✓
+          </div>
+
+          <div>
+
+            <strong>
+              Stock en buen estado
+            </strong>
+
+            <span>
+              No existen medicamentos que requieran reposición inmediata.
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ACCESOS RÁPIDOS -->
+
+    <section class="panel quick-panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <span class="panel-label">
+            ACCIONES
+          </span>
+
+          <h2>
+            Accesos rápidos
+          </h2>
+
+          <p>
+            Funciones principales del sistema
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="quick-list">
+
+        <button
+          type="button"
+          class="quick-button"
+          *ngFor="let acceso of accesosRapidos"
+          (click)="ejecutarAcceso(acceso.titulo)">
+
+          <span class="quick-icon">
+            {{ acceso.icono }}
+          </span>
+
+          <span class="quick-text">
+
+            <strong>
+              {{ acceso.titulo }}
+            </strong>
+
+            <small>
+              {{ acceso.descripcion }}
+            </small>
+
+          </span>
+
+          <span class="quick-arrow">
+            →
+          </span>
+
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <!-- ACTIVIDADES -->
+
+  <section class="panel activities-panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <span class="panel-label">
+          ACTIVIDAD
+        </span>
+
+        <h2>
+          Últimas actividades
+        </h2>
+
+        <p>
+          Movimientos recientes realizados en el sistema
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="view-all-button"
+        (click)="irA('/reportes')">
+
+        Ver todas
+
+        <span>
+          →
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <div class="activity-table">
+
+      <div class="activity-header">
+
+        <span>Usuario</span>
+        <span>Actividad</span>
+        <span>Módulo</span>
+        <span>Fecha</span>
+        <span>Estado</span>
+
+      </div>
+
+
+      <div
+        class="activity-row"
+        *ngFor="let actividad of actividades">
+
+        <div class="activity-user">
+
+          <div class="user-avatar">
+
+            {{
+              (actividad.usuario || 'A')
+                .charAt(0)
+                .toUpperCase()
+            }}
+
+          </div>
+
+          <strong>
+            {{ actividad.usuario }}
+          </strong>
+
+        </div>
+
+
+        <span class="activity-action">
+          {{ actividad.accion }}
+        </span>
+
+
+        <span
+          class="module-badge"
+          [class.venta-module]="actividad.modulo === 'Ventas'">
+
+          {{ actividad.modulo }}
+
+        </span>
+
+
+        <span class="activity-date">
+          {{ formatearFechaCorta(actividad.fecha) }}
+        </span>
+
+
+        <span
+          class="activity-status"
+          [class.status-anulada]="actividad.estado === 'ANULADA'"
+          [class.status-correcta]="actividad.estado !== 'ANULADA'">
+
+          <span class="activity-status-dot"></span>
+
+          {{ actividad.estado }}
+
+        </span>
+
+      </div>
+
+
+      <div
+        class="empty-state activity-empty"
+        *ngIf="actividades.length === 0">
+
+        <div class="empty-icon">
+          ◷
+        </div>
+
+        <div>
+
+          <strong>
+            No existen actividades recientes
+          </strong>
+
+          <span>
+            Las últimas operaciones aparecerán en esta sección.
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PIE -->
+
+  <div class="dashboard-footer">
+
+    <span>
+      Sistema de Gestión de Stock de Medicamentos
+    </span>
+
+    <span>
+      Farmacia Coria
+    </span>
+
+    <span class="secure-footer">
+      🔒 Sistema protegido
+    </span>
+
+  </div>
+
+</div>

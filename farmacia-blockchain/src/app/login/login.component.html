@@ -1,0 +1,673 @@
+<div class="login-page">
+
+  <!-- =====================================================
+       LADO IZQUIERDO
+  ====================================================== -->
+
+  <section class="brand-side">
+
+    <div class="brand-shade"></div>
+
+    <div class="brand-content">
+
+      <!-- LOGO -->
+
+      <div class="brand-header">
+
+        <img
+          src="/farmacor-logo.svg"
+          class="brand-logo"
+          alt="FARMACOR">
+
+        <div class="brand-title">
+
+          <h1>
+            FARMA<span>COR</span>
+          </h1>
+
+          <div class="farmacia-name">
+            FARMACIA CORIA
+          </div>
+
+          <p>
+            Salud y bienestar siempre cerca de ti
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="brand-line"></div>
+
+
+      <!-- FUNCIONES -->
+
+      <div class="features">
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            💊
+          </div>
+
+          <div>
+            <strong>
+              Gestión de Stock
+            </strong>
+
+            <span>
+              Control total de medicamentos
+              en tiempo real.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            ▥
+          </div>
+
+          <div>
+            <strong>
+              Reportes Inteligentes
+            </strong>
+
+            <span>
+              Análisis de consumo y vencimientos.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            ◈
+          </div>
+
+          <div>
+            <strong>
+              Seguridad Blockchain
+            </strong>
+
+            <span>
+              Trazabilidad y registros seguros.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="feature">
+
+          <div class="feature-icon">
+            👥
+          </div>
+
+          <div>
+            <strong>
+              Mejor Atención
+            </strong>
+
+            <span>
+              Un servicio más rápido y eficiente.
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DECORACIÓN -->
+
+    <div class="health-decoration">
+      <span>⬡</span>
+      <span>⬡</span>
+      <span>⬡</span>
+
+      <div class="heart-line">
+        ─────╱╲──╱╲────
+      </div>
+    </div>
+
+
+    <!-- PIE -->
+
+    <div class="brand-footer">
+
+      <span>
+        FARMACOR &nbsp;|&nbsp;
+        Shinahota - Cochabamba
+      </span>
+
+      
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       LADO DERECHO
+  ====================================================== -->
+
+  <section class="form-side">
+
+    <div class="auth-card">
+
+
+      <!-- =================================================
+           PESTAÑAS
+      ================================================== -->
+
+      <div class="tabs">
+
+        <button
+          type="button"
+          [class.active]="!mostrarRegistro"
+          (click)="cambiarModo(false)">
+
+          <span>🔒</span>
+
+          Iniciar Sesión
+
+        </button>
+
+
+        <button
+          type="button"
+          [class.active]="mostrarRegistro"
+          (click)="cambiarModo(true)">
+
+          <span>👤</span>
+
+          Crear Cuenta
+
+        </button>
+
+      </div>
+
+
+      <!-- =================================================
+           LOGIN
+      ================================================== -->
+
+      <div
+        class="auth-content"
+        *ngIf="!mostrarRegistro">
+
+
+        <div class="auth-title">
+
+          <h2>
+            Bienvenido a
+            <span>FARMACOR</span>
+          </h2>
+
+          <p>
+            Ingresa a tu cuenta para continuar
+          </p>
+
+        </div>
+
+
+        <!-- USUARIO -->
+
+        <div class="input-box">
+
+          <span class="field-icon">
+            👤
+          </span>
+
+          <input
+            type="text"
+            placeholder="Nombre de usuario"
+            autocomplete="username"
+            [(ngModel)]="usuario">
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="input-box">
+
+          <span class="field-icon">
+            🔒
+          </span>
+
+          <input
+            [type]="mostrarPassword ? 'text' : 'password'"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+            [(ngModel)]="password"
+            (keyup.enter)="iniciarSesion()">
+
+
+          <button
+            type="button"
+            class="eye-button"
+            (click)="mostrarPassword = !mostrarPassword">
+
+            {{ mostrarPassword ? '◉' : '◎' }}
+
+          </button>
+
+        </div>
+
+
+        <!-- OPCIONES -->
+
+        <div class="login-options">
+
+          <label class="remember">
+
+            <input
+              type="checkbox"
+              [(ngModel)]="recordarme">
+
+            <span class="checkbox"></span>
+
+            Recordarme
+
+          </label>
+
+
+          <button
+            type="button"
+            class="forgot"
+            (click)="abrirRecuperacion()">
+
+            ¿Olvidaste tu contraseña?
+
+          </button>
+
+        </div>
+
+
+        <!-- LOGIN BUTTON -->
+
+        <button
+          type="button"
+          class="primary-button"
+          (click)="iniciarSesion()">
+
+          <span>
+            ⇥
+          </span>
+
+          Iniciar Sesión
+
+        </button>
+
+
+        <!-- SEPARADOR -->
+
+        <div class="separator">
+
+          <span></span>
+
+          <small>
+            SISTEMA SEGURO
+          </small>
+
+          <span></span>
+
+        </div>
+
+
+        <!-- CARACTERÍSTICAS -->
+
+        <div class="security-box">
+
+          <div>
+            <b>◈</b>
+            <small>Seguro</small>
+          </div>
+
+          <div>
+            <b>⚡</b>
+            <small>Rápido</small>
+          </div>
+
+          <div>
+            <b>▣</b>
+            <small>Multiplataforma</small>
+          </div>
+
+          <div>
+            <b>▥</b>
+            <small>Confiable</small>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           CREAR CUENTA
+      ================================================== -->
+
+      <div
+        class="auth-content register-content"
+        *ngIf="mostrarRegistro">
+
+
+        <div class="auth-title">
+
+          <h2>
+            Crear cuenta en
+            <span>FARMACOR</span>
+          </h2>
+
+          <p>
+            Completa tus datos para registrarte
+          </p>
+
+        </div>
+
+
+        <div class="input-box">
+
+          <span class="field-icon">
+            👤
+          </span>
+
+          <input
+            type="text"
+            placeholder="Nombre completo"
+            [(ngModel)]="nombre">
+
+        </div>
+
+
+        <div class="input-box">
+
+          <span class="field-icon">
+            ◉
+          </span>
+
+          <input
+            type="text"
+            placeholder="Nombre de usuario"
+            [(ngModel)]="usuario">
+
+        </div>
+
+
+        <div class="input-box">
+
+          <span class="field-icon">
+            ✉
+          </span>
+
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            [(ngModel)]="correo">
+
+        </div>
+
+
+        <div class="input-box">
+
+          <span class="field-icon">
+            🔒
+          </span>
+
+          <input
+            [type]="mostrarPassword ? 'text' : 'password'"
+            placeholder="Contraseña"
+            [(ngModel)]="password">
+
+        </div>
+
+
+        <div class="input-box">
+
+          <span class="field-icon">
+            🔐
+          </span>
+
+          <input
+            type="password"
+            placeholder="Confirmar contraseña"
+            [(ngModel)]="confirmarPassword">
+
+        </div>
+
+
+        <label class="remember terms">
+
+          <input
+            type="checkbox"
+            [(ngModel)]="aceptarTerminos">
+
+          <span class="checkbox"></span>
+
+          Acepto los términos y condiciones
+
+        </label>
+
+
+        <button
+          type="button"
+          class="primary-button"
+          (click)="crearCuenta()">
+
+          Crear Cuenta
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="system-text">
+      “Tecnología al servicio de la salud”
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       MODAL RECUPERACIÓN
+  ====================================================== -->
+
+  <div
+    class="modal-overlay"
+    *ngIf="mostrarRecuperacion">
+
+
+    <div class="recovery-modal">
+
+
+      <button
+        type="button"
+        class="close-modal"
+        (click)="cerrarRecuperacion()">
+
+        ×
+
+      </button>
+
+
+      <div class="recovery-icon">
+        🔐
+      </div>
+
+
+      <!-- PASO 1 -->
+
+      <div *ngIf="pasoRecuperacion === 1">
+
+        <h2>
+          Recuperar contraseña
+        </h2>
+
+        <p>
+          Ingresa el correo asociado a tu cuenta.
+        </p>
+
+
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          [(ngModel)]="correoRecuperacion">
+
+
+        <button
+          type="button"
+          class="modal-button"
+          [disabled]="cargandoRecuperacion"
+          (click)="enviarCodigo()">
+
+          {{
+            cargandoRecuperacion
+              ? 'Generando...'
+              : 'Generar código'
+          }}
+
+        </button>
+
+      </div>
+
+
+      <!-- PASO 2 -->
+
+      <div *ngIf="pasoRecuperacion === 2">
+
+        <h2>
+          Código de verificación
+        </h2>
+
+        <p>
+          Código generado para
+        </p>
+
+
+        <strong class="recovery-email">
+          {{ correoRecuperacion }}
+        </strong>
+
+
+        <div class="generated-code">
+
+          {{ codigoGenerado }}
+
+        </div>
+
+
+        <input
+          type="text"
+          maxlength="6"
+          class="code-input"
+          placeholder="000000"
+          [(ngModel)]="codigoRecuperacion">
+
+
+        <button
+          type="button"
+          class="modal-button"
+          (click)="verificarCodigo()">
+
+          Verificar código
+
+        </button>
+
+      </div>
+
+
+      <!-- PASO 3 -->
+
+      <div *ngIf="pasoRecuperacion === 3">
+
+        <h2>
+          Nueva contraseña
+        </h2>
+
+        <p>
+          Ingresa una nueva contraseña.
+        </p>
+
+
+        <input
+          type="password"
+          placeholder="Nueva contraseña"
+          [(ngModel)]="nuevaPassword">
+
+
+        <input
+          type="password"
+          placeholder="Confirmar contraseña"
+          [(ngModel)]="confirmarNuevaPassword">
+
+
+        <button
+          type="button"
+          class="modal-button"
+          (click)="cambiarPassword()">
+
+          Actualizar contraseña
+
+        </button>
+
+      </div>
+
+
+      <!-- PASO 4 -->
+
+      <div *ngIf="pasoRecuperacion === 4">
+
+        <div class="success-icon">
+          ✓
+        </div>
+
+
+        <h2>
+          Contraseña actualizada
+        </h2>
+
+
+        <p>
+          Ya puedes iniciar sesión con tu nueva contraseña.
+        </p>
+
+
+        <button
+          type="button"
+          class="modal-button"
+          (click)="volverLogin()">
+
+          Volver al Login
+
+        </button>
+
+      </div>
+
+
+      <!-- MENSAJE -->
+
+      <div
+        class="recovery-message"
+        *ngIf="mensajeRecuperacion"
+        [class.error]="mensajeError">
+
+        {{ mensajeRecuperacion }}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

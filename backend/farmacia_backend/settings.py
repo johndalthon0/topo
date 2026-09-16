@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'ventas',
     'compras',
     'reportes',
-    'alertas',
+    'alertas.apps.AlertasConfig',
     'blockchain',
 ]
 
@@ -147,3 +147,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
 ]
+# ==========================================
+# CORREO FARMACOR - GMAIL
+# ==========================================
+

@@ -1,0 +1,121 @@
+<section class="alertas-container">
+
+    <div class="pagina-titulo">
+        <div>
+            <span class="eyebrow">SEGURIDAD DEL SISTEMA</span>
+            <h1>Notificaciones</h1>
+            <p>Intentos de modificación directa bloqueados por FARMACOR.</p>
+        </div>
+
+        <div class="acciones-superiores">
+            <span class="contador" [class.activo]="totalNoLeidas > 0">🔔 {{ totalNoLeidas }} sin revisar</span>
+            <button type="button" class="btn-secundario" (click)="cargar()">↻ Actualizar</button>
+            <button type="button" class="btn-principal" *ngIf="totalNoLeidas > 0" (click)="marcarTodas()">
+                ✓ Marcar todas como revisadas
+            </button>
+        </div>
+    </div>
+
+    <div class="resumen-grid">
+        <article class="resumen-card">
+            <div class="icono">🛡️</div>
+            <div><span>Protección</span><strong>Activa</strong></div>
+        </article>
+        <article class="resumen-card">
+            <div class="icono">⛔</div>
+            <div><span>Intentos registrados</span><strong>{{ notificaciones.length }}</strong></div>
+        </article>
+        <article class="resumen-card">
+            <div class="icono">🔔</div>
+            <div><span>Sin revisar</span><strong>{{ totalNoLeidas }}</strong></div>
+        </article>
+    </div>
+
+    <div class="mensaje" *ngIf="cargando">Cargando notificaciones...</div>
+    <div class="mensaje error" *ngIf="mensajeError">{{ mensajeError }}</div>
+
+    <div class="sin-alertas" *ngIf="!cargando && !mensajeError && notificaciones.length === 0">
+        <span>✅</span>
+        <h3>Sin intentos de alteración</h3>
+        <p>Los registros protegidos no presentan intentos directos bloqueados.</p>
+    </div>
+
+    <div class="tabla-wrap" *ngIf="notificaciones.length > 0">
+        <table>
+            <thead>
+                <tr>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Acción</th>
+                    <th>Sección</th>
+                    <th>Registro</th>
+                    <th>Usuario BD</th>
+                    <th>Resultado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of notificaciones" [class.no-leida]="!item.leida">
+                    <td><span class="estado-dot" [class.revisada]="item.leida"></span>{{ item.leida ? 'Revisada' : 'Nueva' }}</td>
+                    <td>{{ item.fecha_hora | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td><span class="accion" [ngClass]="claseAccion(item.accion)">{{ item.accion }}</span></td>
+                    <td>{{ nombreTabla(item.tabla_afectada) }}</td>
+                    <td>{{ item.registro_id || 'Nuevo registro' }}</td>
+                    <td>{{ item.usuario_bd }}</td>
+                    <td><span class="bloqueado">⛔ BLOQUEADO</span></td>
+                    <td><button type="button" class="btn-ver" (click)="verDetalle(item)">Ver detalle</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal-backdrop" *ngIf="seleccionada" (click)="cerrarDetalle()">
+        <article class="modal" (click)="$event.stopPropagation()">
+            <button class="cerrar" type="button" (click)="cerrarDetalle()">×</button>
+            <div class="modal-icono">🛡️</div>
+            <h2>Intento de alteración bloqueado</h2>
+            <p class="modal-sub">El dato original se mantuvo sin cambios.</p>
+
+            <div class="detalle-grid">
+                <div><span>Sección</span><strong>{{ nombreTabla(seleccionada.tabla_afectada) }}</strong></div>
+                <div><span>Registro BD</span><strong>{{ seleccionada.registro_id || 'Nuevo' }}</strong></div>
+                <div class="detalle-ancho" *ngIf="seleccionada.referencia_registro">
+                    <span>Registro identificado</span><strong>{{ seleccionada.referencia_registro }}</strong>
+                </div>
+                <div><span>Acción intentada</span><strong>{{ seleccionada.accion }}</strong></div>
+                <div><span>Usuario de BD</span><strong>{{ seleccionada.usuario_bd }}</strong></div>
+                <div><span>Fecha y hora</span><strong>{{ seleccionada.fecha_hora | date:'dd/MM/yyyy HH:mm:ss' }}</strong></div>
+                <div><span>Estado</span><strong class="texto-rojo">BLOQUEADO</strong></div>
+            </div>
+
+            <div class="cambio-box" *ngIf="seleccionada.campos_modificados || seleccionada.valor_anterior || seleccionada.valor_intentado">
+                <div class="cambio-titulo">🔎 ¿Qué intentaron modificar?</div>
+                <div class="cambio-fila" *ngIf="seleccionada.campos_modificados">
+                    <span>Campo(s)</span>
+                    <strong>{{ seleccionada.campos_modificados }}</strong>
+                </div>
+                <div class="comparacion-valores">
+                    <div class="valor-box anterior" *ngIf="seleccionada.valor_anterior">
+                        <span>Valor original</span>
+                        <pre>{{ seleccionada.valor_anterior }}</pre>
+                    </div>
+                    <div class="valor-box intentado" *ngIf="seleccionada.valor_intentado">
+                        <span>Valor que intentaron guardar</span>
+                        <pre>{{ seleccionada.valor_intentado }}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blockchain-box" *ngIf="seleccionada.blockchain">
+                <span>⛓ Blockchain</span>
+                <strong>{{ seleccionada.blockchain.estado }}</strong>
+                <p>{{ seleccionada.blockchain.mensaje }}</p>
+            </div>
+
+            <div class="explicacion">
+                <strong>¿Qué ocurrió?</strong>
+                <p>{{ seleccionada.detalle }}</p>
+            </div>
+        </article>
+    </div>
+</section>

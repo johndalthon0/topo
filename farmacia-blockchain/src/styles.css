@@ -1,0 +1,119 @@
+/* =========================================================
+   ESTILOS GLOBALES - FARMACOR
+========================================================= */
+
+html,
+body{
+    margin:0;
+    padding:0;
+
+    width:100%;
+    min-height:100%;
+
+    background:#05142d;
+}
+
+body{
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+app-root{
+    display:block;
+    min-height:100vh;
+
+    background:
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 50%,
+            #06162f 100%
+        );
+}
+
+*,
+*::before,
+*::after{
+    box-sizing:border-box;
+}
+
+/* =========================================================
+   SCROLLBARS OSCUROS
+   Evita las franjas claras del navegador dentro del sistema.
+========================================================= */
+
+*{
+    scrollbar-width:thin;
+    scrollbar-color:#274d85 #06162f;
+}
+
+*::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+}
+
+*::-webkit-scrollbar-track{
+    background:#06162f;
+}
+
+*::-webkit-scrollbar-thumb{
+    background:#274d85;
+    border-radius:10px;
+    border:2px solid #06162f;
+}
+
+*::-webkit-scrollbar-thumb:hover{
+    background:#3568ad;
+}
+
+
+/* =========================================================
+   PROTECCIONES RESPONSIVE GLOBALES
+========================================================= */
+
+img,
+svg,
+video,
+canvas{
+    max-width:100%;
+}
+
+input,
+select,
+textarea,
+button{
+    max-width:100%;
+}
+
+@media(max-width:768px){
+    html,
+    body{
+        width:100%;
+        max-width:100%;
+        overflow-x:hidden;
+    }
+
+    body{
+        min-height:100dvh;
+    }
+
+    /* Evita que un modal quede fuera de la pantalla en móviles. */
+    .modal,
+    .modal-box,
+    .modal-contenido{
+        max-width:calc(100vw - 24px) !important;
+        max-height:calc(100dvh - 24px);
+    }
+
+    /* Las zonas de tablas pueden desplazarse sin romper el layout. */
+    .table-scroll,
+    .tabla-scroll,
+    .tabla-contenedor,
+    .tabla-detalle-contenedor,
+    .tabla-reportes,
+    .alertas-table-wrap{
+        max-width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+}

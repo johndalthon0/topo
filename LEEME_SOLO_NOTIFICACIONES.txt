@@ -1,0 +1,32 @@
+FARMACOR - SOLO CAMBIO DE NOTIFICACIONES DE SEGURIDAD
+
+Este paquete NO contiene el sistema completo. Solo modifica la sección de Notificaciones de Seguridad.
+
+ARCHIVOS INCLUIDOS:
+- backend/alertas/models.py
+- backend/alertas/views.py
+- backend/alertas/management/commands/instalar_seguridad_bd.py
+- farmacia-blockchain/src/app/alertas/alertas.component.ts
+- farmacia-blockchain/src/app/alertas/alertas.component.html
+- farmacia-blockchain/src/app/alertas/alertas.component.css
+- REINSTALAR_NOTIFICACIONES_DETALLADAS.bat
+
+QUE AGREGA:
+- Campo(s) que se intentaron modificar.
+- Valor original.
+- Valor que se intentó guardar.
+- Referencia legible cuando existe (nombre de medicamento, N° de venta, factura, etc.).
+- Mantiene usuario BD, fecha, acción, estado y Blockchain.
+
+COMO APLICAR:
+1. Haga una copia de respaldo de su proyecto actual.
+2. Copie el contenido de este ZIP dentro de "proyecto del sistemaS".
+3. Acepte combinar/reemplazar SOLO los archivos indicados.
+4. Encienda MySQL en XAMPP.
+5. Ejecute REINSTALAR_NOTIFICACIONES_DETALLADAS.bat.
+6. Reinicie Django y Angular.
+
+IMPORTANTE:
+- Los intentos antiguos seguirán sin mostrar campo/valor porque fueron registrados antes de esta mejora.
+- Los NUEVOS intentos bloqueados sí mostrarán el detalle completo.
+- No modifica Compras, Ventas, Usuarios, Blockchain, Login, roles, responsive ni otros módulos.

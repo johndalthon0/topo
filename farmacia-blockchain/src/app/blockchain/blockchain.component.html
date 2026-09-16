@@ -1,0 +1,1037 @@
+<div class="blockchain-container">
+
+  <!-- =====================================================
+       CABECERA
+  ====================================================== -->
+
+  <div class="pagina-header">
+
+    <div class="titulo">
+
+      <div class="icono-titulo">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="7" cy="7" r="3"></circle>
+          <circle cx="17" cy="17" r="3"></circle>
+          <path d="M9.2 9.2 14.8 14.8"></path>
+          <path d="M14.8 9.2 9.2 14.8"></path>
+          <circle cx="17" cy="7" r="3"></circle>
+          <circle cx="7" cy="17" r="3"></circle>
+        </svg>
+
+      </div>
+
+
+      <div>
+
+        <h1>
+          Blockchain
+        </h1>
+
+        <div class="breadcrumb-blockchain">
+          <span>Blockchain</span>
+          <b>›</b>
+          <strong>Trazabilidad</strong>
+        </div>
+
+        <p>
+          Trazabilidad e integridad de las operaciones del sistema
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="btn-recargar"
+      type="button"
+      [disabled]="cargando"
+      (click)="recargar()">
+
+      <span>↻</span>
+
+      {{
+        cargando
+          ? 'Cargando...'
+          : 'Actualizar'
+      }}
+
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       ESTADO BLOCKCHAIN
+  ====================================================== -->
+
+  <div
+    class="estado-blockchain"
+    [class.conectada]="blockchainConectada"
+    [class.desconectada]="!blockchainConectada">
+
+    <div class="estado-icono">
+
+      <svg
+        *ngIf="blockchainConectada"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <circle cx="7" cy="7" r="3"></circle>
+        <circle cx="17" cy="17" r="3"></circle>
+        <path d="M9.2 9.2 14.8 14.8"></path>
+        <circle cx="17" cy="7" r="3"></circle>
+        <circle cx="7" cy="17" r="3"></circle>
+
+      </svg>
+
+
+      <svg
+        *ngIf="!blockchainConectada"
+        viewBox="0 0 24 24"
+        aria-hidden="true">
+
+        <path d="M12 3 2.8 20h18.4L12 3Z"></path>
+        <path d="M12 9v4M12 17h.01"></path>
+
+      </svg>
+
+    </div>
+
+
+    <div class="estado-info">
+
+      <span class="estado-label">
+        ESTADO DE LA RED
+      </span>
+
+      <h3>
+
+        Blockchain
+
+        {{
+          blockchainConectada
+            ? 'Conectada'
+            : 'Sin registros Blockchain'
+        }}
+
+      </h3>
+
+
+      <p>
+
+        {{
+          blockchainConectada
+            ? 'La red Blockchain está registrando y conservando la trazabilidad de las operaciones.'
+            : 'No existen registros Blockchain disponibles o no se pudo conectar con Django.'
+        }}
+
+      </p>
+
+    </div>
+
+
+    <div class="estado-indicador">
+
+      <span class="punto"></span>
+
+      {{
+        blockchainConectada
+          ? 'Sistema operativo'
+          : 'Sin conexión'
+      }}
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ERROR
+  ====================================================== -->
+
+  <div
+    class="mensaje-error"
+    *ngIf="error">
+
+    <span>⚠</span>
+    {{ error }}
+
+  </div>
+
+
+  <!-- =====================================================
+       CARGANDO
+  ====================================================== -->
+
+  <div
+    class="cargando"
+    *ngIf="cargando">
+
+    <div class="spinner"></div>
+
+    <p>
+      Cargando historial de Blockchain...
+    </p>
+
+  </div>
+
+
+  <!-- =====================================================
+       CONTENIDO
+  ====================================================== -->
+
+  <div *ngIf="!cargando">
+
+
+    <!-- ===================================================
+         TARJETAS RESUMEN
+    ==================================================== -->
+
+    <div class="resumen-cards">
+
+
+      <!-- TOTAL REGISTROS -->
+      <div class="resumen-card azul">
+
+        <div class="resumen-icono">
+
+          <svg viewBox="0 0 24 24">
+            <circle cx="7" cy="7" r="3"></circle>
+            <circle cx="17" cy="17" r="3"></circle>
+            <path d="M9.2 9.2 14.8 14.8"></path>
+            <circle cx="17" cy="7" r="3"></circle>
+            <circle cx="7" cy="17" r="3"></circle>
+          </svg>
+
+        </div>
+
+        <div>
+
+          <span>
+            Total Registros
+          </span>
+
+          <strong>
+            {{ totalRegistros }}
+          </strong>
+
+          <small>
+            Operaciones trazables
+          </small>
+
+        </div>
+
+        <div class="linea-card"></div>
+
+      </div>
+
+
+      <!-- ÍNTEGROS -->
+      <div class="resumen-card verde">
+
+        <div class="resumen-icono">
+
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12.5 10 17l9-10"></path>
+          </svg>
+
+        </div>
+
+        <div>
+
+          <span>
+            Registros Íntegros
+          </span>
+
+          <strong>
+            {{ registrosVerificados }}
+          </strong>
+
+          <small>
+            Verificados o activos
+          </small>
+
+        </div>
+
+        <div class="linea-card"></div>
+
+      </div>
+
+
+      <!-- ANULACIONES -->
+      <div class="resumen-card naranja">
+
+        <div class="resumen-icono">
+
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8"></circle>
+            <path d="m7 7 10 10"></path>
+          </svg>
+
+        </div>
+
+        <div>
+
+          <span>
+            Anulaciones
+          </span>
+
+          <strong>
+            {{ totalAnulaciones }}
+          </strong>
+
+          <small>
+            Operaciones anuladas
+          </small>
+
+        </div>
+
+        <div class="linea-card"></div>
+
+      </div>
+
+
+      <!-- CORRECCIONES -->
+      <div class="resumen-card morado">
+
+        <div class="resumen-icono">
+
+          <svg viewBox="0 0 24 24">
+            <path d="M20 7h-5V2"></path>
+            <path d="M4 17h5v5"></path>
+            <path d="M19 7a8 8 0 0 0-13-2"></path>
+            <path d="M5 17a8 8 0 0 0 13 2"></path>
+          </svg>
+
+        </div>
+
+        <div>
+
+          <span>
+            Correcciones
+          </span>
+
+          <strong>
+            {{ totalCorrecciones }}
+          </strong>
+
+          <small>
+            Registros corregidos
+          </small>
+
+        </div>
+
+        <div class="linea-card"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         INFORMACIÓN
+    ==================================================== -->
+
+    <div class="trazabilidad-info">
+
+      <div class="trazabilidad-icono">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z"></path>
+          <path d="m9 12 2 2 4-5"></path>
+        </svg>
+
+      </div>
+
+      <div>
+
+        <strong>
+          Trazabilidad Blockchain
+        </strong>
+
+        <span>
+          El sistema conserva la operación original, la anulación y la corrección como registros independientes, sin eliminar el historial anterior.
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         TABLA
+    ==================================================== -->
+
+    <div class="tabla-panel">
+
+
+      <div class="tabla-header">
+
+        <div class="tabla-titulo">
+
+          <div class="tabla-icono">
+
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+              <path d="M8 9h8M8 13h8M8 17h5"></path>
+            </svg>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Registros de Blockchain
+            </h2>
+
+            <p>
+              Historial de compras, ventas, anulaciones y correcciones
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="buscador">
+
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+
+          <input
+            type="text"
+            [(ngModel)]="buscar"
+            (ngModelChange)="paginaActual = 1"
+            placeholder="Buscar hash, operación, referencia..."
+            autocomplete="off">
+
+        </div>
+
+      </div>
+
+
+      <div class="tabla-scroll">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>#</th>
+              <th>Hash Blockchain</th>
+              <th>Operación</th>
+              <th>Referencia</th>
+              <th>Usuario</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acción</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let registro of registrosPaginados;
+                let i = index
+              "
+              [class.fila-anulada]="registro.estado === 'Anulada'">
+
+
+              <!-- NÚMERO -->
+
+              <td class="numero-registro">
+                {{ indiceInicio + i + 1 }}
+              </td>
+
+
+              <!-- HASH -->
+
+              <td>
+
+                <div class="hash-container">
+
+                  <span
+                    class="hash"
+                    [title]="registro.hash || 'Sin hash'">
+
+                    {{
+                      registro.hash
+                        ? (
+                            registro.hash.length > 18
+                              ? (
+                                  registro.hash.substring(0, 10)
+                                  +
+                                  '...'
+                                  +
+                                  registro.hash.substring(
+                                    registro.hash.length - 6
+                                  )
+                                )
+                              : registro.hash
+                          )
+                        : 'No registrado'
+                    }}
+
+                  </span>
+
+
+                  <button
+                    class="btn-copiar"
+                    title="Copiar Hash"
+                    *ngIf="registro.hash"
+                    (click)="copiarHash(registro.hash)">
+
+                    ⧉
+
+                  </button>
+
+                </div>
+
+              </td>
+
+
+              <!-- OPERACIÓN -->
+
+              <td>
+
+                <span
+                  class="operacion"
+                  [ngClass]="claseOperacion(registro)">
+
+                  <span>
+                    {{ iconoOperacion(registro) }}
+                  </span>
+
+                  {{ registro.operacion }}
+
+                </span>
+
+              </td>
+
+
+              <!-- REFERENCIA -->
+
+              <td>
+
+                <div class="referencia-registro">
+
+                  <strong>
+                    {{ registro.referencia }}
+                  </strong>
+
+                  <small
+                    *ngIf="esAnulacion(registro)">
+
+                    El registro original se conserva
+
+                  </small>
+
+                </div>
+
+              </td>
+
+
+              <!-- USUARIO -->
+
+              <td>
+
+                <div class="usuario">
+
+                  <div class="avatar">
+
+                    {{
+                      (registro.usuario || 'A')
+                        .charAt(0)
+                        .toUpperCase()
+                    }}
+
+                  </div>
+
+                  <span>
+                    {{ registro.usuario }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- FECHA -->
+
+              <td>
+                {{ registro.fecha }}
+              </td>
+
+
+              <!-- ESTADO -->
+
+              <td>
+
+                <span
+                  class="estado-badge"
+                  [ngClass]="claseEstado(registro.estado)">
+
+                  <span class="punto"></span>
+
+                  {{ registro.estado }}
+
+                </span>
+
+              </td>
+
+
+              <!-- ACCIÓN -->
+
+              <td>
+
+                <button
+                  class="btn-ver"
+                  title="Ver trazabilidad"
+                  (click)="verDetalle(registro)">
+
+                  <svg viewBox="0 0 24 24">
+                    <path d="M2.8 12s3.4-5 9.2-5 9.2 5 9.2 5-3.4 5-9.2 5-9.2-5-9.2-5Z"></path>
+                    <circle cx="12" cy="12" r="2.5"></circle>
+                  </svg>
+
+                </button>
+
+              </td>
+
+            </tr>
+
+
+            <tr
+              *ngIf="
+                registrosPaginados.length === 0
+              ">
+
+              <td
+                colspan="8"
+                class="sin-resultados">
+
+                🔍 No se encontraron registros
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- ===================================================
+           PAGINACIÓN
+      ==================================================== -->
+
+      <div
+        class="paginacion-blockchain"
+        *ngIf="registrosFiltrados.length > registrosPorPagina">
+
+
+        <button
+          type="button"
+          class="pagina-control"
+          [disabled]="paginaActual === 1"
+          (click)="paginaAnterior()">
+
+          ‹
+
+        </button>
+
+
+        <button
+          type="button"
+          class="pagina-numero"
+          *ngFor="let pagina of paginasVisibles"
+          [class.activa]="pagina === paginaActual"
+          (click)="irPagina(pagina)">
+
+          {{ pagina }}
+
+        </button>
+
+
+        <button
+          type="button"
+          class="pagina-control"
+          [disabled]="paginaActual === totalPaginas"
+          (click)="paginaSiguiente()">
+
+          ›
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL DETALLE BLOCKCHAIN
+====================================================== -->
+
+<div
+  class="modal"
+  *ngIf="mostrarDetalle">
+
+
+  <div class="modal-contenido">
+
+
+    <div class="modal-header">
+
+      <div class="modal-titulo">
+
+        <div class="modal-icono">
+
+          <svg viewBox="0 0 24 24">
+            <circle cx="7" cy="7" r="3"></circle>
+            <circle cx="17" cy="17" r="3"></circle>
+            <path d="M9.2 9.2 14.8 14.8"></path>
+            <circle cx="17" cy="7" r="3"></circle>
+            <circle cx="7" cy="17" r="3"></circle>
+          </svg>
+
+        </div>
+
+        <div>
+
+          <span class="modal-label">
+            TRAZABILIDAD
+          </span>
+
+          <h2>
+            Detalle de Operación Blockchain
+          </h2>
+
+          <p>
+            Información completa de trazabilidad
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="btn-cerrar"
+        (click)="cerrarDetalle()">
+
+        ✕
+
+      </button>
+
+    </div>
+
+
+    <div
+      class="detalle-operacion-principal"
+      *ngIf="registroSeleccionado">
+
+      <span
+        class="operacion operacion-grande"
+        [ngClass]="claseOperacion(registroSeleccionado)">
+
+        {{ iconoOperacion(registroSeleccionado) }}
+
+        {{ registroSeleccionado.operacion }}
+
+      </span>
+
+
+      <span
+        class="estado-badge"
+        [ngClass]="claseEstado(registroSeleccionado.estado)">
+
+        <span class="punto"></span>
+
+        {{ registroSeleccionado.estado }}
+
+      </span>
+
+    </div>
+
+
+    <div
+      class="detalle-grid"
+      *ngIf="registroSeleccionado">
+
+
+      <div class="detalle-item">
+
+        <span>
+          ID del Registro
+        </span>
+
+        <strong>
+          {{ registroSeleccionado.id }}
+        </strong>
+
+      </div>
+
+
+      <div class="detalle-item">
+
+        <span>
+          Operación
+        </span>
+
+        <strong>
+          {{ registroSeleccionado.operacion }}
+        </strong>
+
+      </div>
+
+
+      <div class="detalle-item detalle-item-ancho">
+
+        <span>
+          Referencia / Trazabilidad
+        </span>
+
+        <strong>
+          {{ registroSeleccionado.referencia }}
+        </strong>
+
+      </div>
+
+
+      <div class="detalle-item">
+
+        <span>
+          Usuario
+        </span>
+
+        <strong>
+          {{ registroSeleccionado.usuario }}
+        </strong>
+
+      </div>
+
+
+      <div class="detalle-item">
+
+        <span>
+          Fecha
+        </span>
+
+        <strong>
+          {{ registroSeleccionado.fecha }}
+        </strong>
+
+      </div>
+
+
+      <div class="detalle-item">
+
+        <span>
+          Bloque
+        </span>
+
+        <strong>
+
+          {{
+            registroSeleccionado.blockNumber
+              ?? 'No registrado'
+          }}
+
+        </strong>
+
+      </div>
+
+
+      <div class="detalle-item">
+
+        <span>
+          Estado
+        </span>
+
+        <strong>
+          {{ registroSeleccionado.estado }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="detalle-trazabilidad"
+      *ngIf="
+        registroSeleccionado
+        &&
+        (
+          esAnulacion(registroSeleccionado)
+          ||
+          esCorreccion(registroSeleccionado)
+        )
+      ">
+
+      <strong>
+
+        {{
+          esAnulacion(registroSeleccionado)
+            ? '🚫 Registro de anulación'
+            : '🔄 Registro de corrección'
+        }}
+
+      </strong>
+
+      <span>
+
+        {{
+          esAnulacion(registroSeleccionado)
+            ? 'Este registro no elimina la operación original. La anulación queda registrada como una nueva operación para mantener la trazabilidad.'
+            : 'Esta corrección se almacena como una nueva operación. El registro anterior permanece conservado dentro del historial.'
+        }}
+
+      </span>
+
+    </div>
+
+
+    <!-- HASH SHA256 -->
+
+    <div class="hash-detalle">
+
+      <label>
+        Hash SHA256
+      </label>
+
+      <div class="hash-box">
+
+        <span>
+
+          {{
+            registroSeleccionado?.hash
+            ||
+            'No registrado'
+          }}
+
+        </span>
+
+
+        <button
+          *ngIf="registroSeleccionado?.hash"
+          (click)="copiarHash(
+            registroSeleccionado?.hash || ''
+          )">
+
+          ⧉ Copiar
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- TRANSACTION HASH -->
+
+    <div class="hash-detalle">
+
+      <label>
+        Transaction Hash
+      </label>
+
+      <div class="hash-box">
+
+        <span>
+
+          {{
+            registroSeleccionado?.transactionHash
+            ||
+            'No registrado'
+          }}
+
+        </span>
+
+
+        <button
+          *ngIf="
+            registroSeleccionado?.transactionHash
+          "
+          (click)="copiarTransactionHash(
+            registroSeleccionado?.transactionHash || ''
+          )">
+
+          ⧉ Copiar
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- CUENTA BLOCKCHAIN -->
+
+    <div class="hash-detalle">
+
+      <label>
+        Cuenta Blockchain
+      </label>
+
+      <div class="hash-box">
+
+        <span>
+
+          {{
+            registroSeleccionado?.cuentaBlockchain
+            ||
+            'No registrado'
+          }}
+
+        </span>
+
+
+        <button
+          *ngIf="
+            registroSeleccionado?.cuentaBlockchain
+          "
+          (click)="copiarHash(
+            registroSeleccionado?.cuentaBlockchain || ''
+          )">
+
+          ⧉ Copiar
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <button
+        class="btn-cerrar-modal"
+        (click)="cerrarDetalle()">
+
+        Cerrar
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

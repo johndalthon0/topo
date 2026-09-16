@@ -1,0 +1,2801 @@
+
+
+/* =========================================
+        CONTENEDOR PRINCIPAL
+========================================= */
+
+.compras-container {
+    padding: 25px;
+    background: #f5f7fb;
+    min-height: 100vh;
+}
+
+/* =========================================
+        CABECERA
+========================================= */
+
+.compras-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.compras-header h2 {
+    margin: 0;
+    color: #1d3557;
+    font-size: 30px;
+}
+
+.compras-header span {
+    color: #777;
+    font-size: 14px;
+}
+
+.btn-nueva-compra {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-nueva-compra:hover {
+    background: #0d47a1;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+        TARJETAS
+========================================= */
+
+.compras-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.compra-card {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+    transition: .3s;
+}
+
+.compra-card:hover {
+    transform: translateY(-5px);
+}
+
+.compra-icono {
+    width: 65px;
+    height: 65px;
+    min-width: 65px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 28px;
+}
+
+.compra-card h4 {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+.compra-card h2 {
+    margin: 5px 0;
+    color: #1d3557;
+    font-size: 25px;
+}
+
+.compra-card span {
+    color: #999;
+    font-size: 13px;
+}
+
+.compra-card.azul .compra-icono { background: #1976d2; }
+.compra-card.verde .compra-icono { background: #2e7d32; }
+.compra-card.naranja .compra-icono { background: #fb8c00; }
+.compra-card.morado .compra-icono { background: #8e24aa; }
+
+/* =========================================
+        PANEL DE COMPRAS
+========================================= */
+
+.compras-panel {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+}
+
+.tabla-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.tabla-header h3 {
+    margin: 0 0 5px 0;
+    color: #1d3557;
+    font-size: 20px;
+}
+
+.tabla-header small {
+    color: #999;
+    font-size: 13px;
+}
+
+/* =========================================
+        BUSCADOR
+========================================= */
+
+.acciones-tabla {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.acciones-tabla input {
+    width: 260px;
+    padding: 11px 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    transition: .3s;
+}
+
+.acciones-tabla input:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, .1);
+}
+
+.btn-buscar {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .3s;
+    white-space: nowrap;
+}
+
+.btn-buscar:hover {
+    background: #0d47a1;
+}
+
+/* =========================================
+        TABLA
+========================================= */
+
+.tabla-contenedor,
+.tabla-detalle-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabla-compras {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-compras thead {
+    background: #1976d2;
+    color: white;
+}
+
+.tabla-compras th {
+    padding: 15px;
+    text-align: left;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.tabla-compras td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #ececec;
+    color: #555;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.tabla-compras tbody tr {
+    transition: .2s;
+}
+
+.tabla-compras tbody tr:hover {
+    background: #f5f9ff;
+}
+
+.tabla-compras tbody tr.fila-anulada {
+    background: #fff6f6;
+}
+
+.tabla-compras tbody tr.fila-anulada:hover {
+    background: #ffeded;
+}
+
+.referencia-correccion {
+    display: block;
+    margin-top: 4px;
+    color: #1976d2;
+    font-size: 11px;
+}
+
+.estado-recibida,
+.estado-anulada {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.estado-recibida {
+    background: #d4edda;
+    color: #1b5e20;
+}
+
+.estado-anulada {
+    background: #fde2e2;
+    color: #b71c1c;
+}
+
+.sin-registros {
+    text-align: center !important;
+    padding: 40px !important;
+    color: #999 !important;
+    font-size: 15px !important;
+}
+
+/* =========================================
+        ACCIONES DE LA TABLA
+========================================= */
+
+.acciones-compra {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.btn-ver,
+.btn-anular,
+.btn-corregir {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .25s;
+}
+
+.btn-ver { background: #1976d2; }
+.btn-anular { background: #e53935; }
+.btn-corregir { background: #6f42c1; }
+
+.btn-ver:hover:not(:disabled),
+.btn-anular:hover:not(:disabled),
+.btn-corregir:hover:not(:disabled) {
+    transform: scale(1.07);
+}
+
+.btn-ver:hover:not(:disabled) { background: #0d47a1; }
+.btn-anular:hover:not(:disabled) { background: #b71c1c; }
+.btn-corregir:hover:not(:disabled) { background: #512da8; }
+
+.btn-ver:disabled,
+.btn-anular:disabled,
+.btn-corregir:disabled {
+    background: #c8cdd5;
+    color: #f4f4f4;
+    cursor: not-allowed;
+    opacity: .65;
+}
+
+/* =========================================
+        MODAL GENERAL
+========================================= */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, .52);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+    box-sizing: border-box;
+    backdrop-filter: blur(2px);
+}
+
+.modal-contenido {
+    width: 800px;
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, .25);
+    animation: aparecer .25s ease;
+}
+
+.modal-compra {
+    width: 950px;
+    max-width: 95%;
+}
+
+.modal-anular {
+    width: 620px;
+}
+
+.modal-detalle {
+    width: 900px;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-18px) scale(.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+    margin: 0 0 5px 0;
+    color: #1d3557;
+}
+
+.modal-header span {
+    color: #888;
+    font-size: 13px;
+}
+
+.btn-cerrar {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #e53935;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: .3s;
+}
+
+.btn-cerrar:hover:not(:disabled) {
+    background: #b71c1c;
+    transform: rotate(90deg);
+}
+
+.btn-cerrar:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+/* =========================================
+        FORMULARIO COMPRA
+========================================= */
+
+.formulario-compra {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.campo label {
+    color: #1d3557;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+    background: white;
+    font-family: inherit;
+    transition: .3s;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, .1);
+}
+
+.campo textarea {
+    resize: vertical;
+}
+
+.observacion {
+    margin-bottom: 25px;
+}
+
+/* =========================================
+        AVISO CORRECCIÓN
+========================================= */
+
+.aviso-correccion {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+    background: #f2f0ff;
+    border: 1px solid #ddd6fe;
+    border-left: 4px solid #6f42c1;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 22px;
+}
+
+.aviso-icono {
+    font-size: 22px;
+}
+
+.aviso-correccion strong {
+    color: #4c1d95;
+}
+
+.aviso-correccion p {
+    margin: 5px 0 0;
+    color: #6b6480;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* =========================================
+        AGREGAR PRODUCTO
+========================================= */
+
+.agregar-producto {
+    background: #f5f7fb;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.agregar-producto h3,
+.detalle-productos h3,
+.blockchain-detalle h3,
+.detalle-anulacion h3 {
+    margin: 0 0 18px 0;
+    color: #1d3557;
+    font-size: 17px;
+}
+
+.producto-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 15px;
+    align-items: end;
+}
+
+.btn-agregar {
+    height: 43px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 10px;
+    background: #2e7d32;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+    white-space: nowrap;
+}
+
+.btn-agregar:hover {
+    background: #1b5e20;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+        DETALLE PRODUCTOS
+========================================= */
+
+.detalle-productos {
+    margin-top: 20px;
+}
+
+.detalle-productos table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detalle-productos thead {
+    background: #1976d2;
+    color: white;
+}
+
+.detalle-productos th {
+    padding: 12px;
+    text-align: left;
+    font-size: 13px;
+}
+
+.detalle-productos td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    font-size: 14px;
+}
+
+.detalle-productos tbody tr:hover {
+    background: #f5f9ff;
+}
+
+.sin-productos {
+    text-align: center !important;
+    padding: 30px !important;
+    color: #999 !important;
+}
+
+.btn-eliminar {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    background: #e53935;
+    color: white;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-eliminar:hover {
+    background: #b71c1c;
+    transform: scale(1.05);
+}
+
+/* =========================================
+        TOTAL Y ACCIONES DE MODAL
+========================================= */
+
+.total-compra {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    margin-top: 25px;
+    padding: 20px;
+    background: #f5f7fb;
+    border-radius: 12px;
+    color: #1d3557;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.total-compra strong {
+    color: #1976d2;
+    font-size: 28px;
+}
+
+.acciones-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-cancelar,
+.btn-guardar-compra,
+.btn-confirmar-anulacion {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-cancelar {
+    background: #e0e0e0;
+    color: #555;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+    background: #bdbdbd;
+}
+
+.btn-guardar-compra {
+    background: #1976d2;
+    color: white;
+}
+
+.btn-guardar-compra:hover {
+    background: #0d47a1;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+        MODAL ANULACIÓN
+========================================= */
+
+.modal-header-anular {
+    align-items: flex-start;
+}
+
+.titulo-anular {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icono-anular {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fde2e2;
+    color: #c62828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.resumen-anulacion {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.dato-anulacion {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dato-anulacion span {
+    color: #8a94a5;
+    font-size: 12px;
+}
+
+.dato-anulacion strong {
+    color: #1d3557;
+    font-size: 14px;
+}
+
+.campo-motivo small {
+    color: #8b94a3;
+    line-height: 1.4;
+}
+
+.aviso-stock {
+    margin-top: 15px;
+    background: #eef6ff;
+    border: 1px solid #d5e9ff;
+    color: #375a7f;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.btn-confirmar-anulacion {
+    background: #e53935;
+    color: white;
+}
+
+.btn-confirmar-anulacion:hover:not(:disabled) {
+    background: #b71c1c;
+    transform: translateY(-2px);
+}
+
+.btn-confirmar-anulacion:disabled,
+.btn-cancelar:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* =========================================
+        MODAL DETALLE
+========================================= */
+
+.cargando {
+    text-align: center;
+    padding: 35px;
+    color: #7b8798;
+}
+
+.detalle-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.detalle-info-grid > div {
+    background: #f7f9fc;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detalle-info-grid span,
+.blockchain-grid span {
+    color: #8a94a5;
+    font-size: 12px;
+}
+
+.detalle-info-grid strong {
+    color: #1d3557;
+}
+
+.texto-anulado {
+    color: #c62828 !important;
+}
+
+.detalle-anulacion {
+    padding: 16px;
+    margin-bottom: 20px;
+    background: #fff4f4;
+    border-left: 4px solid #e53935;
+    border-radius: 10px;
+}
+
+.detalle-anulacion h3 {
+    color: #b71c1c;
+    margin-bottom: 10px;
+}
+
+.detalle-anulacion p {
+    margin: 6px 0;
+    color: #5f6670;
+    font-size: 13px;
+}
+
+.blockchain-detalle {
+    margin-top: 22px;
+    padding: 18px;
+    background: #f6f3ff;
+    border: 1px solid #e7ddff;
+    border-radius: 12px;
+}
+
+.blockchain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr .5fr;
+    gap: 12px;
+}
+
+.blockchain-grid > div {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.blockchain-grid code {
+    display: block;
+    padding: 9px;
+    background: white;
+    border-radius: 8px;
+    color: #5b21b6;
+    overflow-wrap: anywhere;
+    font-size: 11px;
+}
+
+.total-detalle {
+    margin-top: 20px;
+}
+
+/* =========================================
+        RESPONSIVE
+========================================= */
+
+@media (max-width: 1200px) {
+    .compras-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .detalle-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .producto-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .btn-agregar {
+        width: 100%;
+    }
+
+    .blockchain-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .compras-container {
+        padding: 15px;
+    }
+
+    .compras-header,
+    .tabla-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .compras-cards,
+    .formulario-compra,
+    .resumen-anulacion,
+    .detalle-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .acciones-tabla {
+        width: 100%;
+    }
+
+    .acciones-tabla input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 650px) {
+    .producto-form {
+        grid-template-columns: 1fr;
+    }
+
+    .total-compra {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .acciones-modal {
+        flex-direction: column;
+    }
+
+    .btn-cancelar,
+    .btn-guardar-compra,
+    .btn-confirmar-anulacion {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   FARMACOR - COMPRAS
+   DISEÑO OSCURO PROFESIONAL APROBADO
+========================================================= */
+
+:host {
+    display: block;
+}
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+========================================================= */
+
+.compras-container {
+    min-height: 100vh !important;
+
+    padding: 30px 34px 40px !important;
+
+    box-sizing: border-box;
+
+    color: #dbe7f6;
+
+    background:
+        radial-gradient(
+            circle at 83% 6%,
+            rgba(37, 76, 180, .17),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 22% 50%,
+            rgba(10, 126, 190, .05),
+            transparent 22%
+        ),
+        linear-gradient(
+            135deg,
+            #05142d 0%,
+            #071a38 50%,
+            #06162f 100%
+        ) !important;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+/* =========================================================
+   CABECERA
+========================================================= */
+
+.compras-header {
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: space-between !important;
+
+    margin-bottom: 26px !important;
+}
+
+
+.titulo-compras {
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+}
+
+
+.titulo-icono {
+    width: 62px;
+
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid rgba(48, 137, 255, .53);
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 102, 225, .44),
+            rgba(10, 50, 126, .62)
+        );
+
+    box-shadow:
+        0 0 24px rgba(31, 116, 239, .13);
+
+    font-size: 28px;
+}
+
+
+.compras-header h2 {
+    margin: 0 0 6px !important;
+
+    color: #ffffff !important;
+
+    font-size: 35px !important;
+
+    font-weight: 800 !important;
+
+    line-height: 1 !important;
+}
+
+
+.breadcrumb-compras {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    font-size: 12px;
+}
+
+
+.breadcrumb-compras span {
+    color: #a3b4cc !important;
+
+    font-size: 12px !important;
+}
+
+
+.breadcrumb-compras b {
+    color: #617c9f;
+}
+
+
+.breadcrumb-compras strong {
+    color: #3bb2ff;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TARJETAS
+========================================================= */
+
+.compras-cards {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr)) !important;
+
+    gap: 18px !important;
+
+    margin-bottom: 24px !important;
+}
+
+
+.compra-card {
+    min-height: 142px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 18px !important;
+
+    padding: 21px 20px !important;
+
+    border: 1px solid rgba(70, 124, 199, .29);
+
+    border-radius: 18px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(9, 37, 78, .98),
+            rgba(5, 25, 56, .99)
+        ) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.022),
+        0 17px 40px rgba(0,0,0,.16) !important;
+
+    transition: .22s ease !important;
+}
+
+
+.compra-card:hover {
+    transform: translateY(-3px) !important;
+
+    border-color:
+        rgba(92, 151, 231, .37);
+}
+
+
+.compra-card::after {
+    content: "";
+
+    position: absolute;
+
+    top: -48px;
+
+    right: -34px;
+
+    width: 125px;
+
+    height: 125px;
+
+    border-radius: 50%;
+
+    filter: blur(17px);
+
+    opacity: .20;
+}
+
+
+.compra-card.azul::after {
+    background: #2582ff;
+}
+
+
+.compra-card.verde::after {
+    background: #17cf9c;
+}
+
+
+.compra-card.naranja::after {
+    background: #f5a514;
+}
+
+
+.compra-card.morado::after {
+    background: #8c50f2;
+}
+
+
+.compra-icono {
+    position: relative;
+
+    z-index: 2;
+
+    width: 65px !important;
+
+    height: 65px !important;
+
+    min-width: 65px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    border-radius: 17px !important;
+
+    color: #ffffff !important;
+
+    font-size: 27px !important;
+}
+
+
+.compra-card.azul .compra-icono {
+    border:
+        1px solid rgba(45, 139, 255, .58);
+
+    background:
+        rgba(22, 90, 186, .32) !important;
+}
+
+
+.compra-card.verde .compra-icono {
+    border:
+        1px solid rgba(29, 210, 158, .47);
+
+    background:
+        rgba(13, 116, 88, .29) !important;
+}
+
+
+.compra-card.naranja .compra-icono {
+    border:
+        1px solid rgba(245, 165, 20, .50);
+
+    background:
+        rgba(135, 86, 16, .30) !important;
+}
+
+
+.compra-card.morado .compra-icono {
+    border:
+        1px solid rgba(140, 80, 242, .51);
+
+    background:
+        rgba(84, 46, 151, .29) !important;
+}
+
+
+.compra-datos {
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.compra-card h4 {
+    margin: 0 0 7px !important;
+
+    color: #bdcbe0 !important;
+
+    font-size: 13px !important;
+
+    font-weight: 600 !important;
+}
+
+
+.compra-card h2 {
+    margin: 0 0 8px !important;
+
+    color: #ffffff !important;
+
+    font-size: 28px !important;
+
+    line-height: 1.05 !important;
+
+    font-weight: 800 !important;
+}
+
+
+.compra-card span {
+    color: #879dbd !important;
+
+    font-size: 11px !important;
+}
+
+
+.linea-card {
+    position: absolute;
+
+    left: 16px;
+
+    bottom: 0;
+
+    width: 78%;
+
+    height: 4px;
+
+    border-radius: 999px 999px 0 0;
+}
+
+
+.azul .linea-card {
+    background:
+        linear-gradient(
+            90deg,
+            #3ca8ff,
+            transparent
+        );
+}
+
+
+.verde .linea-card {
+    background:
+        linear-gradient(
+            90deg,
+            #29d5a5,
+            transparent
+        );
+}
+
+
+.naranja .linea-card {
+    background:
+        linear-gradient(
+            90deg,
+            #f5a514,
+            transparent
+        );
+}
+
+
+.morado .linea-card {
+    background:
+        linear-gradient(
+            90deg,
+            #9658f4,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   PANEL DE COMPRAS
+========================================================= */
+
+.compras-panel {
+    overflow: hidden;
+
+    padding: 0 !important;
+
+    border: 1px solid rgba(66, 116, 184, .30);
+
+    border-radius: 18px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 31, 67, .985),
+            rgba(4, 23, 52, .995)
+        ) !important;
+
+    box-shadow:
+        0 22px 52px rgba(0,0,0,.20) !important;
+}
+
+
+.tabla-header {
+    min-height: 80px;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: space-between !important;
+
+    gap: 18px;
+
+    padding: 15px 20px;
+
+    margin: 0 !important;
+
+    box-sizing: border-box;
+
+    border-bottom:
+        1px solid rgba(69, 116, 178, .19);
+}
+
+
+.titulo-registro {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.registro-icono {
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid rgba(62, 130, 230, .35);
+
+    border-radius: 10px;
+
+    background:
+        rgba(18, 73, 156, .20);
+
+    font-size: 18px;
+}
+
+
+.tabla-header h3 {
+    margin: 0 0 4px !important;
+
+    color: #ffffff !important;
+
+    font-size: 18px !important;
+
+    font-weight: 800 !important;
+}
+
+
+.tabla-header small {
+    color: #7f95b5 !important;
+
+    font-size: 10px !important;
+}
+
+
+/* =========================================================
+   BUSCADOR + BOTÓN
+========================================================= */
+
+.acciones-tabla {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 9px !important;
+}
+
+
+.buscador-compras {
+    width: 285px;
+
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid rgba(75, 122, 188, .29);
+
+    border-radius: 10px;
+
+    background:
+        rgba(4, 21, 48, .81);
+}
+
+
+.buscador-icono {
+    color: #7d93b3 !important;
+
+    font-size: 14px !important;
+}
+
+
+.acciones-tabla input {
+    width: 100% !important;
+
+    padding: 0 !important;
+
+    border: 0 !important;
+
+    outline: 0 !important;
+
+    color: #dce6f5 !important;
+
+    background:
+        transparent !important;
+
+    font-size: 11px !important;
+
+    box-shadow: none !important;
+}
+
+
+.acciones-tabla input::placeholder {
+    color: #6c82a3;
+}
+
+
+.btn-buscar {
+    height: 42px;
+
+    padding: 0 16px !important;
+
+    border:
+        1px solid rgba(45, 137, 255, .55) !important;
+
+    border-radius: 10px !important;
+
+    color: #ffffff !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1264d9,
+            #0d4aa7
+        ) !important;
+
+    font-size: 11px !important;
+
+    font-weight: 700 !important;
+
+    cursor: pointer;
+}
+
+
+.btn-nueva-compra {
+    height: 42px;
+
+    min-width: 174px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 16px !important;
+
+    border:
+        1px solid rgba(65, 184, 255, .63) !important;
+
+    border-radius: 10px !important;
+
+    color: #ffffff !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1767e8,
+            #149ee9
+        ) !important;
+
+    box-shadow:
+        0 0 22px rgba(22, 153, 237, .23);
+
+    font-size: 11px !important;
+
+    font-weight: 800 !important;
+
+    cursor: pointer;
+}
+
+
+.btn-nueva-compra span {
+    color: #ffffff !important;
+
+    font-size: 18px !important;
+}
+
+
+/* =========================================================
+   TABLA PRINCIPAL
+========================================================= */
+
+.tabla-contenedor {
+    width: 100% !important;
+
+    overflow-x: auto !important;
+}
+
+
+.tabla-compras {
+    width: 100% !important;
+
+    min-width: 930px;
+
+    border-collapse: collapse !important;
+}
+
+
+.tabla-compras thead {
+    color: inherit !important;
+
+    background:
+        rgba(10, 43, 89, .94) !important;
+}
+
+
+.tabla-compras th {
+    padding: 14px 17px !important;
+
+    color: #55b5ff !important;
+
+    background:
+        transparent !important;
+
+    font-size: 10px !important;
+
+    font-weight: 800 !important;
+
+    border-bottom:
+        1px solid rgba(68, 113, 176, .21);
+}
+
+
+.tabla-compras td {
+    padding: 14px 17px !important;
+
+    color: #cbd8e9 !important;
+
+    border-bottom:
+        1px solid rgba(68, 110, 168, .12) !important;
+
+    font-size: 11px !important;
+}
+
+
+.tabla-compras tbody tr {
+    background:
+        transparent !important;
+}
+
+
+.tabla-compras tbody tr:hover {
+    background:
+        rgba(30, 75, 134, .075) !important;
+}
+
+
+.tabla-compras tbody tr.fila-anulada {
+    background:
+        rgba(130, 35, 51, .13) !important;
+}
+
+
+.tabla-compras tbody tr.fila-anulada:hover {
+    background:
+        rgba(151, 39, 58, .17) !important;
+}
+
+
+.tabla-compras strong {
+    color: #edf4fd;
+}
+
+
+.total-tabla {
+    font-weight: 800;
+}
+
+
+.referencia-correccion {
+    display: block !important;
+
+    margin-top: 4px !important;
+
+    color: #45adff !important;
+
+    font-size: 9px !important;
+}
+
+
+/* =========================================================
+   ESTADOS
+========================================================= */
+
+.estado-recibida,
+.estado-anulada {
+    display: inline-flex !important;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 5px 10px !important;
+
+    border-radius: 999px !important;
+
+    font-size: 9px !important;
+
+    font-weight: 800 !important;
+}
+
+
+.estado-recibida {
+    color: #44e88a !important;
+
+    border:
+        1px solid rgba(38, 205, 105, .29);
+
+    background:
+        rgba(23, 129, 67, .17) !important;
+}
+
+
+.estado-anulada {
+    color: #ff5e67 !important;
+
+    border:
+        1px solid rgba(235, 73, 83, .36);
+
+    background:
+        rgba(148, 42, 50, .18) !important;
+}
+
+
+.estado-recibida i,
+.estado-anulada i {
+    width: 6px;
+
+    height: 6px;
+
+    display: block;
+
+    border-radius: 50%;
+}
+
+
+.estado-recibida i {
+    background: #48e992;
+
+    box-shadow:
+        0 0 7px rgba(72, 233, 146, .55);
+}
+
+
+.estado-anulada i {
+    background: #ff5c65;
+
+    box-shadow:
+        0 0 7px rgba(255, 92, 101, .48);
+}
+
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.acciones-compra {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 7px !important;
+}
+
+
+.btn-ver,
+.btn-anular,
+.btn-corregir {
+    width: 35px !important;
+
+    height: 35px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    border-radius: 8px !important;
+
+    font-size: 14px !important;
+
+    cursor: pointer;
+
+    transition: .18s ease !important;
+}
+
+
+.btn-ver {
+    border:
+        1px solid rgba(42, 132, 255, .49) !important;
+
+    color: #5eb9ff !important;
+
+    background:
+        rgba(18, 83, 174, .29) !important;
+}
+
+
+.btn-anular {
+    border:
+        1px solid rgba(237, 67, 78, .45) !important;
+
+    color: #ff5e69 !important;
+
+    background:
+        rgba(145, 38, 48, .21) !important;
+}
+
+
+.btn-corregir {
+    border:
+        1px solid rgba(231, 157, 17, .45) !important;
+
+    color: #ffb21d !important;
+
+    background:
+        rgba(135, 89, 11, .23) !important;
+}
+
+
+.btn-ver:hover:not(:disabled),
+.btn-anular:hover:not(:disabled),
+.btn-corregir:hover:not(:disabled) {
+    transform: translateY(-1px) !important;
+}
+
+
+.btn-ver:disabled,
+.btn-anular:disabled,
+.btn-corregir:disabled {
+    opacity: .27 !important;
+
+    color: #718097 !important;
+
+    border-color:
+        rgba(100, 115, 139, .16) !important;
+
+    background:
+        rgba(60, 75, 98, .10) !important;
+}
+
+
+/* =========================================================
+   PAGINACIÓN SIMPLE
+========================================================= */
+
+.paginacion-simple {
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border-top:
+        1px solid rgba(68, 111, 174, .14);
+}
+
+
+.pagina-control,
+.pagina-numero {
+    width: 36px;
+
+    height: 36px;
+
+    border:
+        1px solid rgba(69, 116, 181, .28);
+
+    border-radius: 8px;
+
+    color: #9db0ca;
+
+    background:
+        rgba(5, 25, 55, .79);
+
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+
+.pagina-numero.activa {
+    color: #ffffff;
+
+    border-color:
+        #2989ff;
+
+    background:
+        linear-gradient(
+            180deg,
+            #1774e6,
+            #0e4cac
+        );
+
+    box-shadow:
+        0 0 16px rgba(43, 132, 255, .22);
+}
+
+
+.pagina-control:disabled {
+    opacity: .28;
+
+    cursor: default;
+}
+
+
+/* =========================================================
+   SIN REGISTROS
+========================================================= */
+
+.sin-registros {
+    padding: 40px !important;
+
+    text-align: center !important;
+
+    color: #738aa9 !important;
+
+    font-size: 12px !important;
+}
+
+
+/* =========================================================
+   MODALES - ESTILO OSCURO
+========================================================= */
+
+.modal {
+    position: fixed !important;
+
+    inset: 0 !important;
+
+    width: auto !important;
+
+    height: auto !important;
+
+    z-index: 9999 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    padding: 22px !important;
+
+    box-sizing: border-box;
+
+    background:
+        rgba(1, 7, 19, .83) !important;
+
+    backdrop-filter:
+        blur(7px) !important;
+}
+
+
+.modal-contenido {
+    max-height: 92vh !important;
+
+    overflow-y: auto !important;
+
+    padding: 0 !important;
+
+    border:
+        1px solid rgba(70, 126, 208, .34);
+
+    border-radius: 19px !important;
+
+    color: #dbe6f5;
+
+    background:
+        radial-gradient(
+            circle at 84% 0%,
+            rgba(89, 54, 172, .09),
+            transparent 27%
+        ),
+        linear-gradient(
+            145deg,
+            #082349,
+            #06172f
+        ) !important;
+
+    box-shadow:
+        0 34px 90px rgba(0,0,0,.55) !important;
+}
+
+
+.modal-compra {
+    width: 980px !important;
+}
+
+
+.modal-anular {
+    width: 650px !important;
+}
+
+
+.modal-detalle {
+    width: 920px !important;
+}
+
+
+.modal-header {
+    min-height: 88px;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: space-between !important;
+
+    gap: 18px;
+
+    margin: 0 !important;
+
+    padding: 19px 24px !important;
+
+    border-bottom:
+        1px solid rgba(77, 126, 194, .19) !important;
+}
+
+
+.modal-header h2 {
+    margin: 0 0 5px !important;
+
+    color: #ffffff !important;
+
+    font-size: 23px !important;
+}
+
+
+.modal-header span {
+    color: #879dbd !important;
+
+    font-size: 11px !important;
+}
+
+
+.btn-cerrar {
+    width: 40px !important;
+
+    height: 40px !important;
+
+    border:
+        1px solid rgba(232, 72, 101, .35) !important;
+
+    border-radius: 10px !important;
+
+    color: #ff6c82 !important;
+
+    background:
+        rgba(155, 35, 59, .11) !important;
+
+    cursor: pointer !important;
+}
+
+
+/* =========================================================
+   FORMULARIO MODAL
+========================================================= */
+
+.formulario-compra {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 18px !important;
+
+    margin: 0 !important;
+
+    padding: 24px 25px 18px;
+}
+
+
+.campo {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    gap: 7px !important;
+}
+
+
+.campo label {
+    color: #aebed4 !important;
+
+    font-size: 11px !important;
+
+    font-weight: 700 !important;
+}
+
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    border:
+        1px solid rgba(73, 120, 188, .28) !important;
+
+    border-radius: 10px !important;
+
+    outline: none !important;
+
+    color: #dfe8f5 !important;
+
+    background:
+        rgba(4, 21, 47, .77) !important;
+
+    font-size: 12px !important;
+
+    font-family: inherit !important;
+
+    transition: .18s ease !important;
+}
+
+
+.campo input,
+.campo select {
+    height: 44px !important;
+
+    padding: 0 12px !important;
+}
+
+
+.campo textarea {
+    padding: 11px 12px !important;
+
+    resize: vertical !important;
+}
+
+
+.campo select option {
+    color: #ecf3ff;
+
+    background: #092247;
+}
+
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color:
+        rgba(57, 157, 255, .58) !important;
+
+    box-shadow:
+        0 0 0 3px rgba(36, 111, 228, .075) !important;
+}
+
+
+.observacion,
+.campo-motivo {
+    margin:
+        0 25px 21px !important;
+}
+
+
+/* =========================================================
+   AVISOS / BLOQUES MODAL
+========================================================= */
+
+.aviso-correccion {
+    margin:
+        20px 25px 0 !important;
+
+    padding: 13px 15px !important;
+
+    border:
+        1px solid rgba(139, 92, 246, .28) !important;
+
+    border-left:
+        4px solid #8b5cf6 !important;
+
+    border-radius: 11px !important;
+
+    color: #c9b8f7;
+
+    background:
+        rgba(102, 54, 158, .10) !important;
+}
+
+
+.aviso-correccion strong {
+    color: #c6adff !important;
+}
+
+
+.aviso-correccion p {
+    color: #8f83ae !important;
+
+    font-size: 11px !important;
+}
+
+
+.agregar-producto {
+    margin:
+        0 25px 22px !important;
+
+    padding: 18px !important;
+
+    border:
+        1px solid rgba(67, 115, 182, .20);
+
+    border-radius: 13px !important;
+
+    background:
+        rgba(5, 23, 51, .62) !important;
+}
+
+
+.agregar-producto h3,
+.detalle-productos h3,
+.blockchain-detalle h3,
+.detalle-anulacion h3 {
+    color: #ffffff !important;
+
+    font-size: 15px !important;
+}
+
+
+.producto-form {
+    display: grid !important;
+
+    grid-template-columns:
+        2fr 1fr 1fr auto !important;
+
+    gap: 13px !important;
+
+    align-items: end !important;
+}
+
+
+.btn-agregar {
+    height: 44px !important;
+
+    border:
+        1px solid rgba(35, 211, 151, .45) !important;
+
+    border-radius: 10px !important;
+
+    color: #ffffff !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            #12865e,
+            #16a879
+        ) !important;
+
+    font-size: 11px !important;
+
+    font-weight: 800 !important;
+}
+
+
+/* =========================================================
+   DETALLE DE PRODUCTOS MODAL
+========================================================= */
+
+.detalle-productos {
+    margin:
+        0 25px !important;
+}
+
+
+.detalle-productos table {
+    width: 100% !important;
+
+    border-collapse: collapse !important;
+}
+
+
+.detalle-productos thead {
+    color: inherit !important;
+
+    background:
+        rgba(11, 43, 88, .92) !important;
+}
+
+
+.detalle-productos th {
+    padding: 12px !important;
+
+    color: #53b4ff !important;
+
+    font-size: 10px !important;
+}
+
+
+.detalle-productos td {
+    padding: 12px !important;
+
+    color: #cbd7e7 !important;
+
+    border-bottom:
+        1px solid rgba(72, 112, 169, .14) !important;
+
+    font-size: 11px !important;
+}
+
+
+.detalle-productos tbody tr:hover {
+    background:
+        rgba(28, 67, 119, .07) !important;
+}
+
+
+.sin-productos {
+    color: #748aa8 !important;
+}
+
+
+.btn-eliminar {
+    border:
+        1px solid rgba(235, 71, 82, .42) !important;
+
+    color: #ff6570 !important;
+
+    background:
+        rgba(145, 38, 47, .18) !important;
+}
+
+
+/* =========================================================
+   TOTAL Y BOTONES
+========================================================= */
+
+.total-compra {
+    margin:
+        20px 25px 0 !important;
+
+    padding: 15px 18px !important;
+
+    border:
+        1px solid rgba(68, 116, 183, .19);
+
+    border-radius: 11px !important;
+
+    color: #9eb1cb !important;
+
+    background:
+        rgba(5, 23, 51, .69) !important;
+
+    font-size: 14px !important;
+}
+
+
+.total-compra strong {
+    color: #55b8ff !important;
+
+    font-size: 23px !important;
+}
+
+
+.acciones-modal {
+    display: flex !important;
+
+    justify-content: flex-end !important;
+
+    gap: 11px !important;
+
+    margin-top: 20px !important;
+
+    padding:
+        0 25px 24px;
+}
+
+
+.btn-cancelar,
+.btn-guardar-compra,
+.btn-confirmar-anulacion {
+    min-height: 43px;
+
+    padding:
+        0 18px !important;
+
+    border-radius:
+        10px !important;
+
+    font-size:
+        11px !important;
+
+    font-weight:
+        800 !important;
+}
+
+
+.btn-cancelar {
+    border:
+        1px solid rgba(109, 133, 169, .20) !important;
+
+    color:
+        #b5c3d7 !important;
+
+    background:
+        rgba(71, 88, 116, .11) !important;
+}
+
+
+.btn-guardar-compra {
+    border:
+        1px solid rgba(58, 181, 255, .56) !important;
+
+    color:
+        #ffffff !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1767e8,
+            #159de8
+        ) !important;
+
+    box-shadow:
+        0 0 20px rgba(20, 151, 233, .18);
+}
+
+
+.btn-confirmar-anulacion {
+    border:
+        1px solid rgba(240, 78, 90, .50) !important;
+
+    color:
+        #ffffff !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            #b52d42,
+            #d63e50
+        ) !important;
+}
+
+
+/* =========================================================
+   MODAL ANULACIÓN
+========================================================= */
+
+.titulo-anular {
+    gap: 12px !important;
+}
+
+
+.icono-anular {
+    width: 46px !important;
+
+    height: 46px !important;
+
+    border:
+        1px solid rgba(238, 73, 91, .31);
+
+    border-radius:
+        12px !important;
+
+    color:
+        #ff6b7d !important;
+
+    background:
+        rgba(145, 37, 54, .13) !important;
+}
+
+
+.resumen-anulacion {
+    display:
+        grid !important;
+
+    grid-template-columns:
+        repeat(3, 1fr) !important;
+
+    gap:
+        11px !important;
+
+    margin:
+        22px 25px 18px !important;
+
+    padding:
+        14px !important;
+
+    border:
+        1px solid rgba(70, 116, 181, .18);
+
+    border-radius:
+        11px !important;
+
+    background:
+        rgba(5, 23, 51, .69) !important;
+}
+
+
+.dato-anulacion span {
+    color:
+        #748aa8 !important;
+}
+
+
+.dato-anulacion strong {
+    color:
+        #e2eaf6 !important;
+}
+
+
+.campo-motivo small {
+    color:
+        #7e93b1 !important;
+}
+
+
+.aviso-stock {
+    margin:
+        15px 25px 0 !important;
+
+    border:
+        1px solid rgba(67, 145, 236, .20) !important;
+
+    color:
+        #8fb5dd !important;
+
+    background:
+        rgba(28, 90, 158, .09) !important;
+}
+
+
+/* =========================================================
+   MODAL DETALLE
+========================================================= */
+
+.cargando {
+    color:
+        #859ab8 !important;
+}
+
+
+.detalle-info-grid {
+    display:
+        grid !important;
+
+    grid-template-columns:
+        repeat(4, 1fr) !important;
+
+    gap:
+        11px !important;
+
+    margin:
+        22px 24px !important;
+}
+
+
+.detalle-info-grid > div {
+    padding:
+        13px !important;
+
+    border:
+        1px solid rgba(69, 115, 180, .18);
+
+    border-radius:
+        10px !important;
+
+    background:
+        rgba(4, 21, 48, .68) !important;
+}
+
+
+.detalle-info-grid span,
+.blockchain-grid span {
+    color:
+        #748aa9 !important;
+}
+
+
+.detalle-info-grid strong {
+    color:
+        #dfe8f5 !important;
+}
+
+
+.texto-anulado {
+    color:
+        #ff6470 !important;
+}
+
+
+.detalle-anulacion {
+    margin:
+        0 24px 20px !important;
+
+    padding:
+        15px !important;
+
+    border:
+        1px solid rgba(236, 74, 88, .22) !important;
+
+    border-left:
+        4px solid #e74b5c !important;
+
+    border-radius:
+        10px !important;
+
+    background:
+        rgba(133, 36, 51, .10) !important;
+}
+
+
+.detalle-anulacion h3 {
+    color:
+        #ff7581 !important;
+}
+
+
+.detalle-anulacion p {
+    color:
+        #a7b3c5 !important;
+}
+
+
+.blockchain-detalle {
+    margin:
+        22px 24px 0 !important;
+
+    padding:
+        17px !important;
+
+    border:
+        1px solid rgba(129, 87, 236, .23) !important;
+
+    border-radius:
+        11px !important;
+
+    background:
+        rgba(88, 48, 151, .09) !important;
+}
+
+
+.blockchain-grid {
+    display:
+        grid !important;
+
+    grid-template-columns:
+        1fr 1fr .45fr !important;
+
+    gap:
+        11px !important;
+}
+
+
+.blockchain-grid code {
+    padding:
+        9px !important;
+
+    border:
+        1px solid rgba(92, 71, 151, .17);
+
+    border-radius:
+        8px !important;
+
+    color:
+        #bfa8ff !important;
+
+    background:
+        rgba(6, 21, 46, .73) !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1180px) {
+
+    .compras-cards {
+        grid-template-columns:
+            repeat(2, 1fr) !important;
+    }
+
+    .tabla-header {
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start !important;
+    }
+
+    .acciones-tabla {
+        width:
+            100% !important;
+    }
+
+    .buscador-compras {
+        flex:
+            1;
+    }
+
+}
+
+
+@media (max-width: 760px) {
+
+    .compras-container {
+        padding:
+            18px !important;
+    }
+
+    .compras-cards {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    .acciones-tabla {
+        display:
+            grid !important;
+
+        grid-template-columns:
+            1fr !important;
+    }
+
+    .buscador-compras,
+    .btn-buscar,
+    .btn-nueva-compra {
+        width:
+            100% !important;
+
+        min-width:
+            0 !important;
+    }
+
+    .formulario-compra,
+    .producto-form,
+    .resumen-anulacion,
+    .detalle-info-grid,
+    .blockchain-grid {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    .acciones-modal {
+        flex-direction:
+            column-reverse !important;
+    }
+
+    .btn-cancelar,
+    .btn-guardar-compra,
+    .btn-confirmar-anulacion {
+        width:
+            100%;
+    }
+
+}
+/* TODO TU CSS NORMAL DE COMPRAS ARRIBA */
+
+
+/* ==========================================
+   RESPONSIVE - NUEVA COMPRA
+========================================== */
+
+@media (max-width: 768px) {
+
+    .modal-content {
+        width: calc(100% - 24px);
+        max-width: 100%;
+        max-height: 92vh;
+        overflow-y: auto;
+        margin: 4vh auto;
+    }
+
+    .modal-body {
+        padding: 18px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .agregar-medicamento {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .tabla-container,
+    .detalle-compra {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .detalle-compra table,
+    .tabla-container table {
+        min-width: 520px;
+    }
+
+    .modal-actions,
+    .acciones-modal {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-actions button,
+    .acciones-modal button {
+        width: 100%;
+    }
+}
+
+
+/* ===== BUSCADOR DE MEDICAMENTOS - COMPRA ===== */
+.campo-buscador-medicamento { position: relative; }
+.buscador-medicamento-wrap { position: relative; width: 100%; }
+.buscador-medicamento-wrap input { width: 100%; box-sizing: border-box; }
+.resultados-medicamento {
+  position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 1200;
+  max-height: 270px; overflow-y: auto; background: #081f42;
+  border: 1px solid rgba(64,153,255,.55); border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.38); padding: 6px;
+}
+.resultado-medicamento {
+  width: 100%; display: flex; justify-content: space-between; gap: 12px;
+  align-items: center; padding: 11px 12px; border: 0; border-radius: 8px;
+  background: transparent; color: #eef6ff; text-align: left; cursor: pointer;
+}
+.resultado-medicamento:hover { background: rgba(42,132,255,.18); }
+.resultado-medicamento small { color: #81a9d8; white-space: nowrap; }
+.sin-resultados { padding: 12px; color: #8eacd0; text-align: center; }

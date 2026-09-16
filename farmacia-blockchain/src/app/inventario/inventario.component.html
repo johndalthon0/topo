@@ -1,0 +1,1196 @@
+<div class="inventario-page">
+
+  <!-- =====================================================
+       CABECERA
+  ====================================================== -->
+  <section class="inventario-header">
+
+    <div class="titulo-wrap">
+
+      <div class="titulo-icono">
+        <svg viewBox="0 0 24 24">
+          <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path>
+          <path d="m4 7.5 8 4.5 8-4.5M12 12v9"></path>
+        </svg>
+      </div>
+
+      <div>
+        <h1>Inventario</h1>
+
+        <div class="breadcrumb">
+          <span>Inventario</span>
+          <b>›</b>
+          <strong>Dashboard</strong>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="fecha-pill">
+      <span>Hoy: {{ fechaActual }}</span>
+
+      <svg viewBox="0 0 24 24">
+        <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+        <path d="M8 3v4M16 3v4M4 9h16"></path>
+      </svg>
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       TARJETAS SUPERIORES
+  ====================================================== -->
+  <section class="cards-grid">
+
+    <article class="stat-card azul">
+
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path>
+          <path d="m4 7.5 8 4.5 8-4.5M12 12v9"></path>
+        </svg>
+      </div>
+
+      <div class="stat-info">
+        <span>Total Productos</span>
+        <strong>{{ totalProductos }}</strong>
+        <small>Medicamentos<br>registrados</small>
+      </div>
+
+      <div class="accent-line"></div>
+
+    </article>
+
+
+    <article class="stat-card verde">
+
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v12"></path>
+          <path d="m8 11 4 4 4-4"></path>
+          <path d="M5 14v5h14v-5"></path>
+        </svg>
+      </div>
+
+      <div class="stat-info">
+        <span>Entradas Hoy</span>
+        <strong>{{ entradasHoy }}</strong>
+        <small>{{ totalUnidadesEntradasHoy }} unidades</small>
+      </div>
+
+      <div class="accent-line"></div>
+
+    </article>
+
+
+    <article class="stat-card naranja">
+
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 15V3"></path>
+          <path d="m8 7 4-4 4 4"></path>
+          <path d="M5 10v9h14v-9"></path>
+        </svg>
+      </div>
+
+      <div class="stat-info">
+        <span>Salidas Hoy</span>
+        <strong>{{ salidasHoy }}</strong>
+        <small>{{ totalUnidadesSalidasHoy }} unidades</small>
+      </div>
+
+      <div class="accent-line"></div>
+
+    </article>
+
+
+    <article class="stat-card morado">
+
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3 2.8 20h18.4L12 3Z"></path>
+          <path d="M12 9v4M12 17h.01"></path>
+        </svg>
+      </div>
+
+      <div class="stat-info">
+        <span>Stock Bajo</span>
+        <strong>{{ stockBajo }}</strong>
+        <small>Productos críticos</small>
+      </div>
+
+      <div class="accent-line"></div>
+
+    </article>
+
+
+    <article class="stat-card rojo">
+
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24">
+          <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+          <path d="M8 3v4M16 3v4M4 9h16M9 13h2M13 13h2"></path>
+        </svg>
+      </div>
+
+      <div class="stat-info">
+        <span>Por Vencer</span>
+        <strong>{{ porVencer }}</strong>
+        <small>Próximos 30 días</small>
+      </div>
+
+      <div class="accent-line"></div>
+
+    </article>
+
+  </section>
+
+
+  <!-- =====================================================
+       PESTAÑAS
+  ====================================================== -->
+  <section class="tabs-dashboard">
+
+    <button
+      type="button"
+      [class.active]="pestanaActiva === 'resumen'"
+      (click)="cambiarPestana('resumen')">
+
+      <svg viewBox="0 0 24 24">
+        <rect x="4" y="4" width="6" height="6"></rect>
+        <rect x="14" y="4" width="6" height="6"></rect>
+        <rect x="4" y="14" width="6" height="6"></rect>
+        <rect x="14" y="14" width="6" height="6"></rect>
+      </svg>
+
+      Resumen
+
+    </button>
+
+
+    <button
+      type="button"
+      [class.active]="pestanaActiva === 'movimientos'"
+      (click)="cambiarPestana('movimientos')">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M5 8h12"></path>
+        <path d="m14 5 3 3-3 3"></path>
+        <path d="M19 16H7"></path>
+        <path d="m10 13-3 3 3 3"></path>
+      </svg>
+
+      Movimientos
+
+    </button>
+
+
+    <button
+      type="button"
+      [class.active]="pestanaActiva === 'alertas'"
+      (click)="cambiarPestana('alertas')">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+        <path d="M10 21h4"></path>
+      </svg>
+
+      Alertas
+
+    </button>
+
+  </section>
+
+
+  <!-- =====================================================
+       RESUMEN
+  ====================================================== -->
+  <section
+    class="contenido-grid"
+    *ngIf="pestanaActiva === 'resumen'">
+
+    <!-- TABLA -->
+    <div class="panel movimientos-panel">
+
+      <div class="panel-cabecera">
+
+        <div>
+          <h2>Movimientos Recientes</h2>
+          <p>Últimos movimientos registrados en el inventario</p>
+        </div>
+
+
+        <div class="busqueda-wrap">
+
+          <div class="input-busqueda">
+
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+
+            <input
+              type="text"
+              placeholder="Buscar medicamento..."
+              [(ngModel)]="textoBusqueda"
+              (ngModelChange)="filtrarMovimientos()">
+
+          </div>
+
+
+          <button
+            type="button"
+            class="btn-filtrar"
+            (click)="filtrarMovimientos()">
+
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+
+            Filtrar
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="tabla-scroll">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Medicamento</th>
+              <th>Lote</th>
+              <th>Cantidad</th>
+              <th>Usuario</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let m of movimientosPagina;
+                let i = index
+              ">
+
+              <td>
+                {{ indiceInicio + i + 1 }}
+              </td>
+
+              <td>
+                {{ m.fecha || '-' }}
+              </td>
+
+              <td>
+
+                <span
+                  class="tipo"
+                  [ngClass]="{
+                    'entrada': m.tipo === 'Entrada',
+                    'salida': m.tipo === 'Salida',
+                    'ajuste': m.tipo === 'Ajuste'
+                  }">
+
+                  {{ m.tipo }}
+
+                </span>
+
+              </td>
+
+              <td class="medicamento-col">
+                {{ m.medicamento || '-' }}
+              </td>
+
+              <td>
+                {{ m.lote || '-' }}
+              </td>
+
+              <td>
+                {{ m.cantidad || 0 }}
+              </td>
+
+              <td>
+                {{ m.usuario || '-' }}
+              </td>
+
+              <td>
+
+                <button
+                  type="button"
+                  class="btn-ver"
+                  title="Ver detalle"
+                  (click)="verMovimiento(m)">
+
+                  <svg viewBox="0 0 24 24">
+                    <path d="M2.8 12s3.4-5 9.2-5 9.2 5 9.2 5-3.4 5-9.2 5-9.2-5-9.2-5Z"></path>
+                    <circle cx="12" cy="12" r="2.5"></circle>
+                  </svg>
+
+                </button>
+
+              </td>
+
+            </tr>
+
+
+            <tr *ngIf="movimientosFiltrados.length === 0">
+
+              <td
+                colspan="8"
+                class="sin-resultados">
+
+                No se encontraron movimientos.
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="tabla-footer">
+
+        <span>
+          Mostrando
+          {{ movimientosFiltrados.length === 0 ? 0 : indiceInicio + 1 }}
+          a
+          {{ indiceFin }}
+          de
+          {{ movimientosFiltrados.length }}
+          movimientos
+        </span>
+
+
+        <div class="paginacion">
+
+          <button
+            type="button"
+            (click)="paginaAnterior()"
+            [disabled]="paginaActual === 1">
+
+            ‹
+
+          </button>
+
+
+          <button
+            type="button"
+            *ngFor="let pagina of paginasVisibles"
+            [class.active]="pagina === paginaActual"
+            (click)="irPagina(pagina)">
+
+            {{ pagina }}
+
+          </button>
+
+
+          <button
+            type="button"
+            (click)="paginaSiguiente()"
+            [disabled]="paginaActual === totalPaginas">
+
+            ›
+
+          </button>
+
+        </div>
+
+
+        <select
+          [(ngModel)]="porPagina"
+          (ngModelChange)="cambiarCantidadPagina()">
+
+          <option [ngValue]="6">6 por página</option>
+          <option [ngValue]="8">8 por página</option>
+          <option [ngValue]="10">10 por página</option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <!-- PANELES DERECHOS -->
+    <aside class="paneles-derecha">
+
+      <!-- STOCK BAJO -->
+      <div class="panel alerta-panel">
+
+        <div class="alerta-titulo">
+
+          <div class="alerta-icono warning">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3 2.8 20h18.4L12 3Z"></path>
+              <path d="M12 9v4M12 17h.01"></path>
+            </svg>
+          </div>
+
+          <h3>Stock Bajo</h3>
+
+        </div>
+
+
+        <ul>
+
+          <li
+            *ngFor="
+              let m of stockBajoLista
+                | slice:0:5
+            ">
+
+            <div class="alerta-nombre">
+              <span class="bullet"></span>
+              {{ m.nombre }}
+            </div>
+
+            <b>
+              Stock: {{ m.stock }}
+            </b>
+
+          </li>
+
+
+          <li
+            *ngIf="stockBajoLista.length === 0"
+            class="lista-vacia">
+
+            Sin productos críticos
+
+          </li>
+
+        </ul>
+
+
+        <button
+          type="button"
+          class="ver-todos"
+          (click)="cambiarPestana('alertas')">
+
+          Ver todos
+          <span>→</span>
+
+        </button>
+
+      </div>
+
+
+      <!-- POR VENCER -->
+      <div class="panel alerta-panel">
+
+        <div class="alerta-titulo">
+
+          <div class="alerta-icono vencimiento">
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+              <path d="M8 3v4M16 3v4M4 9h16"></path>
+            </svg>
+          </div>
+
+          <h3>Medicamentos por Vencer</h3>
+
+        </div>
+
+
+        <ul>
+
+          <li
+            *ngFor="
+              let m of porVencerLista
+                | slice:0:5
+            ">
+
+            <div class="alerta-nombre">
+              <span class="bullet"></span>
+              {{ m.nombre }}
+            </div>
+
+            <span class="fecha-vencimiento">
+              {{ m.fecha_vencimiento }}
+            </span>
+
+          </li>
+
+
+          <li
+            *ngIf="porVencerLista.length === 0"
+            class="lista-vacia">
+
+            Sin medicamentos por vencer
+
+          </li>
+
+        </ul>
+
+
+        <button
+          type="button"
+          class="ver-todos"
+          (click)="cambiarPestana('alertas')">
+
+          Ver todos
+          <span>→</span>
+
+        </button>
+
+      </div>
+
+    </aside>
+
+  </section>
+
+
+  <!-- =====================================================
+       MOVIMIENTOS
+  ====================================================== -->
+  <section
+    class="panel movimientos-completo"
+    *ngIf="pestanaActiva === 'movimientos'">
+
+    <div class="panel-cabecera">
+
+      <div>
+        <h2>Historial de Movimientos</h2>
+        <p>Consulta todas las entradas y salidas registradas</p>
+      </div>
+
+
+      <div class="busqueda-wrap">
+
+        <div class="input-busqueda">
+
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+
+          <input
+            type="text"
+            placeholder="Buscar movimiento..."
+            [(ngModel)]="textoBusqueda"
+            (ngModelChange)="filtrarMovimientos()">
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="tabla-scroll">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Medicamento</th>
+            <th>Lote</th>
+            <th>Cantidad</th>
+            <th>Usuario</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let m of movimientosPagina;
+              let i = index
+            ">
+
+            <td>{{ indiceInicio + i + 1 }}</td>
+
+            <td>{{ m.fecha || '-' }}</td>
+
+            <td>
+              <span
+                class="tipo"
+                [ngClass]="{
+                  'entrada': m.tipo === 'Entrada',
+                  'salida': m.tipo === 'Salida'
+                }">
+
+                {{ m.tipo }}
+
+              </span>
+            </td>
+
+            <td>{{ m.medicamento || '-' }}</td>
+            <td>{{ m.lote || '-' }}</td>
+            <td>{{ m.cantidad || 0 }}</td>
+            <td>{{ m.usuario || '-' }}</td>
+
+            <td>
+              <button
+                type="button"
+                class="btn-ver"
+                (click)="verMovimiento(m)">
+
+                <svg viewBox="0 0 24 24">
+                  <path d="M2.8 12s3.4-5 9.2-5 9.2 5 9.2 5-3.4 5-9.2 5-9.2-5-9.2-5Z"></path>
+                  <circle cx="12" cy="12" r="2.5"></circle>
+                </svg>
+
+              </button>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <div class="tabla-footer">
+
+      <span>
+        {{ movimientosFiltrados.length }}
+        movimientos encontrados
+      </span>
+
+
+      <div class="paginacion">
+
+        <button
+          type="button"
+          (click)="paginaAnterior()"
+          [disabled]="paginaActual === 1">
+          ‹
+        </button>
+
+        <button
+          type="button"
+          *ngFor="let pagina of paginasVisibles"
+          [class.active]="pagina === paginaActual"
+          (click)="irPagina(pagina)">
+          {{ pagina }}
+        </button>
+
+        <button
+          type="button"
+          (click)="paginaSiguiente()"
+          [disabled]="paginaActual === totalPaginas">
+          ›
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       ALERTAS
+  ====================================================== -->
+  <section
+    class="alertas-grid"
+    *ngIf="pestanaActiva === 'alertas'">
+
+    <!-- ================================================
+         STOCK BAJO
+    ================================================= -->
+    <article class="panel alertas-tab-panel">
+
+      <div class="alertas-header">
+
+        <span class="alertas-section-tag">
+          STOCK BAJO
+        </span>
+
+        <h2>
+          Medicamentos críticos
+        </h2>
+
+      </div>
+
+
+      <div class="alertas-table-wrap">
+
+        <table class="alertas-table">
+
+          <thead>
+            <tr>
+              <th>Medicamento</th>
+              <th>Stock</th>
+              <th>Mínimo</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let m of stockBajoLista">
+
+              <td class="alerta-med-nombre">
+                {{ m.nombre }}
+              </td>
+
+              <td>
+                {{ m.stock }}
+              </td>
+
+              <td>
+                {{ m.stock_minimo }}
+              </td>
+
+              <td>
+                <span class="estado-pill critico">
+                  Crítico
+                </span>
+              </td>
+
+            </tr>
+
+
+            <tr *ngIf="stockBajoLista.length === 0">
+
+              <td
+                colspan="4"
+                class="alertas-vacio">
+
+                No existen medicamentos con stock bajo.
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="alertas-footer">
+
+        <div class="alertas-resumen critico-resumen">
+
+          <span class="alert-dot red"></span>
+
+          <strong>
+            {{ stockBajo }}
+          </strong>
+
+          <span>
+            medicamentos por debajo del stock mínimo
+          </span>
+
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <!-- ================================================
+         POR VENCER
+    ================================================= -->
+    <article class="panel alertas-tab-panel">
+
+      <div class="alertas-header">
+
+        <span class="alertas-section-tag">
+          POR VENCER
+        </span>
+
+        <h2>
+          Medicamentos próximos a vencer
+        </h2>
+
+      </div>
+
+
+      <div class="alertas-table-wrap">
+
+        <table class="alertas-table">
+
+          <thead>
+            <tr>
+              <th>Medicamento</th>
+              <th>Lote</th>
+              <th>Vencimiento</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let m of porVencerLista">
+
+              <td class="alerta-med-nombre">
+                {{ m.nombre }}
+              </td>
+
+              <td>
+                {{ m.lote || '-' }}
+              </td>
+
+              <td>
+                {{ m.fecha_vencimiento }}
+              </td>
+
+              <td>
+                <span class="estado-pill proximo">
+                  Próximo
+                </span>
+              </td>
+
+            </tr>
+
+
+            <tr *ngIf="porVencerLista.length === 0">
+
+              <td
+                colspan="4"
+                class="alertas-vacio">
+
+                No existen medicamentos próximos a vencer.
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="alertas-footer">
+
+        <div class="alertas-resumen proximo-resumen">
+
+          <span class="alert-dot orange"></span>
+
+          <strong>
+            {{ porVencer }}
+          </strong>
+
+          <span>
+            medicamentos próximos a vencer en 30 días
+          </span>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- =====================================================
+       TARJETAS INFERIORES
+  ====================================================== -->
+  <section class="footer-cards">
+
+    <article class="footer-card valor">
+
+      <div class="footer-icon">
+        <span>$</span>
+      </div>
+
+      <div>
+        <span>Valor Total del Inventario</span>
+
+        <strong>
+          Bs. {{ valorInventario | number:'1.2-2' }}
+        </strong>
+
+        <small>Valor aproximado</small>
+      </div>
+
+    </article>
+
+
+    <article class="footer-card entrada-card">
+
+      <div class="footer-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v12"></path>
+          <path d="m8 11 4 4 4-4"></path>
+          <path d="M5 14v5h14v-5"></path>
+        </svg>
+      </div>
+
+      <div>
+        <span>Última Entrada</span>
+
+        <strong>
+          {{ ultimaEntradaFecha }}
+        </strong>
+
+        <small>
+          {{ ultimaEntradaMedicamento }}
+        </small>
+      </div>
+
+    </article>
+
+
+    <article class="footer-card salida-card">
+
+      <div class="footer-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 15V3"></path>
+          <path d="m8 7 4-4 4 4"></path>
+          <path d="M5 10v9h14v-9"></path>
+        </svg>
+      </div>
+
+      <div>
+        <span>Última Salida</span>
+
+        <strong>
+          {{ ultimaSalidaFecha }}
+        </strong>
+
+        <small>
+          {{ ultimaSalidaMedicamento }}
+        </small>
+      </div>
+
+    </article>
+
+  </section>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL DETALLE
+====================================================== -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarDetalle">
+
+  <div class="modal-contenido">
+
+    <div class="modal-header">
+
+      <div>
+
+        <span class="modal-label">
+          DETALLE DEL MOVIMIENTO
+        </span>
+
+        <h2 *ngIf="detalleMovimiento?.tipo === 'Entrada'">
+          Entrada de Inventario
+        </h2>
+
+        <h2 *ngIf="detalleMovimiento?.tipo === 'Salida'">
+          Salida de Inventario
+        </h2>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="cerrar-modal"
+        (click)="cerrarDetalle()">
+
+        ×
+
+      </button>
+
+    </div>
+
+
+    <!-- ENTRADA -->
+    <div
+      class="detalle-contenido"
+      *ngIf="detalleMovimiento?.tipo === 'Entrada'">
+
+      <div class="detalle-datos">
+
+        <div>
+          <span>Proveedor</span>
+          <strong>
+            {{ detalleMovimiento?.proveedor || '-' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Factura</span>
+          <strong>
+            {{ detalleMovimiento?.factura || '-' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Fecha</span>
+          <strong>
+            {{ detalleMovimiento?.fecha || '-' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Observación</span>
+          <strong>
+            {{ detalleMovimiento?.observacion || '-' }}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="tabla-scroll">
+
+        <table class="tabla-detalle">
+
+          <thead>
+            <tr>
+              <th>Medicamento</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let d of detalleMovimiento?.detalle
+              ">
+
+              <td>{{ d.medicamento || '-' }}</td>
+              <td>{{ d.cantidad || 0 }}</td>
+              <td>Bs. {{ d.precio || 0 }}</td>
+              <td>Bs. {{ d.subtotal || 0 }}</td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="detalle-total">
+
+        <span>Total</span>
+
+        <strong>
+          Bs. {{ detalleMovimiento?.total || 0 }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- SALIDA -->
+    <div
+      class="detalle-contenido"
+      *ngIf="detalleMovimiento?.tipo === 'Salida'">
+
+      <div class="detalle-datos">
+
+        <div>
+          <span>Número de Venta</span>
+          <strong>
+            {{ detalleMovimiento?.numero_venta || '-' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Fecha</span>
+          <strong>
+            {{ detalleMovimiento?.fecha || '-' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Estado</span>
+          <strong>
+            {{ detalleMovimiento?.estado || '-' }}
+          </strong>
+        </div>
+
+        <div>
+          <span>Observación</span>
+          <strong>
+            {{ detalleMovimiento?.observacion || '-' }}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div class="tabla-scroll">
+
+        <table class="tabla-detalle">
+
+          <thead>
+            <tr>
+              <th>Medicamento</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let d of detalleMovimiento?.detalles
+              ">
+
+              <td>{{ d.medicamento || '-' }}</td>
+              <td>{{ d.cantidad || 0 }}</td>
+              <td>Bs. {{ d.precio_venta || 0 }}</td>
+              <td>Bs. {{ d.subtotal || 0 }}</td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="detalle-total">
+
+        <span>Total</span>
+
+        <strong>
+          Bs. {{ detalleMovimiento?.total || 0 }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
