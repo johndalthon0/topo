@@ -22,6 +22,8 @@ farmacia-blockchain/.env
 # ==========================================
 blockchain/node_modules/
 blockchain/.env
+blockchain/testnet-node/node_modules/
+blockchain/testnet-node/.env
 
 # ==========================================
 # Generales
