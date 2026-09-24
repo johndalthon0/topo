@@ -81,6 +81,48 @@ app.post('/', async (req, res) => {
 
 });
 
-app.listen(PORT, () => {
-    console.log(`Nodo blockchain de prueba escuchando en el puerto ${PORT}`);
-});
+// =====================================================
+// DESPLIEGUE AUTOMÁTICO DEL CONTRATO AL ARRANCAR
+// =====================================================
+// El nodo vive en memoria: en cada arranque (incluido al despertar
+// tras dormirse en el free tier) la cadena está vacía. Se despliega
+// RegistroOperaciones como PRIMERA transacción de la cuenta 0, así la
+// dirección resultante es siempre la misma (ver CONTRACT_ADDRESS en
+// ../server.js).
+
+const contrato = require('./contract.json');
+
+async function desplegarContrato() {
+
+    const [from] = await provider.request({
+        method: 'eth_accounts',
+        params: [],
+    });
+
+    const txHash = await provider.request({
+        method: 'eth_sendTransaction',
+        params: [{
+            from,
+            data: contrato.bytecode,
+            gas: '0x2DC6C0', // 3.000.000
+        }],
+    });
+
+    const recibo = await provider.request({
+        method: 'eth_getTransactionReceipt',
+        params: [txHash],
+    });
+
+    console.log('Contrato desplegado en:', recibo.contractAddress);
+}
+
+desplegarContrato()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Nodo blockchain de prueba escuchando en el puerto ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error('ERROR al desplegar el contrato:', error);
+        process.exit(1);
+    });
