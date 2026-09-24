@@ -1,7 +1,6 @@
 // Entorno de PRODUCCIÓN (usado por `ng build` / `ng build --configuration production`).
-// IMPORTANTE: reemplaza apiUrl por la URL real del backend Django ya desplegado
-// (por ejemplo, un servicio de Render: https://farmacol-backend.onrender.com).
+// apiUrl apunta al backend Django desplegado en Render.
 export const environment = {
   production: true,
-  apiUrl: 'https://TU-BACKEND.onrender.com',
+  apiUrl: 'https://farmacol-backend.onrender.com',
 };
