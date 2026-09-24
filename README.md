@@ -168,6 +168,7 @@ Ya resuelto: el remoto `origin` apunta a tu propio repositorio.
    Start command: (usa el `Procfile` incluido, o pon manualmente)
    `gunicorn farmacia_backend.wsgi:application --bind 0.0.0.0:$PORT`.
 3. Plan: **Free**. Variables de entorno (ver `backend/.env.example`):
+   - `PYTHON_VERSION` = `3.12.11` (fija la versión de Python de Render)
    - `DJANGO_SECRET_KEY` (genera una nueva, no la de desarrollo)
    - `DJANGO_DEBUG=False`
    - `DJANGO_ALLOWED_HOSTS` = el dominio que te dé Render (sin `https://`)

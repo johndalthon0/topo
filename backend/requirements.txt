@@ -7,10 +7,10 @@ djangorestframework==3.16.1
 et_xmlfile==2.0.0
 gunicorn==23.0.0
 idna==3.18
-mysqlclient==2.2.7
 openpyxl==3.1.5
 pillow==11.3.0
 pygame==2.6.1
+PyMySQL==1.1.1
 reportlab==5.0.0
 requests==2.32.5
 sqlparse==0.5.5

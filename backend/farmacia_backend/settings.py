@@ -13,6 +13,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+# PyMySQL (Python puro) en lugar de mysqlclient: no hay que compilar nada,
+# lo que evita fallos de build en Render. Django 4.2 exige mysqlclient>=1.4.3,
+# por eso se declara una version compatible.
+import pymysql
+pymysql.version_info = (2, 2, 7, 'final', 0)
+pymysql.install_as_MySQLdb()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -116,7 +123,7 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT', '3306'),
         'OPTIONS': {
             # Requerido por proveedores MySQL en la nube (ej. Aiven) que exigen TLS.
-            'ssl': {'ssl-mode': os.environ.get('DB_SSL_MODE', 'PREFERRED')},
+            'ssl': {'check_hostname': False},
         } if os.environ.get('DB_USE_SSL') == 'True' else {},
     }
 }
