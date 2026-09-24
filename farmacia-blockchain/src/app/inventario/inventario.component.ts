@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -22,13 +23,13 @@ export class InventarioComponent implements OnInit {
   // =====================================================
 
   api =
-    'http://127.0.0.1:8000/api/medicamentos/';
+    `${environment.apiUrl}/api/medicamentos/`;
 
   apiDashboardCompras =
-    'http://127.0.0.1:8000/api/compras/dashboard/';
+    `${environment.apiUrl}/api/compras/dashboard/`;
 
   apiDashboardVentas =
-    'http://127.0.0.1:8000/api/ventas/dashboard/';
+    `${environment.apiUrl}/api/ventas/dashboard/`;
 
 
   // =====================================================
@@ -1020,7 +1021,7 @@ export class InventarioComponent implements OnInit {
 
       this.http
         .get<any>(
-          'http://127.0.0.1:8000/api/compras/detalle/'
+          `${environment.apiUrl}/api/compras/detalle/`
           +
           movimiento.id
           +
@@ -1075,7 +1076,7 @@ export class InventarioComponent implements OnInit {
 
       this.http
         .get<any>(
-          'http://127.0.0.1:8000/api/ventas/'
+          `${environment.apiUrl}/api/ventas/`
           +
           movimiento.id
           +

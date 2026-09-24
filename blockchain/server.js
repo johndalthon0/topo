@@ -12,7 +12,7 @@ const crypto = require('crypto');
 
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
@@ -20,12 +20,41 @@ app.use(express.json());
 
 
 // =====================================================
-// CONEXIÓN CON GANACHE
+// CONEXIÓN CON LA RED (Ganache local o testnet Sepolia
+// vía Infura/Alchemy en la nube)
 // =====================================================
 
+const WEB3_PROVIDER_URL =
+    process.env.WEB3_PROVIDER_URL || 'http://127.0.0.1:7545';
+
 const web3 = new Web3(
-    'http://127.0.0.1:7545'
+    WEB3_PROVIDER_URL
 );
+
+
+// =====================================================
+// CUENTA QUE FIRMA LAS TRANSACCIONES
+// =====================================================
+// En local (Ganache) las cuentas vienen "desbloqueadas" y se usa
+// web3.eth.getAccounts(). En una red pública (Sepolia) no existen
+// cuentas desbloqueadas: hay que firmar con una clave privada propia
+// (variable de entorno PRIVATE_KEY, con fondos de un faucet de Sepolia).
+
+const PRIVATE_KEY = process.env.PRIVATE_KEY || null;
+
+let cuentaFirmante = null;
+
+if (PRIVATE_KEY) {
+
+    const cuenta =
+        web3.eth.accounts.privateKeyToAccount(
+            PRIVATE_KEY.startsWith('0x') ? PRIVATE_KEY : `0x${PRIVATE_KEY}`
+        );
+
+    web3.eth.accounts.wallet.add(cuenta);
+
+    cuentaFirmante = cuenta.address;
+}
 
 
 // =====================================================
@@ -33,7 +62,8 @@ const web3 = new Web3(
 // =====================================================
 
 const CONTRACT_ADDRESS =
-    '0x7eF074B4208Cb6150aFf71967D867c7B467f72Fe';
+    process.env.CONTRACT_ADDRESS ||
+    '0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab';
 
 
 // =====================================================
@@ -113,7 +143,9 @@ app.get(
                 await web3.eth.net.isListening();
 
             const cuentas =
-                await web3.eth.getAccounts();
+                cuentaFirmante
+                    ? [cuentaFirmante]
+                    : await web3.eth.getAccounts();
 
             res.json({
 
@@ -271,27 +303,32 @@ app.post(
 
 
             // =================================================
-            // OBTENER CUENTA
+            // OBTENER CUENTA (firmante local vía PRIVATE_KEY, o
+            // primera cuenta desbloqueada de Ganache)
             // =================================================
 
-            const cuentas =
-                await web3.eth.getAccounts();
+            let cuenta =
+                cuentaFirmante;
 
+            if (!cuenta) {
 
-            if (
-                !cuentas ||
-                cuentas.length === 0
-            ) {
+                const cuentas =
+                    await web3.eth.getAccounts();
 
-                throw new Error(
-                    'No existen cuentas disponibles en Ganache'
-                );
+                if (
+                    !cuentas ||
+                    cuentas.length === 0
+                ) {
+
+                    throw new Error(
+                        'No existen cuentas disponibles en Ganache'
+                    );
+
+                }
+
+                cuenta = cuentas[0];
 
             }
-
-
-            const cuenta =
-                cuentas[0];
 
 
             console.log(
@@ -659,36 +696,39 @@ async function iniciar() {
 
 
         console.log(
-            'Ganache conectado:',
+            'Red conectada:',
             conectado
         );
 
 
-        const cuentas =
-            await web3.eth.getAccounts();
+        let cuentaUsada =
+            cuentaFirmante;
 
+        if (!cuentaUsada) {
 
-        console.log(
-            'Cuentas disponibles:',
-            cuentas.length
-        );
+            const cuentas =
+                await web3.eth.getAccounts();
 
+            if (
+                !cuentas ||
+                cuentas.length === 0
+            ) {
 
-        if (
-            !cuentas ||
-            cuentas.length === 0
-        ) {
+                throw new Error(
+                    'No existen cuentas disponibles en Ganache'
+                );
 
-            throw new Error(
-                'No existen cuentas disponibles en Ganache'
-            );
+            }
+
+            cuentaUsada = cuentas[0];
 
         }
 
 
         console.log(
             'Cuenta utilizada:',
-            cuentas[0]
+            cuentaUsada,
+            cuentaFirmante ? '(firmante local vía PRIVATE_KEY)' : '(cuenta de Ganache)'
         );
 
 
@@ -714,7 +754,7 @@ async function iniciar() {
                 );
 
                 console.log(
-                    'Ganache: http://127.0.0.1:7545'
+                    'Proveedor Web3:', WEB3_PROVIDER_URL
                 );
 
                 console.log(

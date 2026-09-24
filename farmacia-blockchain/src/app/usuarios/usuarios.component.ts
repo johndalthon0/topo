@@ -5,6 +5,7 @@ import {
   HttpClient,
   HttpClientModule
 } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 
 interface Usuario {
@@ -60,7 +61,7 @@ export class UsuariosComponent implements OnInit {
   // ============================================================
 
   private apiUrl =
-    'http://127.0.0.1:8000/api/usuarios-sistema';
+    `${environment.apiUrl}/api/usuarios-sistema`;
 
 
   // ============================================================

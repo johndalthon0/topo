@@ -14,6 +14,7 @@ import {
 import {
   Router
 } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit {
   // =====================================================
 
   private API =
-    'http://127.0.0.1:8000/api';
+    `${environment.apiUrl}/api`;
 
 
   private API_MEDICAMENTOS =

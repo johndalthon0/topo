@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 interface RegistroBlockchain {
   id: string | number;
@@ -35,13 +36,13 @@ export class BlockchainComponent implements OnInit {
   // =====================================================
 
   private blockchainUrl =
-    'http://127.0.0.1:8000/api/ventas/blockchain/';
+    `${environment.apiUrl}/api/ventas/blockchain/`;
 
   private comprasUrl =
-    'http://127.0.0.1:8000/api/compras/';
+    `${environment.apiUrl}/api/compras/`;
 
   private ventasUrl =
-    'http://127.0.0.1:8000/api/ventas/';
+    `${environment.apiUrl}/api/ventas/`;
 
 
   // =====================================================

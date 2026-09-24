@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class ReportesComponent implements OnInit {
   // =====================================================
 
   api =
-    'http://127.0.0.1:8000/api/reportes/';
+    `${environment.apiUrl}/api/reportes/`;
 
 
   // =====================================================

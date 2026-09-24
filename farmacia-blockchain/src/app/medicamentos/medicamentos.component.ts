@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MedicamentosComponent implements OnInit {
 
-  api = 'http://127.0.0.1:8000/api/medicamentos/';
+  api = `${environment.apiUrl}/api/medicamentos/`;
 
   medicamentos: any[] = [];
   medicamentosFiltrados: any[] = [];

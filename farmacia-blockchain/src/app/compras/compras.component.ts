@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-compras',
@@ -16,8 +17,8 @@ export class ComprasComponent implements OnInit {
   // API
   // =====================================================
 
-  api = 'http://127.0.0.1:8000/api/compras/';
-  apiMedicamentos = 'http://127.0.0.1:8000/api/medicamentos/';
+  api = `${environment.apiUrl}/api/compras/`;
+  apiMedicamentos = `${environment.apiUrl}/api/medicamentos/`;
 
   // =====================================================
   // DATOS

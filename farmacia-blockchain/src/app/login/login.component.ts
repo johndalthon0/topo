@@ -10,6 +10,7 @@ import {
 } from '@angular/common/http';
 
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class LoginComponent {
 
 
   private API =
-    'http://127.0.0.1:8000/api/usuarios-sistema';
+    `${environment.apiUrl}/api/usuarios-sistema`;
 
 
   mostrarRegistro = false;

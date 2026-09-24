@@ -15,6 +15,7 @@ import {
 
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -31,7 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   usuario = '';
   rolUsuario = '';
 
-  apiAlertas = 'http://127.0.0.1:8000/api/alertas/notificaciones/';
+  apiAlertas = `${environment.apiUrl}/api/alertas/notificaciones/`;
 
   mostrarNotificaciones = false;
   noLeidas = 0;

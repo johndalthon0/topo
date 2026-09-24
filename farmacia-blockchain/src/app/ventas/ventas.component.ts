@@ -5,6 +5,7 @@ import {
   HttpClient,
   HttpClientModule
 } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -26,10 +27,10 @@ export class VentasComponent implements OnInit {
   // =========================================
 
   api =
-    'http://127.0.0.1:8000/api/ventas/';
+    `${environment.apiUrl}/api/ventas/`;
 
   apiMedicamentos =
-    'http://127.0.0.1:8000/api/medicamentos/';
+    `${environment.apiUrl}/api/medicamentos/`;
 
 
   // =========================================

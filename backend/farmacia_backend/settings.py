@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,14 +21,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-tx2bup0hqvg!028q)b!i@v=f76)dp6a4z9un2h6+6)2tj@30wg'
+# En la nube, define la variable de entorno DJANGO_SECRET_KEY con un valor
+# propio y secreto. En local, si no se define, se usa la clave de desarrollo.
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-tx2bup0hqvg!028q)b!i@v=f76)dp6a4z9un2h6+6)2tj@30wg',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# En la nube, define DJANGO_DEBUG=False.
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
+] + [
+    h.strip()
+    for h in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+    if h.strip()
 ]
 
 # Application definition
@@ -59,6 +70,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,14 +103,21 @@ WSGI_APPLICATION = 'farmacia_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# En local usa MySQL (XAMPP) sin configurar nada. En la nube, define estas
+# variables de entorno con los datos del proveedor MySQL (ej. Aiven):
+# DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'farmacia_db',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME', 'farmacia_db'),
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
+        'OPTIONS': {
+            # Requerido por proveedores MySQL en la nube (ej. Aiven) que exigen TLS.
+            'ssl': {'ssl-mode': os.environ.get('DB_SSL_MODE', 'PREFERRED')},
+        } if os.environ.get('DB_USE_SSL') == 'True' else {},
     }
 }
 
@@ -137,16 +156,42 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ALL_ORIGINS = True
+# En local (DEBUG=True) se permite cualquier origen para simplificar el
+# desarrollo. En la nube (DEBUG=False), define DJANGO_CORS_ALLOWED_ORIGINS
+# y DJANGO_CSRF_TRUSTED_ORIGINS con la URL real del frontend (ej. Vercel),
+# separadas por comas si hay varias.
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+CORS_ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.environ.get('DJANGO_CORS_ALLOWED_ORIGINS', '').split(',')
+    if o.strip()
+]
+
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
+] + [
+    o.strip()
+    for o in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',')
+    if o.strip()
 ]
+
+# URL del microservicio Node/blockchain (Ganache local, o un servicio
+# desplegado en la nube apuntando a la testnet Sepolia).
+BLOCKCHAIN_SERVICE_URL = os.environ.get(
+    'BLOCKCHAIN_SERVICE_URL', 'http://127.0.0.1:3000'
+)
 # ==========================================
 # CORREO FARMACOR - GMAIL
 # ==========================================

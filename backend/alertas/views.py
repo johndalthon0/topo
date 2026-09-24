@@ -1,4 +1,5 @@
 import requests
+from django.conf import settings
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -7,7 +8,7 @@ from django.db.utils import OperationalError, ProgrammingError
 from .models import IntentoSeguridadBD
 
 
-BLOCKCHAIN_URL = 'http://127.0.0.1:3000'
+BLOCKCHAIN_URL = settings.BLOCKCHAIN_SERVICE_URL
 
 
 def _estado_blockchain(tabla, registro_id):

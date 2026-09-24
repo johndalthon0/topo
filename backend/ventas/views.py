@@ -1,4 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -25,7 +26,7 @@ from usuarios_sistema.models import UsuarioSistema
 # CONFIGURACIÓN BLOCKCHAIN
 # ============================================================
 
-BLOCKCHAIN_URL = "http://127.0.0.1:3000/api/blockchain/registrar/"
+BLOCKCHAIN_URL = f"{settings.BLOCKCHAIN_SERVICE_URL}/api/blockchain/registrar/"
 
 
 # ============================================================

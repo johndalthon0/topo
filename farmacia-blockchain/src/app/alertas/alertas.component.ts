@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-alertas',
@@ -11,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AlertasComponent implements OnInit {
 
-  api = 'http://127.0.0.1:8000/api/alertas/notificaciones/';
+  api = `${environment.apiUrl}/api/alertas/notificaciones/`;
 
   notificaciones: any[] = [];
   cargando = false;

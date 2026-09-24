@@ -1,0 +1,32 @@
+# ==========================================
+# Python / Django (backend/)
+# ==========================================
+backend/venv/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/staticfiles/
+backend/db.sqlite3
+backend/.env
+backend/reportes/*.pdf
+
+# ==========================================
+# Node / Angular (farmacia-blockchain/)
+# ==========================================
+farmacia-blockchain/node_modules/
+farmacia-blockchain/dist/
+farmacia-blockchain/.angular/
+farmacia-blockchain/.env
+
+# ==========================================
+# Node / Blockchain bridge (blockchain/)
+# ==========================================
+blockchain/node_modules/
+blockchain/.env
+
+# ==========================================
+# Generales
+# ==========================================
+.env
+*.log
+.DS_Store
+Thumbs.db
