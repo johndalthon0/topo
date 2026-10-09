@@ -9,7 +9,6 @@ gunicorn==23.0.0
 idna==3.18
 openpyxl==3.1.5
 pillow==11.3.0
-pygame==2.6.1
 PyMySQL==1.1.1
 reportlab==5.0.0
 requests==2.32.5
