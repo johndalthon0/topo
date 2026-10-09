@@ -121,6 +121,12 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD', ''),
         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '3306'),
+        # Reutiliza la conexion entre peticiones en vez de abrir un handshake
+        # TLS nuevo cada vez. Es critico cuando la BD esta en otra region/
+        # proveedor (ej. backend en DigitalOcean, BD en Aiven): sin esto,
+        # cada request paga el costo completo de la conexion cruzando la
+        # red, pudiendo tardar varios segundos solo en conectar.
+        'CONN_MAX_AGE': int(os.environ.get('DB_CONN_MAX_AGE', '0' if os.environ.get('DB_HOST', '127.0.0.1') == '127.0.0.1' else '600')),
         'OPTIONS': {
             # Requerido por proveedores MySQL en la nube (ej. Aiven) que exigen TLS.
             'ssl': {'check_hostname': False},
