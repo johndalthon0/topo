@@ -216,33 +216,45 @@ def listar_ventas(request):
         .order_by("-id")
     )
 
+    # Trae en bloque los detalles y las correcciones activas de todas las
+    # ventas mostradas, en vez de 2 consultas por fila (N+1). Con muchas
+    # ventas esto evita decenas/centenas de ida y vuelta extra a la BD.
+    ids_ventas = [venta.id for venta in ventas]
+
+    detalles_por_venta = {}
+    for detalle in (
+        DetalleVenta.objects
+        .filter(venta_id__in=ids_ventas)
+        .select_related("medicamento")
+    ):
+        detalles_por_venta.setdefault(detalle.venta_id, []).append({
+            "id": detalle.id,
+            "medicamento": detalle.medicamento.nombre,
+            "medicamento_id": detalle.medicamento.id,
+            "cantidad": detalle.cantidad,
+            "precio": float(detalle.precio_venta),
+            "precio_venta": float(detalle.precio_venta),
+            "subtotal": float(detalle.subtotal)
+        })
+
+    correcciones_por_origen = {}
+    for correccion in (
+        Venta.objects
+        .filter(venta_origen_id__in=ids_ventas)
+        .exclude(estado="ANULADA")
+    ):
+        correcciones_por_origen.setdefault(
+            correccion.venta_origen_id,
+            correccion
+        )
+
     datos = []
 
     for venta in ventas:
 
-        detalles = []
+        detalles = detalles_por_venta.get(venta.id, [])
 
-        for detalle in (
-            DetalleVenta.objects
-            .filter(venta=venta)
-            .select_related("medicamento")
-        ):
-
-            detalles.append({
-                "id": detalle.id,
-                "medicamento": detalle.medicamento.nombre,
-                "medicamento_id": detalle.medicamento.id,
-                "cantidad": detalle.cantidad,
-                "precio": float(detalle.precio_venta),
-                "precio_venta": float(detalle.precio_venta),
-                "subtotal": float(detalle.subtotal)
-            })
-
-        correccion_activa = (
-            venta.correcciones
-            .exclude(estado="ANULADA")
-            .first()
-        )
+        correccion_activa = correcciones_por_origen.get(venta.id)
 
         datos.append({
             "id": venta.id,

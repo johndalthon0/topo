@@ -263,18 +263,33 @@ def listar_compras(request):
     )
 
 
+    # Trae en una sola consulta la correccion activa mas reciente de cada
+    # compra, en vez de una consulta por fila (N+1). Compra.Meta.ordering
+    # es ['-id'], asi que recorriendo en ese orden y usando setdefault se
+    # obtiene la misma fila que .correcciones.exclude(...).first() daria
+    # por cada una.
+    ids_compras = [compra.id for compra in compras]
+
+    correcciones_por_origen = {}
+
+    for correccion in (
+        Compra.objects
+        .filter(compra_origen_id__in=ids_compras)
+        .exclude(estado="ANULADA")
+        .order_by("-id")
+    ):
+        correcciones_por_origen.setdefault(
+            correccion.compra_origen_id,
+            correccion
+        )
+
+
     datos = []
 
 
     for compra in compras:
 
-        correccion_activa = (
-            compra.correcciones
-            .exclude(
-                estado="ANULADA"
-            )
-            .first()
-        )
+        correccion_activa = correcciones_por_origen.get(compra.id)
 
 
         datos.append({
