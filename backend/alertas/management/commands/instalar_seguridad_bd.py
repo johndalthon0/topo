@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
+from django.db.utils import OperationalError
 
 
 PROTEGIDAS = {
@@ -126,29 +127,65 @@ class Command(BaseCommand):
             db_name = cursor.fetchone()[0]
 
             # MyISAM es intencional: el intento queda guardado aunque el trigger
-            # rechace la sentencia original con SIGNAL.
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS seguridad_intentos_bd (
-                    id BIGINT NOT NULL AUTO_INCREMENT,
-                    fecha_hora DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-                    usuario_bd VARCHAR(150) NOT NULL,
-                    conexion_id BIGINT NULL,
-                    tabla_afectada VARCHAR(100) NOT NULL,
-                    registro_id VARCHAR(100) NULL,
-                    referencia_registro VARCHAR(255) NULL,
-                    accion VARCHAR(20) NOT NULL,
-                    campos_modificados TEXT NULL,
-                    valor_anterior LONGTEXT NULL,
-                    valor_intentado LONGTEXT NULL,
-                    detalle TEXT NOT NULL,
-                    estado VARCHAR(30) NOT NULL DEFAULT 'BLOQUEADO',
-                    leida TINYINT(1) NOT NULL DEFAULT 0,
-                    fecha_revision DATETIME(6) NULL,
-                    PRIMARY KEY (id),
-                    KEY idx_seguridad_fecha (fecha_hora),
-                    KEY idx_seguridad_leida (leida)
-                ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-            """)
+            # rechace la sentencia original con SIGNAL (InnoDB haria rollback
+            # del INSERT de auditoria junto con la sentencia bloqueada).
+            # Algunos proveedores administrados (ej. Aiven) deshabilitan
+            # MyISAM por completo; en ese caso se usa InnoDB como respaldo y,
+            # como ya no se puede garantizar que el registro sobreviva al
+            # SIGNAL, los triggers detectan y registran pero ya no bloquean
+            # la operacion (se avisa igual, pero el cambio sí se aplica).
+            motor = 'MyISAM'
+            try:
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS seguridad_intentos_bd (
+                        id BIGINT NOT NULL AUTO_INCREMENT,
+                        fecha_hora DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+                        usuario_bd VARCHAR(150) NOT NULL,
+                        conexion_id BIGINT NULL,
+                        tabla_afectada VARCHAR(100) NOT NULL,
+                        registro_id VARCHAR(100) NULL,
+                        referencia_registro VARCHAR(255) NULL,
+                        accion VARCHAR(20) NOT NULL,
+                        campos_modificados TEXT NULL,
+                        valor_anterior LONGTEXT NULL,
+                        valor_intentado LONGTEXT NULL,
+                        detalle TEXT NOT NULL,
+                        estado VARCHAR(30) NOT NULL DEFAULT 'BLOQUEADO',
+                        leida TINYINT(1) NOT NULL DEFAULT 0,
+                        fecha_revision DATETIME(6) NULL,
+                        PRIMARY KEY (id),
+                        KEY idx_seguridad_fecha (fecha_hora),
+                        KEY idx_seguridad_leida (leida)
+                    ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+                """)
+            except OperationalError as error:
+                if '3161' not in str(error) and 'MyISAM is disabled' not in str(error):
+                    raise
+                motor = 'InnoDB'
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS seguridad_intentos_bd (
+                        id BIGINT NOT NULL AUTO_INCREMENT,
+                        fecha_hora DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+                        usuario_bd VARCHAR(150) NOT NULL,
+                        conexion_id BIGINT NULL,
+                        tabla_afectada VARCHAR(100) NOT NULL,
+                        registro_id VARCHAR(100) NULL,
+                        referencia_registro VARCHAR(255) NULL,
+                        accion VARCHAR(20) NOT NULL,
+                        campos_modificados TEXT NULL,
+                        valor_anterior LONGTEXT NULL,
+                        valor_intentado LONGTEXT NULL,
+                        detalle TEXT NOT NULL,
+                        estado VARCHAR(30) NOT NULL DEFAULT 'BLOQUEADO',
+                        leida TINYINT(1) NOT NULL DEFAULT 0,
+                        fecha_revision DATETIME(6) NULL,
+                        PRIMARY KEY (id),
+                        KEY idx_seguridad_fecha (fecha_hora),
+                        KEY idx_seguridad_leida (leida)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+                """)
+
+            bloquea = motor == 'MyISAM'
             self._asegurar_columnas_auditoria(cursor, db_name)
 
             cursor.execute("""
@@ -196,11 +233,31 @@ class Command(BaseCommand):
                         ref_expr = self._expr_referencia(tabla, nombres_columnas, 'OLD', pk)
                         campos_expr, anterior_expr, intentado_expr = self._expr_update(columnas, pk)
 
-                    detalle_expr = (
-                        "CONCAT('FARMACOR detectó un intento de " + accion +
-                        " directo en MySQL. La operación fue bloqueada antes de modificar los datos. ', "
-                        "'Campos: ', COALESCE(" + campos_expr + ", 'No identificado'), '.')"
-                    )
+                    if bloquea:
+                        detalle_expr = (
+                            "CONCAT('FARMACOR detectó un intento de " + accion +
+                            " directo en MySQL. La operación fue bloqueada antes de modificar los datos. ', "
+                            "'Campos: ', COALESCE(" + campos_expr + ", 'No identificado'), '.')"
+                        )
+                        estado_valor = 'BLOQUEADO'
+                        accion_final = (
+                            "SIGNAL SQLSTATE '45000'\n"
+                            "                                    SET MESSAGE_TEXT = "
+                            "'FARMACOR: operación directa no autorizada. Cambio bloqueado.';"
+                        )
+                    else:
+                        # Sin MyISAM disponible no se puede garantizar que el
+                        # registro de auditoria sobreviva a un SIGNAL (InnoDB
+                        # haria rollback de todo junto, incluido el INSERT de
+                        # auditoria). Se detecta y se deja constancia igual,
+                        # pero la operacion ya no se bloquea.
+                        detalle_expr = (
+                            "CONCAT('FARMACOR detectó un intento de " + accion +
+                            " directo en MySQL (no se pudo bloquear en este servidor). ', "
+                            "'Campos: ', COALESCE(" + campos_expr + ", 'No identificado'), '.')"
+                        )
+                        estado_valor = 'DETECTADO'
+                        accion_final = ''
 
                     sql = f"""
                         CREATE TRIGGER `{trigger}`
@@ -234,12 +291,11 @@ class Command(BaseCommand):
                                     {anterior_expr},
                                     {intentado_expr},
                                     {detalle_expr},
-                                    'BLOQUEADO',
+                                    '{estado_valor}',
                                     0
                                 );
 
-                                SIGNAL SQLSTATE '45000'
-                                    SET MESSAGE_TEXT = 'FARMACOR: operación directa no autorizada. Cambio bloqueado.';
+                                {accion_final}
                             END IF;
                         END
                     """
@@ -263,4 +319,17 @@ class Command(BaseCommand):
         self.stdout.write('')
         self.stdout.write('Ahora cada intento muestra: campo(s), valor anterior y valor intentado.')
         self.stdout.write('Django: cambios permitidos.')
-        self.stdout.write('phpMyAdmin/Workbench/consola MySQL: cambios directos bloqueados.')
+        if bloquea:
+            self.stdout.write('phpMyAdmin/Workbench/consola MySQL: cambios directos bloqueados (motor MyISAM).')
+        else:
+            self.stdout.write(
+                self.style.WARNING(
+                    'Motor MyISAM no disponible en este servidor (ej. Aiven): se instalo con InnoDB.'
+                )
+            )
+            self.stdout.write(
+                self.style.WARNING(
+                    'phpMyAdmin/Workbench/consola MySQL: los cambios directos se DETECTAN y quedan '
+                    'registrados, pero ya no se bloquean.'
+                )
+            )
