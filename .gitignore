@@ -32,3 +32,4 @@ blockchain/testnet-node/.env
 *.log
 .DS_Store
 Thumbs.db
+blockchain/testnet-node/package-lock.json
