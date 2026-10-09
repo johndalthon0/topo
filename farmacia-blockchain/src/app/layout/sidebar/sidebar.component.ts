@@ -4,7 +4,8 @@ import {
   Input,
   Output,
   Inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  inject
 } from '@angular/core';
 
 import {
@@ -16,6 +17,8 @@ import {
   Router,
   RouterModule
 } from '@angular/router';
+
+import { ConfirmacionService } from '../../shared/confirmacion.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,6 +37,8 @@ export class SidebarComponent {
 
   nombreUsuario = '';
   rolUsuario = '';
+
+  private confirmacion = inject(ConfirmacionService);
 
   constructor(
     private router: Router,
@@ -75,12 +80,12 @@ export class SidebarComponent {
     this.cerrarMenu.emit();
   }
 
-  cerrarSesion(): void {
+  async cerrarSesion(): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    const confirmar = window.confirm('¿Deseas cerrar sesión?');
+    const confirmar = await this.confirmacion.confirmar('¿Deseas cerrar sesión?');
 
     if (!confirmar) {
       return;

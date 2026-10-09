@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -11,6 +11,7 @@ import {
 
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { NotificacionService } from '../shared/notificacion.service';
 
 
 @Component({
@@ -85,6 +86,8 @@ export class LoginComponent {
   cargandoRecuperacion = false;
 
 
+  private toast = inject(NotificacionService);
+
   constructor(
     private http: HttpClient,
     private router: Router
@@ -126,7 +129,7 @@ export class LoginComponent {
       !this.password.trim()
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Complete usuario y contraseña'
       );
 
@@ -182,7 +185,7 @@ export class LoginComponent {
 
         error: error => {
 
-          alert(
+          this.toast.mostrar(
             error.error?.mensaje
             ||
             'No se pudo iniciar sesión'
@@ -213,7 +216,7 @@ export class LoginComponent {
       !this.confirmarPassword
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Complete todos los campos'
       );
 
@@ -228,7 +231,7 @@ export class LoginComponent {
       this.confirmarPassword
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Las contraseñas no coinciden'
       );
 
@@ -241,7 +244,7 @@ export class LoginComponent {
       !this.aceptarTerminos
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Debe aceptar los términos'
       );
 
@@ -274,7 +277,7 @@ export class LoginComponent {
 
         next: respuesta => {
 
-          alert(
+          this.toast.mostrar(
             respuesta.mensaje
           );
 
@@ -311,7 +314,7 @@ export class LoginComponent {
 
         error: error => {
 
-          alert(
+          this.toast.mostrar(
             error.error?.mensaje
             ||
             'No se pudo crear la cuenta'

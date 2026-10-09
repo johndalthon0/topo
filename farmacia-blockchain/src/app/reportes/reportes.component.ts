@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { NotificacionService } from '../shared/notificacion.service';
 
 
 @Component({
@@ -17,6 +18,8 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./reportes.component.css']
 })
 export class ReportesComponent implements OnInit {
+
+  private toast = inject(NotificacionService);
 
   constructor(
     private http: HttpClient
@@ -919,7 +922,7 @@ export class ReportesComponent implements OnInit {
           error
         );
 
-        alert(
+        this.toast.mostrar(
           'No se pudo generar el PDF.'
         );
       }
@@ -975,7 +978,7 @@ export class ReportesComponent implements OnInit {
           error
         );
 
-        alert(
+        this.toast.mostrar(
           'No se pudo generar el Excel.'
         );
       }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -6,6 +6,7 @@ import {
   HttpClientModule
 } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { NotificacionService } from '../shared/notificacion.service';
 
 
 @Component({
@@ -140,6 +141,8 @@ export class VentasComponent implements OnInit {
 
   guardandoVenta = false;
 
+
+  private toast = inject(NotificacionService);
 
   constructor(
     private http: HttpClient
@@ -781,7 +784,7 @@ export class VentasComponent implements OnInit {
       this.medicamentoSeleccionado === ''
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Seleccione un medicamento'
       );
 
@@ -796,7 +799,7 @@ export class VentasComponent implements OnInit {
       ) <= 0
     ) {
 
-      alert(
+      this.toast.mostrar(
         'La cantidad debe ser mayor a 0'
       );
 
@@ -811,7 +814,7 @@ export class VentasComponent implements OnInit {
       ) <= 0
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Ingrese el precio de venta'
       );
 
@@ -835,7 +838,7 @@ export class VentasComponent implements OnInit {
 
     if (!medicamento) {
 
-      alert(
+      this.toast.mostrar(
         'Medicamento no encontrado'
       );
 
@@ -890,7 +893,7 @@ export class VentasComponent implements OnInit {
       stockDisponible
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Stock insuficiente. Disponible: '
         +
         stockDisponible
@@ -1039,7 +1042,7 @@ export class VentasComponent implements OnInit {
       this.cliente.trim() === ''
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Ingrese el nombre del cliente'
       );
 
@@ -1052,7 +1055,7 @@ export class VentasComponent implements OnInit {
       this.detalleVenta.length === 0
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Agregue al menos un medicamento'
       );
 
@@ -1190,7 +1193,7 @@ export class VentasComponent implements OnInit {
 
           if (res.estado) {
 
-            alert(
+            this.toast.mostrar(
               '✅ '
               +
               res.mensaje
@@ -1206,7 +1209,7 @@ export class VentasComponent implements OnInit {
           }
           else {
 
-            alert(
+            this.toast.mostrar(
               '❌ '
               +
               (
@@ -1230,7 +1233,7 @@ export class VentasComponent implements OnInit {
           );
 
 
-          alert(
+          this.toast.mostrar(
             '❌ '
             +
             (
@@ -1264,7 +1267,7 @@ export class VentasComponent implements OnInit {
 
     if (!venta) {
 
-      alert(
+      this.toast.mostrar(
         'No se encontró la venta'
       );
 
@@ -1352,7 +1355,7 @@ export class VentasComponent implements OnInit {
       )
     ) {
 
-      alert(
+      this.toast.mostrar(
         'La venta ya está anulada'
       );
 
@@ -1420,7 +1423,7 @@ export class VentasComponent implements OnInit {
 
     if (motivo === '') {
 
-      alert(
+      this.toast.mostrar(
         'Debe escribir el motivo de la anulación'
       );
 
@@ -1433,7 +1436,7 @@ export class VentasComponent implements OnInit {
       motivo.length < 5
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Escriba un motivo más claro'
       );
 
@@ -1486,7 +1489,7 @@ export class VentasComponent implements OnInit {
 
           if (res.estado) {
 
-            alert(
+            this.toast.mostrar(
               '✅ Venta anulada correctamente. El stock fue devuelto.'
             );
 
@@ -1500,7 +1503,7 @@ export class VentasComponent implements OnInit {
           }
           else {
 
-            alert(
+            this.toast.mostrar(
               '❌ '
               +
               (
@@ -1526,7 +1529,7 @@ export class VentasComponent implements OnInit {
           );
 
 
-          alert(
+          this.toast.mostrar(
             '❌ '
             +
             (
@@ -1557,7 +1560,7 @@ export class VentasComponent implements OnInit {
       )
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Primero debe anular la venta'
       );
 
@@ -1571,7 +1574,7 @@ export class VentasComponent implements OnInit {
       false
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Esta venta ya tiene una corrección activa'
       );
 

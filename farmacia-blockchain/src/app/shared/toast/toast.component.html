@@ -1,0 +1,21 @@
+<div
+  class="toast-contenedor"
+  *ngIf="servicio.notificacion() as n"
+  [class.toast-exito]="n.tipo === 'exito'"
+  [class.toast-error]="n.tipo === 'error'"
+  [class.toast-info]="n.tipo === 'info'"
+>
+  <span class="toast-icono">
+    <ng-container [ngSwitch]="n.tipo">
+      <ng-container *ngSwitchCase="'exito'">✅</ng-container>
+      <ng-container *ngSwitchCase="'error'">⚠️</ng-container>
+      <ng-container *ngSwitchDefault>ℹ️</ng-container>
+    </ng-container>
+  </span>
+
+  <span class="toast-texto">{{ n.texto }}</span>
+
+  <button class="toast-cerrar" type="button" (click)="cerrar()" aria-label="Cerrar">
+    ✕
+  </button>
+</div>

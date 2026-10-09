@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../../environments/environment';
+import { NotificacionService } from '../shared/notificacion.service';
 
 @Component({
   selector: 'app-compras',
@@ -88,6 +89,8 @@ export class ComprasComponent implements OnInit {
   mostrarModalDetalle = false;
   detalleSeleccionado: any = null;
   cargandoDetalle = false;
+
+  private toast = inject(NotificacionService);
 
   constructor(private http: HttpClient) {}
 
@@ -423,17 +426,17 @@ export class ComprasComponent implements OnInit {
 
   agregarProducto(): void {
     if (this.medicamento === '') {
-      alert('Seleccione un medicamento');
+      this.toast.mostrar('Seleccione un medicamento');
       return;
     }
 
     if (this.cantidad <= 0) {
-      alert('La cantidad debe ser mayor a 0');
+      this.toast.mostrar('La cantidad debe ser mayor a 0');
       return;
     }
 
     if (this.precioCompra <= 0) {
-      alert('Ingrese el precio de compra');
+      this.toast.mostrar('Ingrese el precio de compra');
       return;
     }
 
@@ -442,7 +445,7 @@ export class ComprasComponent implements OnInit {
     );
 
     if (!medicamentoEncontrado) {
-      alert('Medicamento no encontrado');
+      this.toast.mostrar('Medicamento no encontrado');
       return;
     }
 
@@ -483,12 +486,12 @@ export class ComprasComponent implements OnInit {
 
   guardarCompra(): void {
     if (this.proveedor.trim() === '') {
-      alert('Ingrese el proveedor');
+      this.toast.mostrar('Ingrese el proveedor');
       return;
     }
 
     if (this.factura.trim() === '') {
-      alert(
+      this.toast.mostrar(
         this.modoCorreccion
           ? 'Ingrese la nueva factura para la compra corregida'
           : 'Ingrese la factura'
@@ -497,7 +500,7 @@ export class ComprasComponent implements OnInit {
     }
 
     if (this.detalleCompra.length === 0) {
-      alert('Agregue al menos un medicamento');
+      this.toast.mostrar('Agregue al menos un medicamento');
       return;
     }
 
@@ -522,13 +525,13 @@ export class ComprasComponent implements OnInit {
             ? 'Compra corregida registrada correctamente'
             : 'Compra registrada correctamente');
 
-        alert('✅ ' + mensaje);
+        this.toast.mostrar('✅ ' + mensaje);
         this.cerrarModal();
         this.listarCompras();
       },
       error: (err) => {
         console.error('Error al registrar compra:', err);
-        alert('❌ ' + this.obtenerMensajeError(err, 'Error al registrar la compra'));
+        this.toast.mostrar('❌ ' + this.obtenerMensajeError(err, 'Error al registrar la compra'));
       }
     });
   }
@@ -551,7 +554,7 @@ export class ComprasComponent implements OnInit {
         console.error('Error al cargar detalle:', err);
         this.cargandoDetalle = false;
         this.mostrarModalDetalle = false;
-        alert('❌ ' + this.obtenerMensajeError(err, 'No se pudo cargar el detalle'));
+        this.toast.mostrar('❌ ' + this.obtenerMensajeError(err, 'No se pudo cargar el detalle'));
       }
     });
   }
@@ -576,7 +579,7 @@ export class ComprasComponent implements OnInit {
 
   abrirAnulacion(compra: any): void {
     if (!this.puedeAnular(compra)) {
-      alert('Esta compra ya se encuentra anulada');
+      this.toast.mostrar('Esta compra ya se encuentra anulada');
       return;
     }
 
@@ -603,12 +606,12 @@ export class ComprasComponent implements OnInit {
     const motivo = this.motivoAnulacion.trim();
 
     if (motivo === '') {
-      alert('Debe indicar el motivo de la anulación');
+      this.toast.mostrar('Debe indicar el motivo de la anulación');
       return;
     }
 
     if (motivo.length < 5) {
-      alert('El motivo debe tener al menos 5 caracteres');
+      this.toast.mostrar('El motivo debe tener al menos 5 caracteres');
       return;
     }
 
@@ -625,7 +628,7 @@ export class ComprasComponent implements OnInit {
         next: (res) => {
           this.procesandoAnulacion = false;
 
-          alert(
+          this.toast.mostrar(
             '✅ ' +
             (res?.mensaje || 'Compra anulada correctamente') +
             '\nEl stock fue revertido y la anulación quedó registrada.'
@@ -637,7 +640,7 @@ export class ComprasComponent implements OnInit {
         error: (err) => {
           this.procesandoAnulacion = false;
           console.error('Error al anular compra:', err);
-          alert('❌ ' + this.obtenerMensajeError(err, 'No se pudo anular la compra'));
+          this.toast.mostrar('❌ ' + this.obtenerMensajeError(err, 'No se pudo anular la compra'));
         }
       });
   }
@@ -660,9 +663,9 @@ export class ComprasComponent implements OnInit {
   corregirCompra(compra: any): void {
     if (!this.puedeCorregir(compra)) {
       if (this.normalizarTexto(compra?.estado) !== 'anulada') {
-        alert('Primero debe anular la compra para poder corregirla');
+        this.toast.mostrar('Primero debe anular la compra para poder corregirla');
       } else {
-        alert('Esta compra ya tiene una corrección registrada');
+        this.toast.mostrar('Esta compra ya tiene una corrección registrada');
       }
       return;
     }
@@ -711,7 +714,7 @@ export class ComprasComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al preparar corrección:', err);
-        alert('❌ ' + this.obtenerMensajeError(err, 'No se pudo cargar la compra para corregirla'));
+        this.toast.mostrar('❌ ' + this.obtenerMensajeError(err, 'No se pudo cargar la compra para corregirla'));
       }
     });
   }

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { NotificacionService } from '../shared/notificacion.service';
 
 interface RegistroBlockchain {
   id: string | number;
@@ -83,6 +84,8 @@ export class BlockchainComponent implements OnInit {
 
   mostrarDetalle = false;
 
+
+  private toast = inject(NotificacionService);
 
   constructor(
     private http: HttpClient
@@ -1645,7 +1648,7 @@ export class BlockchainComponent implements OnInit {
       !hash
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Este registro todavía no tiene Hash Blockchain.'
       );
 
@@ -1661,7 +1664,7 @@ export class BlockchainComponent implements OnInit {
       .then(
         () => {
 
-          alert(
+          this.toast.mostrar(
             'Hash copiado correctamente'
           );
 
@@ -1670,7 +1673,7 @@ export class BlockchainComponent implements OnInit {
       .catch(
         () => {
 
-          alert(
+          this.toast.mostrar(
             'No se pudo copiar el Hash.'
           );
 
@@ -1688,7 +1691,7 @@ export class BlockchainComponent implements OnInit {
       !hash
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Este registro todavía no tiene Transaction Hash.'
       );
 
@@ -1704,7 +1707,7 @@ export class BlockchainComponent implements OnInit {
       .then(
         () => {
 
-          alert(
+          this.toast.mostrar(
             'Transaction Hash copiado correctamente'
           );
 
@@ -1713,7 +1716,7 @@ export class BlockchainComponent implements OnInit {
       .catch(
         () => {
 
-          alert(
+          this.toast.mostrar(
             'No se pudo copiar el Transaction Hash.'
           );
 

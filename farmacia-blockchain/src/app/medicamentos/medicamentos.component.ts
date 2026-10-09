@@ -1,8 +1,10 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { NotificacionService } from '../shared/notificacion.service';
+import { ConfirmacionService } from '../shared/confirmacion.service';
 
 
 @Component({
@@ -57,6 +59,9 @@ export class MedicamentosComponent implements OnInit {
 
     return (sessionStorage.getItem('rol') || '') === 'Administrador';
   }
+
+  private toast = inject(NotificacionService);
+  private confirmacion = inject(ConfirmacionService);
 
   constructor(
     private http: HttpClient,
@@ -321,7 +326,7 @@ export class MedicamentosComponent implements OnInit {
       !this.nombre.trim()
     ) {
 
-      alert(
+      this.toast.mostrar(
         'Debe ingresar el código y el nombre del medicamento.'
       );
 
@@ -388,7 +393,7 @@ export class MedicamentosComponent implements OnInit {
 
         next: () => {
 
-          alert(
+          this.toast.mostrar(
             'Medicamento registrado correctamente.'
           );
 
@@ -400,7 +405,7 @@ export class MedicamentosComponent implements OnInit {
 
           console.error(err);
 
-          alert(
+          this.toast.mostrar(
             'No se pudo registrar el medicamento.'
           );
         }
@@ -467,7 +472,7 @@ export class MedicamentosComponent implements OnInit {
 
         next: () => {
 
-          alert(
+          this.toast.mostrar(
             'Medicamento actualizado correctamente.'
           );
 
@@ -479,7 +484,7 @@ export class MedicamentosComponent implements OnInit {
 
           console.error(err);
 
-          alert(
+          this.toast.mostrar(
             'No se pudo actualizar el medicamento.'
           );
         }
@@ -487,15 +492,15 @@ export class MedicamentosComponent implements OnInit {
   }
 
 
-  eliminarMedicamento(
+  async eliminarMedicamento(
     id: number
-  ): void {
+  ): Promise<void> {
 
-    if (
-      !confirm(
-        '¿Desea eliminar este medicamento?'
-      )
-    ) {
+    const confirmado = await this.confirmacion.confirmar(
+      '¿Desea eliminar este medicamento?'
+    );
+
+    if (!confirmado) {
       return;
     }
 
@@ -511,7 +516,7 @@ export class MedicamentosComponent implements OnInit {
 
         next: () => {
 
-          alert(
+          this.toast.mostrar(
             'Medicamento eliminado correctamente.'
           );
 
@@ -522,7 +527,7 @@ export class MedicamentosComponent implements OnInit {
 
           console.error(err);
 
-          alert(
+          this.toast.mostrar(
             'No se pudo eliminar el medicamento.'
           );
         }

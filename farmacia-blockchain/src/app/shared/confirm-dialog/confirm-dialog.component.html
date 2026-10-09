@@ -1,0 +1,14 @@
+<div class="confirm-fondo" *ngIf="servicio.solicitud() as s" (click)="responder(false)">
+  <div class="confirm-caja" (click)="$event.stopPropagation()">
+    <p class="confirm-mensaje">{{ s.mensaje }}</p>
+
+    <div class="confirm-acciones">
+      <button class="confirm-boton confirm-cancelar" type="button" (click)="responder(false)">
+        {{ s.textoCancelar }}
+      </button>
+      <button class="confirm-boton confirm-aceptar" type="button" (click)="responder(true)">
+        {{ s.textoAceptar }}
+      </button>
+    </div>
+  </div>
+</div>
